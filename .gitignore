@@ -1,0 +1,15 @@
+# Archivos compilados y ejecutables
+*.o
+ejercicio
+main
+primero
+*.out
+*.exe
+
+# Carpetas de editores o IDEs
+.vscode/
+.idea/
+
+# Sistema Operativo
+.DS_Store
+Thumbs.db
