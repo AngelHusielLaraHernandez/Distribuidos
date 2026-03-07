@@ -3,7 +3,6 @@
 
 //Crear un arreglo de 5*np para el P0, donde los demas procesos se deberan ir llenando del P0 con puros 1, P1 con puros 2, arreglo de 1*5 para esos esos
 //Resultado final : P0=[1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,...]
-//operacion conocidas MPI_Send, MPI_Recv, MPI_Bcast, MPI_Gather, MPI_Scatter, MPI_Reduce
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
