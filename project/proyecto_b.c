@@ -5,6 +5,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define N 8  // Filas (debe ser divisible entre el numero de procesos)
 #define M 5  // Columnas
@@ -25,10 +26,13 @@ int main(int argc, char **argv) {
     int *A = NULL;
     int *local_A;
     int rows_per_proc;
+    char hostname[256];
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &np);
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+    gethostname(hostname, sizeof(hostname));
 
     rows_per_proc = N / np;
 
@@ -78,8 +82,8 @@ int main(int argc, char **argv) {
     // Convertir indice de fila local a indice global
     int global_max_row = id * rows_per_proc + local_max_row;
 
-    printf("P%d: Filas [%d-%d] -> Fila con mayor suma: fila global %d, suma = %d\n",
-           id, id * rows_per_proc, id * rows_per_proc + rows_per_proc - 1,
+    printf("Nodo: %s | Proceso: %d | Filas [%d-%d] -> Fila con mayor suma: fila global %d, suma = %d\n",
+           hostname, id, id * rows_per_proc, id * rows_per_proc + rows_per_proc - 1,
            global_max_row, local_max_sum);
 
     // Recolectar las sumas maximas y filas de todos los procesos en P0

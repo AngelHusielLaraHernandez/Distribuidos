@@ -5,6 +5,7 @@
 #include <mpi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define ROWS 3
 #define COLS 3
@@ -24,11 +25,14 @@ void print_matrix(const char *name, int *mat, int rows, int cols) {
 int main(int argc, char **argv) {
     int np, id;
     int A[ROWS * COLS], B[ROWS * COLS];
+    char hostname[256];
     MPI_Status estado;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &np);
     MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+    gethostname(hostname, sizeof(hostname));
 
     if (np < 2) {
         if (id == 0)
@@ -48,7 +52,7 @@ int main(int argc, char **argv) {
             B[i] = (i + 1) * 2;
         }
 
-        printf("=== Valores iniciales en P0 ===\n");
+        printf("=== Valores iniciales en P0 (Nodo: %s) ===\n", hostname);
         print_matrix("Matriz A", A, ROWS, COLS);
         print_matrix("Matriz B", B, ROWS, COLS);
         printf("\n");
@@ -61,7 +65,7 @@ int main(int argc, char **argv) {
         MPI_Recv(A, size, MPI_INT, prev, 0, MPI_COMM_WORLD, &estado);
         MPI_Recv(B, size, MPI_INT, prev, 1, MPI_COMM_WORLD, &estado);
 
-        printf("=== Resultado final en P0 (despues de pasar por %d procesos) ===\n", np - 1);
+        printf("=== Resultado final en P0 (Nodo: %s, despues de pasar por %d procesos) ===\n", hostname, np - 1);
         print_matrix("Matriz A (resultado)", A, ROWS, COLS);
     } else {
         // Recibir A y B del proceso anterior
@@ -73,7 +77,7 @@ int main(int argc, char **argv) {
             A[i] = A[i] + B[i];
         }
 
-        printf("P%d: Suma realizada (A = A + B), enviando al proceso %d\n", id, next);
+        printf("Nodo: %s | Proceso: %d | Suma realizada (A = A + B), enviando al proceso %d\n", hostname, id, next);
 
         // Enviar al siguiente proceso
         MPI_Send(A, size, MPI_INT, next, 0, MPI_COMM_WORLD);
