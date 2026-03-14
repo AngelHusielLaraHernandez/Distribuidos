@@ -1,13 +1,13 @@
 # Fdb version 4
-["biber main"] 1773420102.61196 "main.bcf" "main.bbl" "main" 1773420609.49246 0
-  "main.bcf" 1773420609.35445 133950 26ec94d1153c1da8e93a2f966e263df0 "pdflatex"
+["biber main"] 1773532381.27832 "main.bcf" "main.bbl" "main" 1773532385.52864 0
+  "main.bcf" 1773532385.37583 133950 26ec94d1153c1da8e93a2f966e263df0 "pdflatex"
   "referencias.bib" 1773419953.34333 996 159b68a72378e2321df4c2135dc1881f ""
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1773420607.91271 "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" "main.pdf" "main" 1773420609.49279 0
-  "/home/angel/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1772902783.58778 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
+["pdflatex"] 1773532384.08852 "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" "main.pdf" "main" 1773532385.52912 0
+  "/home/angel/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1773507499.50418 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "/home/angel/.miktex/texmfs/data/fonts/tfm/public/rsfs/rsfs10.tfm" 1771247627.58304 688 37338d6ab346c2f1466b29e195316aa4 ""
   "/home/angel/.miktex/texmfs/data/fonts/tfm/public/rsfs/rsfs5.tfm" 1771247628.21908 684 3a51bd4fd9600428d5264cf25f04bb9a ""
   "/home/angel/.miktex/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt" 1769894396.90434 12031185 c999213898af236288285c1b22695939 ""
@@ -214,12 +214,12 @@
   "/home/angel/.miktex/texmfs/install/tex/latex/tools/array.sty" 1743537578.10942 14552 27664839421e418b87f56fa4c6f66b1a ""
   "/home/angel/.miktex/texmfs/install/tex/latex/url/url.sty" 1743537584.20945 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "/home/angel/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty" 1743537584.24145 55384 b454dec21c2d9f45ec0b793f0995b992 ""
-  "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" 1773420541.37021 4769 1532ab174fd71a64c7eac79fe019bbf7 ""
-  "main.aux" 1773420609.35445 1241 83b08b442b354ed728417e32640e62df "pdflatex"
-  "main.bbl" 1773420108.94336 12522 6c7dcdf2cdd9bbbc4128a51b2574d899 "biber main"
-  "main.out" 1773420609.35445 393 81fa15a78d7167f97c578de11d34d321 "pdflatex"
-  "main.run.xml" 1773420609.35845 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
-  "main.tex" 1773420541.37021 4769 1532ab174fd71a64c7eac79fe019bbf7 ""
+  "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" 1773532379.16357 4769 1532ab174fd71a64c7eac79fe019bbf7 ""
+  "main.aux" 1773532385.37183 1241 83b08b442b354ed728417e32640e62df "pdflatex"
+  "main.bbl" 1773532382.47971 12522 6c7dcdf2cdd9bbbc4128a51b2574d899 "biber main"
+  "main.out" 1773532385.37183 393 81fa15a78d7167f97c578de11d34d321 "pdflatex"
+  "main.run.xml" 1773532385.37583 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
+  "main.tex" 1773532379.16357 4769 1532ab174fd71a64c7eac79fe019bbf7 ""
   "portada.tex" 1773420606.99444 1412 ee89f1bbc066eb5899cdaa968e16b652 ""
   "portada_img/der.png" 1773419953.27933 210257 6d0c4d2ce4cceedcb4c586a3b72b8bc2 ""
   "portada_img/izq.png" 1773419953.28333 32490 e04d7053102a8639b2d7b450d226ab82 ""
