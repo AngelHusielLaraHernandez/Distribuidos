@@ -1,13 +1,22 @@
-\documentclass[letterpaper,12pt]{article}
+\documentclass[letterpaper,11pt]{article}
 
 % --- PAQUETES DE IDIOMA
 \usepackage[spanish,mexico]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{csquotes}
+\usepackage{iftex}
+
+\ifPDFTeX
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\else
+\usepackage{fontspec}
+\setmainfont{Georgia}
+\usepackage{amssymb}
+\fi
 
 % --- PAQUETES MATEMÁTICOS --
 \usepackage{amsmath}
-\usepackage{amssymb}
 \usepackage{cancel}
 \usepackage{mathrsfs}
 
@@ -79,6 +88,23 @@
   sensitive=false
 }
 
+% Estilo para código en C
+\lstdefinestyle{cstyle}{
+  language=C,
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{black},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false
+}
+
 % --- ESTILOS PARA DIAGRAMAS DE FLUJO (TIKZ) ---
 \tikzset{
   startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30},
@@ -108,7 +134,8 @@
 ]{geometry}
 
 % --- FORMATO DE TEXTO ---
-\renewcommand{\baselinestretch}{1.25} 
+\usepackage{setspace}
+\onehalfspacing
 \usepackage{parskip} 
 \usepackage{lipsum}  
 
@@ -151,6 +178,54 @@
     Construir un sistema distribuido de cómputo de alto rendimiento (HPC) y ejecutar programas paralelos que distribuyan el trabajo entre los nodos que lo conforman.
 
     \section{Desarrollo:}
+    Para realizacion del proyecto se tiene como funciones disponibles de MPI las siguientes:
+    \begin{itemize}
+        \item \textbf{MPI\_Init:} Inicializa el entorno de ejecución de MPI.
+        \item \textbf{MPI\_Comm\_size:} Determina el número total de procesos en el comunicador.
+        \item \textbf{MPI\_Comm\_rank:} Determina el identificador único (rango) del proceso dentro del comunicador.
+        \item \textbf{MPI\_Send:} Envía un mensaje a otro proceso.
+        \item \textbf{MPI\_Recv:} Recibe un mensaje de otro proceso.
+        \item \textbf{MPI\_Finalize:} Finaliza el entorno de ejecución de MPI.
+        \item \textbf{MPI\_Gather:} Recopila datos de todos los procesos en el comunicador.
+        \item \textbf{MPI\_Scatter:} Distribuye datos desde un proceso raíz a todos los procesos en el comunicador.
+        \item \textbf{MPI\_Bcast:} Difunde un mensaje desde un proceso raíz a todos los procesos en el comunicador.
+        \item \textbf{MPI\_Reduce:} Realiza una operación de reducción (como suma, máximo, etc.) en datos distribuidos entre los procesos y devuelve el resultado al proceso raíz.
+    \end{itemize}
+
+    De las cuales, para el desarrollo de los programas, solo se usaron las funciones \textbf{MPI\_Init}, \textbf{MPI\_Comm\_size}, \textbf{MPI\_Comm\_rank}, \textbf{MPI\_Send}, \textbf{MPI\_Recv}, \textbf{MPI\_Scatter}, \textbf{MPI\_Gather} y \textbf{MPI\_Finalize}.
+
+    \subsection{Documentacion del cluster:}
+
+    \subsubsection{Actividad 1:}
+
+    \newpage
+    \subsection{Actividad 2:}
+
+    \subsubsection{Programa a), Multiplicacion de matrices:}
+
+    \textbf{Codigo fuente (C):}
+
+
+    % \lstinputlisting[style=cstyle,caption={Programa a) Multiplicacion de matrices},label={lst:programa-a}]{../project/proyecto_a.c}
+
+
+    \newpage
+    \subsubsection{Programa b), Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}
+    
+    \textbf{Enunciado: }
+    Se tiene una matriz $A$ de tamaño $N \times M$ que contiene números enteros. Desarrollar un programa distribuido utilizando MPI que determine qué renglón de la matriz tiene la mayor suma de sus elementos.
+
+    El programa deberá distribuir el trabajo entre varios procesos de manera que cada proceso analice una parte de la matriz.
+
+    El proceso 0 debe generar o inicializar la matriz $A$; la matriz deberá distribuirse entre los procesos utilizando comunicaciones colectivas de MPI. Cada proceso calculará la suma de los elementos de los renglones que le correspondan. Cada proceso determinará la fila con mayor suma dentro de su bloque local.
+
+    El proceso 0 deberá imprimir: el índice de la fila con mayor suma y el valor de dicha suma.
+
+    Suponer que $N$ es divisible entre el número de procesos.
+
+    \textbf{Resolucion :}
+
+    \textbf{Codigo fuente (C):}
 
     
 
