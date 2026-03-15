@@ -206,11 +206,401 @@
 
     De las cuales, para el desarrollo de los programas, solo se usaron las funciones \textbf{MPI\_Init}, \textbf{MPI\_Comm\_size}, \textbf{MPI\_Comm\_rank}, \textbf{MPI\_Send}, \textbf{MPI\_Recv}, \textbf{MPI\_Scatter}, \textbf{MPI\_Gather} y \textbf{MPI\_Finalize}.
 
+
+    \newpage
+
     \subsection{Documentacion del cluster:}
 
     \subsubsection{Actividad 1:}
 
+    Para la realizacion del cluster, se siguieron los siguientes pasos:
+
+    \textbf{Aplicaciones y archivos requeridos para la instalación}
+    
+    1-. Instalación de Oracle VirtualBox Manager
+    Este se instala porque es donde se van a crear las máquinas virtuales que conformarán el cluster HPC.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/oraclevirtualbox.png}
+        \caption{Página de instalación de Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.57\textwidth]{img/Cluster/oraclevirtualboxfuncionando.png}
+        \caption{Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    2-. Instalación de pelicanhpc version 6.1, que esta mediante un archivo tipo ISO, este se instala porque es la distribución de Linux que se va a usar para crear el cluster HPC.
+
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/pelican.png}
+        \caption{Archivo ISO de PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \textbf{Creación del servidor}
+
+    Para la creación del servidor, se crea una máquina virtual en Oracle VirtualBox Manager, asignándole un nombre (en este caso ServidorHPC).
+    Se configuran sus características básicas:
+
+    \begin{itemize}
+        \item Tipo de sistema operativo: Linux
+        \item Memoria Base: 2048 MB
+        \item Procesadores: 2
+        
+    \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor1.png}
+        \caption{Creación del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor2.png}
+        \caption{Especificación de características del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor3.png}
+        \caption{Resumen de características del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
     \newpage
+    Como no necesitamos un disco duro virtual lo vamos a eliminarlo al remover el archivo ServidorHPC.vdi que se creó por default.
+
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/Discodurovirtual.png}
+        \caption{Ubicación del disco duro virtual creado por default en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/Eliminacióndiscodurovirtual.png}
+        \caption{Eliminación del disco duro virtual creado por default en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+
+    Vamos a proseguir con las configuraciónes restantes que nos faltan en nuestro servidor.
+
+    Lo primero que vamos a hacer es cambiar la prioridad de arranque de nuestro servidor, vamos a hacer que arranque en "Optical Drive" para que arranque con el archivo ISO de PelicanHPC que se va a montar posteriormente.   
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Optica.png}
+        \caption{Configuración de la prioridad de arranque en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Vamos a proseguir a poner el archivo ISO de PelicanHPC en la unidad de CD/DVD de nuestro servidor, para esto vamos a ir a la configuración del servidor, luego a la sección de "Storage", seleccionamos el controlador IDE y luego seleccionamos la unidad de CD/DVD, después seleccionamos la opción de "Choose a disk file" y seleccionamos el archivo ISO de PelicanHPC que se encuentra en nuestra computadora.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Optica2.png}
+        \caption{Ponemos el archivo ISO de PelicanHPC en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+
+
+    Proseguimos con la configuración de la red del servidor, para esto vamos a ir a la configuración del servidor, luego a la sección de "Network", seleccionamos el adaptor 1 y lo dejamos de tipo "NAT", para que podamos acceder a internet desde el servidor.
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Adaptador1.png}
+        \caption{Configuración del adaptador de red 1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Vamos a activar un segundo adaptador de red y lo vamos a dejar en Red interna solo, para que los nodos puedan comunicarse entre sí y con el servidor.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Adaptador2.png}
+        \caption{Configuración del adaptador de red 2 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+     \newpage
+
+    Iniciamos nuestra máquina virtual del servidor, siguiendo las propias instrucciones de PelicanHPC
+    Con la única diferencia de que vamos primero a levantar el ambiente gráfico con "startx" y luego vamos a crear el cluster con "pelicansetup"
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{img/Cluster/servidorf1.png}
+        \caption{Levantando el ambiente gráfico en el servidor con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+    Una vez ya levantando el ambiente gráfico, vamos a crear el cluster con el comando "pelicansetup", este comando se encarga de configurar el cluster HPC, asignando las IPs a los nodos y configurando el servicio de SSH para que los nodos puedan comunicarse entre sí y con el servidor. Donde nos aparecen las dos interfaces de red que tenemos
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/servidorf2.png}
+        \caption{Creando el cluster con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Elegimos la segunda interfaz de red, que es donde estan los nodos del cluster, y empezamos a configurar nuestro cluster, para finalmente empezar a cargar nuestros nodos.
+
+         \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Conficluster.png}
+        \caption{Configurando el cluster con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+    \textbf{Creación de los clientes}
+    
+    Para la creación de los clientes, se crearan dos clientes en Oracle VirtualBox Manager, asignándoles un nombre (en este caso ClienteHPC1 y ClienteHPC2).
+
+    Empezando con el ClienteHPC1, se configuran sus características básicas:
+    \begin{itemize}
+        \item Tipo de sistema operativo: Windows
+        \item Memoria Base: 2048 MB
+        \item Procesadores: 1
+    \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente11.png}
+        \caption{Sistema Operativo del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente12.png}
+        \caption{Memoria Base y número de procesadores del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente13.png}
+        \caption{Se crea sin disco duro virtual el ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+    Vamos ahora a configurar la prioridad de arranque del ClienteHPC1, para que arranque en "Network" y pueda arrancar desde el servidor del cluster.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente14.png}
+        \caption{Configuración de la prioridad de arranque del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+
+    Proseguimos con la configuración de la red del ClienteHPC1, para esto vamos a ir a la configuración del cliente, luego a la sección de "Network", seleccionamos el adaptador 1 y lo dejamos en Red interna solo, para que el cliente pueda comunicarse con el servidor y los demás nodos del cluster.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente15.png}
+        \caption{Configuración del adaptador de red del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+    
+    \newpage
+    Inicializamos la máquina virtual, pero como inicializa por red, tenemos que esperar unos momentos hasta que se conecte el servidor y queda de la siguiente manera:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente16.png}
+            \caption{Inicialización del ClienteHPC1 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster} 
+        \end{figure}
+
+
+    Finalmente el servidor detecte que este cliente o nodo ha sido creado, por eso marca que al momento solo nay 1 nodo disponible
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.57\textwidth]{img/Cluster/Cliente17.png}
+            \caption{Servidor detecta el ClienteHPC1 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+    
+
+    \newpage
+    Vamos a proceder a crear el ClienteHPC2, el cual se va a configurar de la misma manera que el ClienteHPC1.
+    
+    Por lo que se mostrara directamente como ya se ve la maquina virtual del ClienteHPC2 y como se ve reflejado en el servidor
+
+      \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente21.png}
+            \caption{ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+    
+          \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente22.png}
+            \caption{Inicialización del ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+        
+
+         \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente23.png}
+            \caption{Servidor detecta el ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+
+  
+    \textbf{Creación del programa}
+    
+    Se nos pidio hacer lo siguiente: 
+    La ejecución de un programa paralelo que u lice al menos 6 procesos. 
+    Para ello, desarrollar un programa en el que el proceso 0 envíe un dato diferente a otros cinco procesos. 
+    Cada proceso receptor deberá imprimir: El nombre de la máquina o nodo, su iden ficador de proceso y el dato recibido.   
+ 
+    
+    Para esto cree 5 máquinas virtuales más, con las mismas características que los clientes anteriores, pero con la prioridad de arranque en "Optical Drive" para que arranquen con el archivo ISO de PelicanHPC que se encuentra en el servidor, y con la red en Red interna solo para que puedan comunicarse con el servidor y los demás nodos del cluster. 
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente31.png}
+        \caption{Clientes creados en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+
+    Observamos que el servidor detecta que se han creado los nuevos nodos, por lo que ahora tenemos un total de 6 nodos disponibles para ejecutar nuestro programa paralelo.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente32.png}
+        \caption{Servidor detecta el ClienteHPC3, ClienteHPC4, ClienteHPC5 y ClienteHPC6 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+    
+El código es el siguiente:
+
+\begin{lstlisting}[style=cstyle,caption={Distribucion de datos desde el proceso maestro a los nodos clientes con MPI},label={lst:programa-distribucion}]
+#include <mpi.h>
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char** argv) {
+    int rank, size;
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+
+    // Inicializar MPI
+    MPI_Init(&argc, &argv);
+    
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    // Verificacion de seguridad
+    if (size < 6) {
+        if (rank == 0) {
+            printf("Error: Se necesitan 6 procesos para los 6 nodos.\n");
+        }
+        MPI_Finalize();
+        return 0;
+    }
+
+    if (rank == 0) {
+        // Logica del Servidor (Proceso 0)
+        printf("Soy el maestro (Proceso 0) en el nodo: %s\n", processor_name);
+        printf("Enviando un dato unico a los 5 nodos clientes...\n\n");
+        
+        // Enviar a los procesos del 1 al 5
+        for (int dest = 1; dest <= 5; dest++) {
+            int dato_a_enviar = dest * 100; // Datos: 100, 200, 300, 400, 500
+            MPI_Send(&dato_a_enviar, 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
+        }
+    } else if (rank >= 1 && rank <= 5) {
+        // Logica de los Clientes (Procesos 1 al 5)
+        int dato_recibido;
+        
+        MPI_Recv(&dato_recibido, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
+        printf("Nodo cliente: %s | ID de proceso: %d | Dato recibido: %d\n", 
+               processor_name, rank, dato_recibido);
+    }
+
+    // Finalizar MPI
+    MPI_Finalize();
+    return 0;
+}
+\end{lstlisting}
+    
+
+Este programa escrito en C utiliza la biblioteca MPI (\textit{Message Passing Interface}) para comunicar diferentes procesos que pueden estar ejecutándose en distintas computadoras o núcleos (nodos). El código sigue un modelo clásico de ``maestro-cliente''. A continuación, se detalla su funcionamiento paso a paso:
+
+\begin{itemize}
+    \item \textbf{Preparación inicial:} 
+    Las funciones \texttt{MPI\_Init}, \texttt{MPI\_Comm\_rank} y \texttt{MPI\_Comm\_size} se encargan de encender el sistema de comunicación. A cada proceso se le asigna un número identificador único llamado \texttt{rank} (el proceso 0 será nuestro maestro, y los demás serán los clientes). También se cuenta cuántos procesos hay en total (\texttt{size}) y se guarda el nombre del equipo donde se está ejecutando mediante \texttt{MPI\_Get\_processor\_name}.
+
+    \item \textbf{Verificación de seguridad:}
+    El programa comprueba mediante un \texttt{if (size < 6)} que se hayan lanzado al menos 6 procesos en total (1 maestro y 5 clientes). Si el usuario ejecutó el programa con menos procesos, el maestro muestra un mensaje de error y el programa se detiene de forma segura.
+
+    \item \textbf{La labor del Maestro (Proceso 0):}
+    Si el \texttt{rank} es 0, este proceso toma el rol de jefe. Su trabajo es usar un bucle \texttt{for} para enviar un número matemático simple y único a cada cliente. Usando la instrucción \texttt{MPI\_Send}, le envía un 100 al proceso 1, un 200 al proceso 2, un 300 al proceso 3, y así sucesivamente.
+
+    \item \textbf{La labor de los Clientes (Procesos del 1 al 5):}
+    Si el \texttt{rank} está entre el 1 y el 5, el proceso actúa como cliente. Su única tarea es esperar a que el maestro le envíe la información utilizando la instrucción \texttt{MPI\_Recv}. Una vez que el dato llega, el cliente imprime en la pantalla dónde se está ejecutando, cuál es su número de proceso y qué número recibió exactamente.
+
+    \item \textbf{Cierre del programa:}
+    Al final, la instrucción \texttt{MPI\_Finalize()} se asegura de cerrar las conexiones de red y apagar el entorno MPI de manera limpia para no dejar procesos atascados en la memoria.
+\end{itemize}
+
+El resultado del código es el siguiente, primero me gustaria mencionar los procesos que tenemos con el comando "cat /etc/hosts" para mostrar los nodos que tenemos disponibles, que son los siguientes:
+
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.0\textwidth]{img/Cluster/codigo1.png}
+        \caption{Nodos disponibles en el cluster con el comando "cat /etc/hosts"}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+
+\newpage
+Este es lo que imprime el programa anteriormente descrito:
+
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=1.0\textwidth]{img/Cluster/codigo2.png}
+        \caption{Resultado del programa paralelo en el cluster}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+
+Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, ya que son los mismos que podemos ver en la imagen anterior, corroborando el correcto funcionamiento del programa
+
+
+
+\newpage
     \subsection{Actividad 2:}
 
     \subsubsection{Programa a), Multiplicacion de matrices:}

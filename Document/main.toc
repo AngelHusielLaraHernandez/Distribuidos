@@ -1,11 +1,11 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {section}{\numberline {1}Objetivo:}{1}{section.1}%
 \contentsline {section}{\numberline {2}Desarrollo:}{1}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Documentacion del cluster:}{1}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}Actividad 1:}{1}{subsubsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.2}Actividad 2:}{2}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Programa a), Multiplicacion de matrices:}{2}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Programa b), Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}{3}{subsubsection.2.2.2}%
-\contentsline {section}{\numberline {3}Tabla de participacion en el proyecto:}{13}{section.3}%
-\contentsline {section}{\numberline {4}Conclusiones:}{14}{section.4}%
-\contentsline {section}{Referencias}{15}{section*.6}%
+\contentsline {subsection}{\numberline {2.1}Documentacion del cluster:}{2}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Actividad 1:}{2}{subsubsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.2}Actividad 2:}{20}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Programa a), Multiplicacion de matrices:}{20}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Programa b), Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}{21}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {3}Tabla de participacion en el proyecto:}{31}{section.3}%
+\contentsline {section}{\numberline {4}Conclusiones:}{32}{section.4}%
+\contentsline {section}{Referencias}{33}{section*.35}%
