@@ -264,6 +264,8 @@ INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmi
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\listings.cfg
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\tocloft\tocloft.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\tocloft\tocloft.sty
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\geometry\geometry.sty
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\generic\iftex\ifvtex.sty
@@ -482,7 +484,11 @@ INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\n
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\newtx\ntx-ec-tlf.enc
+INPUT .\main.toc
+INPUT .\main.toc
+INPUT main.toc
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
+OUTPUT main.toc
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png

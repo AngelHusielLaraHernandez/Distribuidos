@@ -127,6 +127,10 @@
 
 \definecolor{armblue}{RGB}{0, 113, 188}
 
+% --- ÍNDICE CON PUNTOS ---
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
 % --- CONFIGURACIÓN DE PÁGINA (GEOMETRÍA) ---
 \usepackage[
     left=25mm, 
@@ -175,6 +179,10 @@
     \input{portada.tex}
 
     \newpage
+    {\hypersetup{linkcolor=black}\tableofcontents}
+    
+    \newpage
+
     \setcounter{page}{1}
 
     \section{Objetivo:}
@@ -530,11 +538,6 @@
     \end{figure}
 
     La salida muestra que el proceso 0 genera la matriz de $8 \times 5$ y la reparte en bloques de 2 filas por proceso mediante \texttt{MPI\_Scatter}. Posteriormente, cada proceso calcula la suma de sus filas locales y reporta su mejor resultado: P0 obtiene fila 0 con 240, P1 obtiene fila 3 con 359, P2 obtiene fila 5 con 269 y P3 obtiene fila 7 con 206. Finalmente, el proceso 0 recopila esos resultados con \texttt{MPI\_Gather}, compara las sumas locales y determina correctamente que la fila con mayor suma global es la \textbf{fila 3} con un valor de \textbf{359}.
-
-    
-
-
-
 
 
     \section{Tabla de participacion en el proyecto:}
