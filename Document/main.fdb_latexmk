@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber main"] 1773542173.86904 "main.bcf" "main.bbl" "main" 1773542319.77565 0
-  "main.bcf" 1773542319 134011 8218675f7551708631d3ce072e2da23f "pdflatex"
+["biber main"] 1773542173.86904 "main.bcf" "main.bbl" "main" 1773546282.38779 0
+  "main.bcf" 1773546281 134011 8218675f7551708631d3ce072e2da23f "pdflatex"
   "referencias.bib" 1773532611 1028 159b68a72378e2321df4c2135dc1881f ""
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1773542315.34328 "c:/Users/Angel Lara/Music/semestre8/SistemasDistribuidos/Distribuidos/Document/main.tex" "main.pdf" "main" 1773542319.77684 0
+["pdflatex"] 1773546278.41282 "c:/Users/Angel Lara/Music/semestre8/SistemasDistribuidos/Distribuidos/Document/main.tex" "main.pdf" "main" 1773546282.38896 0
   "C:/Users/Angel Lara/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1773537287 163260 f7138aa97b0a1dcae55100dabb7d9e7d ""
   "C:/Users/Angel Lara/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs10.tfm" 1739064368 688 37338d6ab346c2f1466b29e195316aa4 ""
   "C:/Users/Angel Lara/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs5.tfm" 1739064370 684 3a51bd4fd9600428d5264cf25f04bb9a ""
@@ -250,17 +250,17 @@
   "C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/tex/latex/xpatch/xpatch.sty" 1585221260 8510 7803f78066c4f9d008405191a4b43073 ""
   "C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/tex/latex/xstring/xstring.sty" 1693735632 123 a302f2c651a95033260db60e51527ae8 ""
-  "c:/Users/Angel Lara/Music/semestre8/SistemasDistribuidos/Distribuidos/Document/main.tex" 1773542317 27778 b1f3234ca8faed1d8dd4325331350ac7 ""
+  "c:/Users/Angel Lara/Music/semestre8/SistemasDistribuidos/Distribuidos/Document/main.tex" 1773546277 28105 f9c140f6b8deb6703c15885c5b7c87d7 ""
   "img/Seccion2/inciso2/image1.png" 1773532611 397122 2a0130b21dffdf40d978e2d395631107 ""
   "img/Seccion2/inciso2/image1_2.png" 1773532611 452403 1c09a1582bb0293ffa94d32405682235 ""
   "img/Seccion2/inciso2/image3.png" 1773532611 337409 5049809742681280e5ae00694114017b ""
   "img/Seccion2/inciso2/image4.png" 1773532611 338955 3050d1b622368a932c72e6825a34bd38 ""
-  "main.aux" 1773542319 6820 9c660227df5e77df0c3c7489bed242e6 "pdflatex"
+  "main.aux" 1773546281 6820 9c660227df5e77df0c3c7489bed242e6 "pdflatex"
   "main.bbl" 1773542176 12855 6c7dcdf2cdd9bbbc4128a51b2574d899 "biber main"
-  "main.out" 1773542319 1924 c5a44b5a5620893198b18b8566e958ac "pdflatex"
-  "main.run.xml" 1773542319 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
-  "main.tex" 1773542317 27778 b1f3234ca8faed1d8dd4325331350ac7 ""
-  "main.toc" 1773542319 920 aad6e0a9f58411df8b782585e692adbc "pdflatex"
+  "main.out" 1773546281 1924 c5a44b5a5620893198b18b8566e958ac "pdflatex"
+  "main.run.xml" 1773546281 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
+  "main.tex" 1773546277 28105 f9c140f6b8deb6703c15885c5b7c87d7 ""
+  "main.toc" 1773546281 920 aad6e0a9f58411df8b782585e692adbc "pdflatex"
   "portada.tex" 1773541613 1457 df0759b9d587c9140c2cfb11635d2a11 ""
   "portada_img/der.png" 1773532611 210257 06dba9f878f374ac030ef44e424ff46e ""
   "portada_img/izq.png" 1773532611 32490 d7273825e9d4d7935ebf779b146a35ff ""
