@@ -459,22 +459,22 @@ INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\jknappen\ursfs
 INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs10.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs10.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs5.tfm
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
-INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
@@ -484,10 +484,6 @@ INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\newtx\ntx-ec-tlf.enc
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Bold-tlf-t1.tfm
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
@@ -504,16 +500,68 @@ INPUT .\portada_img\izq.png
 INPUT .\portada_img\izq.png
 INPUT .\portada_img\izq.png
 INPUT .\portada_img\izq.png
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstlang1.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\listings\lstmisc.sty
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\newtx\t1ntxtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\newtx\t1ntxtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\newtx\t1ntxtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\t1xtt.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\t1xtt.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\t1txtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\t1txtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex\latex\txfonts\t1txtt.fd
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\txfonts\t1xbtt.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-ot1.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-ot1.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-ot1.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmi.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmi7.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmi5.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsy.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsy7.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsy5.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexx.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexx.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexx.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmia.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmia.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxmia.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsym.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsym.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsym.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsyc.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsyc.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxsyc.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexa.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexa.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntxexa.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs10.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs7.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\MiKTeX\fonts\tfm\public\rsfs\rsfs5.tfm
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\vf\public\newtx\ntxmi.vf
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\NewTXMI.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\stxscr.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\vf\public\newtx\ntxsy.vf
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\txsys.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\txex-bar.tfm
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
 INPUT .\portada_img\izq.png
 INPUT .\portada_img\izq.png
 INPUT .\portada_img\izq.png
@@ -522,16 +570,124 @@ INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1_2.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\img\Seccion2\inciso2\image1.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\img\Seccion2\inciso2\image4.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\img\Seccion2\inciso2\image3.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\vf\public\newtx\ntx-Regular-tlf-ot1.vf
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\txmiaX.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-ot1r.tfm
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\enc\dvips\newtx\ntx-ot1-tlf.enc
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Italic-tlf-t1.tfm
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\tfm\public\newtx\ntx-Regular-tlf-t1.tfm
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
-INPUT .\portada_img\izq.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
 INPUT .\portada_img\der.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
+INPUT .\portada_img\izq.png
 INPUT main.aux
 INPUT .\main.out
 INPUT .\main.out
@@ -539,6 +695,10 @@ INPUT main.run.xml
 OUTPUT main.run.xml
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\newtx\NewTXMI.pfb
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\newtx\NewTXMI.pfb
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\t1xbtt.pfb
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\t1xbtt.pfb
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\t1xtt.pfb
+INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\txfonts\t1xtt.pfb
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\newtx\txsys.pfb
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\newtx\txsys.pfb
 INPUT C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\fonts\type1\public\newtx\ztmb.pfb

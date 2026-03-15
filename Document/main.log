@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.9.10)  14 MAR 2026 19:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.9.10)  14 MAR 2026 20:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1051,65 +1051,99 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip93
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 167.
+Package hyperref Info: Option `colorlinks' set `true' on input line 171.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'spanish'.
-LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 169.
+LaTeX Font Info:    Trying to load font information for T1+ntxtlf on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\t1ntxtlf.fd
 File: t1ntxtlf.fd 2021/05/24 v1.1 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.95pt on input line 169.
+(Font)              scaled to size 10.95pt on input line 173.
  (main.aux
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
 Package babel Info: 'spanish' activates 'spanish' shorthands.
 (babel)             Reported on input line 9.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
+
+LaTeX Warning: Label `lst:programa-b' multiply defined.
+
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 169.
-LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 169.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 173.
+LaTeX Font Info:    Trying to load font information for OML+ntxmi on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\omlntxmi.fd
 File: omlntxmi.fd 2015/08/25 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 169.
-LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 169.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 173.
+LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 169.
-LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 169.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 173.
+LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 169.
-LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 169.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 173.
+LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 169.
-LaTeX Font Info:    ... okay on input line 169.
-LaTeX Info: Redefining \. on input line 169.
-LaTeX Info: Redefining \% on input line 169.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 173.
+LaTeX Font Info:    ... okay on input line 173.
+LaTeX Info: Redefining \. on input line 173.
+LaTeX Info: Redefining \% on input line 173.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count505
@@ -1131,8 +1165,8 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 \c@mv@tabular=\count511
 \c@mv@boldtabular=\count512
-LaTeX Info: Command `\dddot' is already robust on input line 169.
-LaTeX Info: Command `\ddddot' is already robust on input line 169.
+LaTeX Info: Command `\dddot' is already robust on input line 173.
+LaTeX Info: Command `\ddddot' is already robust on input line 173.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
@@ -1195,9 +1229,9 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (main.bbl)
-Package biblatex Info: Reference section=0 on input line 169.
-Package biblatex Info: Reference segment=0 on input line 169.
-Package hyperref Info: Link coloring ON on input line 169.
+Package biblatex Info: Reference section=0 on input line 173.
+Package biblatex Info: Reference segment=0 on input line 173.
+Package hyperref Info: Link coloring ON on input line 173.
  (main.out) (main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
@@ -1271,20 +1305,20 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 6.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/jknappen\ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-<portada_img/izq.png, id=66, 254.9525pt x 301.125pt>
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 8.
-(pdftex.def)             Requested size: 56.9055pt x 67.20801pt.
+<portada_img/der.png, id=70, 332.24126pt x 393.47pt>
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 8.
+(pdftex.def)             Requested size: 56.9055pt x 67.38733pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 24.88pt on input line 11.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 24.88pt on input line 11.
-<portada_img/der.png, id=67, 332.24126pt x 393.47pt>
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 14.
-(pdftex.def)             Requested size: 56.9055pt x 67.38733pt.
+<portada_img/izq.png, id=72, 254.9525pt x 301.125pt>
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 14.
+(pdftex.def)             Requested size: 56.9055pt x 67.20801pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 17.28pt on input line 22.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
@@ -1299,72 +1333,272 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 
 [1
 
-{C:/Users/Angel Lara/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ec-tlf.enc} <./portada_img/izq.png> <./portada_img/der.png>]
+{C:/Users/Angel Lara/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ec-tlf.enc} <./portada_img/der.png> <./portada_img/izq.png>]
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.95pt on input line 183.
+(Font)              scaled to size 10.95pt on input line 187.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 197.
+(Font)              scaled to size 12.0pt on input line 201.
 
 
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 201.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 201.
+Package pdftex.def Info: portada_img/der.png  used on input line 205.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 205.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.201     \newpage
+l.205     \newpage
                    [1]
 
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 212.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 212.
+Package pdftex.def Info: portada_img/der.png  used on input line 216.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-[2]
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 216.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[2] (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
+File: lstlang1.sty 2024/09/23 1.10c listings language file
+) (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
+File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
+)
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 233.
+LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 233.
+ (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\t1ntxtt.fd
+File: t1ntxtt.fd 2012/04/20 v3.1
+)
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 10.95pt on input line 233.
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 10.0pt on input line 233.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.0pt on input line 234.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 6.0pt on input line 234.
+LaTeX Font Info:    Trying to load font information for T1+txtt on input line 234.
+ (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\t1txtt.fd
+File: t1txtt.fd 2000/12/15 v3.1
+)
+LaTeX Font Info:    Font shape `T1/ntxtt/b/n' in size <10> not available
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 234.
+LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 10.0pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 7.3pt on input line 248.
+LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
+(Font)              scaled to size 5.5pt on input line 248.
 
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 232.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+
+LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <5.5> not available
+(Font)              size <5> substituted on input line 248.
+
+
+
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 232.
+Package pdftex.def Info: portada_img/der.png  used on input line 258.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 258.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 [3]
 
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 243.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 243.
+Package pdftex.def Info: portada_img/der.png  used on input line 291.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 291.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 [4]
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.95pt on input line 247.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 8.0pt on input line 247.
 
-
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 248.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 248.
+Package pdftex.def Info: portada_img/der.png  used on input line 323.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-[5] (main.aux
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 323.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[5]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 360.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 360.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[6]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 392.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 392.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[7]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 419.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 419.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[8]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 457.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 457.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[9]
+<img/Seccion2/inciso2/image1_2.png, id=255, 2569.6pt x 1445.4pt>
+File: img/Seccion2/inciso2/image1_2.png Graphic file (type png)
+<use img/Seccion2/inciso2/image1_2.png>
+Package pdftex.def Info: img/Seccion2/inciso2/image1_2.png  used on input line 468.
+(pdftex.def)             Requested size: 472.03113pt x 265.49808pt.
+<img/Seccion2/inciso2/image1.png, id=256, 2569.6pt x 1445.4pt>
+File: img/Seccion2/inciso2/image1.png Graphic file (type png)
+<use img/Seccion2/inciso2/image1.png>
+Package pdftex.def Info: img/Seccion2/inciso2/image1.png  used on input line 488.
+(pdftex.def)             Requested size: 424.82512pt x 238.94386pt.
+
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 492.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 492.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[10 <./img/Seccion2/inciso2/image1_2.png>]
+<img/Seccion2/inciso2/image4.png, id=270, 2182.1525pt x 1446.40375pt>
+File: img/Seccion2/inciso2/image4.png Graphic file (type png)
+<use img/Seccion2/inciso2/image4.png>
+Package pdftex.def Info: img/Seccion2/inciso2/image4.png  used on input line 497.
+(pdftex.def)             Requested size: 377.62634pt x 250.29945pt.
+
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 502.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 502.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[11 <./img/Seccion2/inciso2/image1.png> <./img/Seccion2/inciso2/image4.png>]
+<img/Seccion2/inciso2/image3.png, id=279, 2175.12625pt x 1439.3775pt>
+File: img/Seccion2/inciso2/image3.png Graphic file (type png)
+<use img/Seccion2/inciso2/image3.png>
+Package pdftex.def Info: img/Seccion2/inciso2/image3.png  used on input line 527.
+(pdftex.def)             Requested size: 377.62634pt x 249.87422pt.
+
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 533.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 533.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[12 <./img/Seccion2/inciso2/image3.png>]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 558.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 558.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[13{C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}]
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 569.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 569.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[14]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
+(Font)              scaled to size 10.95pt on input line 573.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 8.0pt on input line 573.
+
+
+File: portada_img/der.png Graphic file (type png)
+<use portada_img/der.png>
+Package pdftex.def Info: portada_img/der.png  used on input line 574.
+(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
+File: portada_img/izq.png Graphic file (type png)
+<use portada_img/izq.png>
+Package pdftex.def Info: portada_img/izq.png  used on input line 574.
+(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
+[15] (main.aux
 LaTeX Info: Redefining \sptext on input line 9.
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
@@ -1373,24 +1607,32 @@ LaTeX Info: Redefining \% on input line 9.
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
+
+
+LaTeX Font Warning: Size substitutions with differences
+(Font)              up to 0.5pt have occurred.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 03166262AD2CB7DFB6B764BB5BA4FA60;1675.
+(rerunfilecheck)             Checksum: C5A44B5A5620893198B18B8566E958AC;1924.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 40086 strings out of 468133
- 765084 string characters out of 5428256
- 1749389 words of memory out of 5000000
- 68079 multiletter control sequences out of 15000+600000
- 675873 words of font info for 85 fonts, out of 8000000 for 9000
+ 41107 strings out of 468133
+ 777986 string characters out of 5428256
+ 1930124 words of memory out of 5000000
+ 68910 multiletter control sequences out of 15000+600000
+ 695939 words of font info for 119 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,15n,131p,774b,2901s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/NewTXMI.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txsys.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmb.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmr.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmri.pfb>
-Output written on main.pdf (6 pages, 341725 bytes).
+ 84i,16n,131p,899b,2901s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/NewTXMI.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xbtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txsys.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmb.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmr.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmri.pfb>
+Output written on main.pdf (16 pages, 1632352 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 19 named destinations out of 1000 (max. 500000)
- 191 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 402 PDF objects out of 1000 (max. 8388607)
+ 191 named destinations out of 1000 (max. 500000)
+ 219 words of extra memory for PDF output out of 10000 (max. 10000000)
 
