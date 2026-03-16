@@ -603,16 +603,189 @@ Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, y
 \newpage
     \subsection{Actividad 2:}
 
-    \subsubsection{Programa a), Multiplicacion de matrices:}
+    \subsubsection{Programa a) Paso de matrices entre procesos:}
 
-    \textbf{Codigo fuente (C):}
+    \textbf{Enunciado: }
+    Implementar un programa que realice el paso de dos matrices de enteros (A y B) entre varios procesos, utilizando np procesos, tal como se indica en la figura proporcionada. 
 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.55\textwidth]{img/Seccion2/inciso1/Enunciado.png}
+        \caption{Diagrama de paso de matrices entre procesos}
+        \label{fig:Enunciado programa a}
+    \end{figure}
+
+    Cada vez que un proceso reciba las matrices A y B, deberá: Sumar ambas matrices, almacenar el resultado en la matriz A y enviar las matrices al siguiente proceso.
+    
+    El proceso 0 deberá imprimir las matrices A y B con sus valores iniciales, el resultado final obtenido después del paso por todos los procesos. 
+
+    \textbf{Resolución :}
+    Al inicio del programa tenemos lo siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Inclusiones, definiciones y funcion de impresion},label={lst:programa-a-init}]
+    #include <mpi.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #define N 4
+    #define M 4
+
+    void print_matrix(char* titulo, int *mat, int rows, int cols) {
+        printf("  %s:\n", titulo);
+        for (int i = 0; i < rows; i++) {
+            printf("  [");
+            for (int j = 0; j < cols; j++) {
+                printf("%4d", mat[i * cols + j]);
+                if (j < cols - 1) printf(", ");
+            }
+            printf(" ]\n");
+        }
+    }
+    \end{lstlisting}
+
+    En esta primera parte del código, se incluyen las librerías estándar necesarias para la ejecución, tales como \texttt{<mpi.h>} para utilizar el estándar de paso de mensajes, así como \texttt{<stdio.h>} y \texttt{<stdlib.h>} para la entrada/salida de datos en consola y la asignación dinámica de memoria. Además, se definen las constantes \texttt{N} y \texttt{M} con un valor de 4, las cuales determinan el tamaño de las matrices enteras que procesará el anillo ($4 \times 4$).
+
+    Inmediatamente después, se declara la función auxiliar \texttt{print\_matrix()}. Esta función recibe el título de la matriz, el puntero a los datos y sus dimensiones (\texttt{rows} y \texttt{cols}). Su propósito es iterar sobre los elementos del arreglo mediante un ciclo anidado para mostrarlos en pantalla con un formato de cuadrícula uniforme, corchetes y espaciado, lo que facilita la visualización y comprobación de las operaciones matemáticas en la terminal.
+
+    Posterior a esto, se da inicio a la función principal \texttt{main()}:
+
+    \begin{lstlisting}[style=cstyle,caption={Inicializacion del entorno y asignacion de memoria},label={lst:programa-a}]
+    int main(int argc, char **argv) {
+        int np, id;
+        char hostname[256];
+        
+        // Asignacion de memoria para A y B (matrices completas)
+        int *A = (int *)malloc(N * M * sizeof(int));
+        int *B = (int *)malloc(N * M * sizeof(int));
+
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &np);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+        gethostname(hostname, sizeof(hostname));
+
+        if (np < 2) {
+            if (id == 0) printf("Error: Se necesitan al menos 2 procesos\n");
+            MPI_Finalize();
+            return 1;
+        }
+    \end{lstlisting}
+    
+    Primero se declaran las variables necesarias para el programa, como el número de procesos (\texttt{np}), el identificador del proceso (\texttt{id}) y un arreglo para almacenar el nombre del host donde se ejecuta cada proceso (\texttt{hostname}). Además, se reserva la memoria dinámica para los punteros de las matrices enteras $A$ y $B$, las cuales tendrán un tamaño total de $N \times M$.
+    
+    Luego se inicializa el entorno de ejecución de MPI con \texttt{MPI\_Init()}, se obtiene el número total de procesos con \texttt{MPI\_Comm\_size()} y el identificador único de cada proceso con \texttt{MPI\_Comm\_rank()}. También se obtiene el nombre del nodo físico utilizando la función \texttt{gethostname()}. Se implementa una validación para asegurar que existan al menos 2 procesos, ya que es el mínimo indispensable para conformar la topología de anillo.
+
+    Para la impresión de las matrices durante la ejecución, se desarrolló una función auxiliar:
+    
+    \begin{lstlisting} [style=cstyle,caption={Funcion de impresion de matriz},label={lst:programa-a}]
+    void print_matrix(char* titulo, int *mat, int rows, int cols) {
+        printf("  %s:\n", titulo);
+        for (int i = 0; i < rows; i++) {
+            printf("  [");
+            for (int j = 0; j < cols; j++) {
+                printf("%4d", mat[i * cols + j]);
+                if (j < cols - 1) printf(", ");
+            }
+            printf(" ]\n");
+        }
+    }
+    \end{lstlisting}
+
+    Esta función recibe el título de la matriz, el puntero a los datos y sus dimensiones, iterando mediante un ciclo anidado para mostrar los elementos con un formato de espaciado uniforme.
+
+    Posteriormente, comienza la lógica específica del proceso raíz:
+    
+    \textbf{Fragmento de codigo de generacion de matriz (C):}
+
+    \begin{lstlisting}[style=cstyle,caption={Generacion de matrices e inicio del anillo en proceso 0},label={lst:programa-a}]
+    // --- LOGICA DEL PROCESO 0 (Inicia y Termina el ciclo) ---
+    if (id == 0) {
+        // Inicializar matrices A y B
+        for (int i = 0; i < N * M; i++) {
+            A[i] = i + 1; // Valores secuenciales
+            B[i] = 2;     // Valor constante para que sea facil verificar la suma
+        }
+
+        printf("=========================================================\n");
+        printf("  INICIO DEL PROGRAMA - %d procesos\n", np);
+        printf("=========================================================\n");
+        printf("  [P0] Nodo: %s | Genera e imprime matrices iniciales\n\n", hostname);
+        print_matrix("Matriz A (Inicial)", A, N, M);
+        printf("\n");
+        print_matrix("Matriz B (Constante)", B, N, M);
+        printf("=========================================================\n");
+
+        // Enviar A y B al Proceso 1
+        printf("  [P0] Nodo: %s | Enviando matrices a P1...\n", hostname);
+        MPI_Send(A, N * M, MPI_INT, 1, 0, MPI_COMM_WORLD);
+        MPI_Send(B, N * M, MPI_INT, 1, 1, MPI_COMM_WORLD);
+    \end{lstlisting}
+
+    Cuando la condición evalúa al proceso 0, este se encarga de inicializar la matriz $A$ con valores numéricos secuenciales y la matriz $B$ con un valor constante (2) para facilitar la verificación del cálculo distribuido. Tras imprimir los valores iniciales en consola, el proceso 0 envía ambas matrices completas al Proceso 1 utilizando la función \texttt{MPI\_Send()}. 
+    
+    El primer \texttt{MPI\_Send()} envía la matriz $A$, especificando su puntero, la cantidad total de elementos ($N \times M$), el tipo de dato (\texttt{MPI\_INT}), el proceso destino (1), una etiqueta de mensaje (0) y el comunicador. Inmediatamente después, envía la matriz $B$ utilizando la etiqueta de mensaje (1).
+
+    Al mismo tiempo, el resto de los procesos que conforman el anillo ejecutan la lógica de recepción, suma y reenvío:
+
+    \begin{lstlisting}[style=cstyle,caption={Recepcion, suma local y reenvio en procesos trabajadores},label={lst:programa-a}]
+    // --- LOGICA DE LOS PROCESOS TRABAJADORES (1 a np-1) ---
+    else {
+        // Recibir del proceso anterior (id - 1)
+        MPI_Recv(A, N * M, MPI_INT, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(B, N * M, MPI_INT, id - 1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        printf("  [P%d] Nodo: %s | Recibio matrices de P%d. Sumando A = A + B...\n", id, hostname, id - 1);
+
+        // Sumar ambas matrices y almacenar en A
+        for (int i = 0; i < N * M; i++) {
+            A[i] = A[i] + B[i];
+        }
+
+        // Determinar el siguiente nodo (si es el ultimo, envia al 0)
+        int next_node = (id + 1) % np;
+        
+        // Enviar al siguiente nodo
+        MPI_Send(A, N * M, MPI_INT, next_node, 0, MPI_COMM_WORLD);
+        MPI_Send(B, N * M, MPI_INT, next_node, 1, MPI_COMM_WORLD);
+        printf("  [P%d] Nodo: %s | Matrices enviadas a P%d.\n", id, hostname, next_node);
+    }
+    \end{lstlisting}
+
+    En este bloque, cada proceso intermedio utiliza \texttt{MPI\_Recv()} para capturar las matrices enviadas por su predecesor (\texttt{id - 1}). Una vez recibidos los datos, se ejecuta un ciclo \texttt{for} lineal que recorre los arreglos unidimensionales para sumar cada celda de la matriz $B$ a su correspondiente en la matriz $A$, sobreescribiendo el valor directamente en $A$. 
+    
+    Para continuar con la topología de anillo, se calcula la identidad del siguiente proceso destino mediante la operación de módulo aritmético \texttt{next\_node = (id + 1) \% np}. Esta fórmula garantiza que el último proceso apunte de vuelta al proceso 0. Finalmente, se despachan los datos al nodo calculado.
+
+    Por último, el programa se cierra de regreso en el flujo del proceso 0, el cual se había quedado bloqueado esperando la conclusión del ciclo:
+
+    \begin{lstlisting}[style=cstyle,caption={Recepcion de resultados y finalizacion en proceso 0},label={lst:programa-a}]
+        // Esperar a recibir el resultado del ultimo proceso
+        MPI_Recv(A, N * M, MPI_INT, np - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(B, N * M, MPI_INT, np - 1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        // Imprimir resultado final
+        printf("\n");
+        printf("=========================================================\n");
+        printf("  RESULTADO FINAL - Ciclo completado\n");
+        printf("=========================================================\n");
+        printf("  [P0] Nodo: %s | Recibio resultado de P%d\n\n", hostname, np - 1);
+        print_matrix("Matriz A (Final despues de todas las sumas)", A, N, M);
+        printf("=========================================================\n");
+
+    } 
+    
+    free(A);
+    free(B);
+    MPI_Finalize();
+    return 0;
+}
+    \end{lstlisting}
+
+    El proceso 0 emplea llamadas a \texttt{MPI\_Recv()} indicando explícitamente que espera el mensaje proveniente del último nodo del clúster (\texttt{np - 1}). Al recibir las matrices modificadas tras pasar por todos los procesos trabajadores, el proceso 0 imprime la matriz $A$ resultante que contiene la sumatoria global acumulada. Para finalizar, se libera la memoria reservada para ambas matrices mediante \texttt{free()} y se cierra de forma segura el entorno de paso de mensajes con \texttt{MPI\_Finalize()}.    
 
     % \lstinputlisting[style=cstyle,caption={Programa a) Multiplicacion de matrices},label={lst:programa-a}]{../project/proyecto_a.c}
 
 
     \newpage
-    \subsubsection{Programa b), Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}
+    \subsubsection{Programa b) Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}
     
     \textbf{Enunciado: }
     Se tiene una matriz $A$ de tamaño $N \times M$ que contiene números enteros. Desarrollar un programa distribuido utilizando MPI que determine qué renglón de la matriz tiene la mayor suma de sus elementos.
