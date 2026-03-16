@@ -28,6 +28,7 @@
 \usepackage{makecell}
 \usepackage{array}
 \usepackage{tikz}
+\usepackage[table]{xcolor}
 \usetikzlibrary{shapes.geometric, shapes.multipart, positioning, arrows.meta, calc, shadows, decorations.pathreplacing,babel}
 
 % --- LISTAS ---
@@ -776,10 +777,132 @@ Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, y
     free(B);
     MPI_Finalize();
     return 0;
-}
+    }
     \end{lstlisting}
 
     El proceso 0 emplea llamadas a \texttt{MPI\_Recv()} indicando explícitamente que espera el mensaje proveniente del último nodo del clúster (\texttt{np - 1}). Al recibir las matrices modificadas tras pasar por todos los procesos trabajadores, el proceso 0 imprime la matriz $A$ resultante que contiene la sumatoria global acumulada. Para finalizar, se libera la memoria reservada para ambas matrices mediante \texttt{free()} y se cierra de forma segura el entorno de paso de mensajes con \texttt{MPI\_Finalize()}.    
+
+
+
+    \textbf{Resultados:}
+
+    Al construir el clúster, primero se verificó que se tuvieran los clientes conectados correctamente al servidor físico, por medio del comando:
+
+    \begin{lstlisting}
+        cat /etc/hosts
+    \end{lstlisting}
+
+    Donde la salida en la terminal fue la siguiente:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_1.png}
+        \caption{Verificación de nodos en el clúster HPC}
+        \label{fig:proyecto_a_hosts}
+    \end{figure}
+
+    \begin{lstlisting}
+        user@pel1:~$ cat /etc/hosts
+        127.0.0.1   localhost
+        10.11.12.1  pel1
+        # The following lines are desirable for IPv6 capable hosts
+        ::1     localhost ip6-localhost ip6-loopback
+        fe00::0 ip6-localnet
+        ff00::0 ip6-mcastprefix
+        ff02::1 ip6-allnodes
+        ff02::2 ip6-allrouters
+        ff02::3 ip6-allhosts
+        10.11.12.16 pel16
+        10.11.12.98 pel98
+    \end{lstlisting}
+
+    En la salida se puede observar que el servidor \texttt{pel1} detecta correctamente a los clientes \texttt{pel16} y \texttt{pel98}, cumpliendo con el mínimo de clientes necesarios para la ejecución del proyecto.
+
+    Después de esto, se procedió a crear y editar el código fuente del programa utilizando el editor de texto \texttt{nano}:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_3.png}
+        \caption{Creación del programa a) en el editor nano}
+        \label{fig:proyecto_a_nano}
+    \end{figure}
+    
+    Una vez guardado, el programa se compiló utilizando el siguiente comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Compilación del programa a)},label={lst:programa-a-comp}]
+        mpicc Proyecto_2a.c -o Proyecto_2a
+    \end{lstlisting}
+
+    Y para ejecutar el programa solicitando 4 procesos, se utilizó el comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Ejecución del programa a)},label={lst:programa-a-exec}]
+        mpirun -np 4 ./Proyecto_2a
+    \end{lstlisting}
+
+    A continuación, se muestra la evidencia en terminal de ambos comandos ingresados:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_6.png}
+        \caption{Comandos de compilación y ejecución del programa a)}
+        \label{fig:proyecto_a_comandos}
+    \end{figure}
+
+    Al ejecutar el programa, la salida se dividió en dos partes para su mejor apreciación. En la primera parte, el Proceso 0 genera e imprime las matrices iniciales, y comienza el envío en anillo:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_7.png}
+        \caption{Evidencia de ejecución del programa a) - Parte 1}
+        \label{fig:proyecto_a_evidencia1}
+    \end{figure}
+
+    En la terminal se observa cómo la Matriz A se inicializa con valores secuenciales del 1 al 16, mientras que la Matriz B se inicializa con una constante de 2. Inmediatamente después, se registra la traza del paso de mensajes entre los distintos nodos:
+
+    \begin{lstlisting}
+        [P0] Nodo: pel1 | Enviando matrices a P1...
+        [P1] Nodo: pel16 | Recibio matrices de P0. Sumando A = A + B...
+        [P1] Nodo: pel16 | Matrices enviadas a P2.
+        [P2] Nodo: pel98 | Recibio matrices de P1. Sumando A = A + B...
+        [P2] Nodo: pel98 | Matrices enviadas a P3.
+        [P3] Nodo: pel1 | Recibio matrices de P2. Sumando A = A + B...
+        [P3] Nodo: pel1 | Matrices enviadas a P0.
+    \end{lstlisting}
+
+    Seguidamente, se tiene la segunda parte de la salida, donde el ciclo se completa y el Proceso 0 recibe e imprime el resultado final:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Seccion2/inciso1/2_8.png}
+        \caption{Evidencia de ejecución del programa a) - Parte 2}
+        \label{fig:proyecto_a_evidencia2}
+    \end{figure}
+
+    La salida demuestra de forma exitosa el comportamiento de la topología de anillo. El Proceso 0 (ubicado en el servidor \texttt{pel1}) envía las matrices al Proceso 1 (\texttt{pel16}), este procesa y envía al Proceso 2 (\texttt{pel98}), y este finalmente envía al Proceso 3 (el cual se ejecuta nuevamente en \texttt{pel1}). El Proceso 3 cierra el anillo devolviendo las matrices al Proceso 0.
+    
+    Dado que las matrices pasaron por 3 procesos trabajadores, y en cada uno se realizó la operación $A = A + B$ (sumando el valor constante de 2 de la matriz B), cada celda de la matriz A incrementó su valor original en \textbf{6 unidades exactas}. Por ejemplo, la primera celda inició con un valor de 1 y finalizó con un valor de \textbf{7}, demostrando que el cálculo distribuido se realizó correctamente a través de todo el clúster.
+
+    Al final, con el propósito de demostrar la escalabilidad del código desarrollado, se intentó realizar una ejecución de prueba incrementando la carga a 6 procesos. Dado que el clúster cuenta con un número limitado de núcleos físicos (slots) asignados a las máquinas virtuales, se intentó forzar la asignación múltiple empleando la bandera \texttt{--oversubscribe} y, posteriormente, la alternativa sugerida por la propia terminal \texttt{--map-by :OVERSUBSCRIBE}. 
+    
+    Los comandos ingresados para estos intentos fueron los siguientes:
+
+    \begin{lstlisting}[style=cstyle,caption={Intentos de ejecución con 6 procesos empleando Oversubscribe},label={lst:programa-a-oversubscribe}]
+        mpirun --oversubscribe -np 6 ./Proyecto_2a
+        mpirun --map-by :OVERSUBSCRIBE -np 6 ./Proyecto_2a
+    \end{lstlisting}
+
+    A continuación, se muestra la respuesta generada por el sistema al ejecutar dichas instrucciones:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_9.png}
+        \caption{Restricción de asignación de slots en OpenMPI}
+        \label{fig:proyecto_a_error_slots}
+    \end{figure}
+
+    Como se puede observar en la evidencia, el gestor de recursos de OpenMPI detuvo la ejecución al no encontrar suficientes unidades de asignación (slots) disponibles en el entorno de PelicanHPC para satisfacer los 6 procesos solicitados de manera simultánea. 
+    
+    Pero aún asi es importante destacar que esta restricción es una limitación exclusiva de la configuración de hardware del entorno virtualizado. Este caso no compromete el funcionamiento del programa ni invalida la prueba anterior de 4 procesos, demostrando que la lógica de la topología de anillo y el paso de matrices implementados cumplen con todos los requerimientos solicitados para la resolución del problema.
 
     % \lstinputlisting[style=cstyle,caption={Programa a) Multiplicacion de matrices},label={lst:programa-a}]{../project/proyecto_a.c}
 
@@ -1106,15 +1229,15 @@ Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, y
     \section{Tabla de participacion en el proyecto:}
     \begin{table}[H]
         \centering
-        \begin{tabular}{|p{7cm}|p{7cm}|}
+        \begin{tabular}{|m{7cm}|m{7cm}|}
             \hline
-            \textbf{Integrante} & \textbf{Participacion} \\
+            \cellcolor{orange!35}\centering\LARGE\textbf{Integrante} & \cellcolor{orange!35}\centering\LARGE\textbf{Participación} \tabularnewline
             \hline
-            Garcia Cortes Adolfo de Jesus  &  En el punto 1, con la creacion del cluster, la configuracion de las maquinas virtuales del servidor así como de los 5 clientes usados , la creación del programa para corrobar el correcto funcionamiento del cluster, así como la documentacion del respectivo punto 1.\\
+            \cellcolor{orange!10}\centering\Large{García Cortés Adolfo de Jesús}  &  En el punto 1, con la creacion del cluster, la configuracion de las maquinas virtuales del servidor así como de los 5 clientes usados , la creación del programa para corrobar el correcto funcionamiento del cluster, así como la documentacion del respectivo punto 1.\\
             \hline
-            Lara Hernandez Angel Husiel &  En el punto 2 en la seccion b del problema, con la creacion del programa en c sobre la determinacion que renglon de la matriz tiene la mayor suma de sus elementos, ademas de eso en la contruccion de cluster propio para la correcta ejecucion del problema, asi como la documentacion del respectivo punto de la seccion 2 inciso b.\\
+            \cellcolor{orange!10}\centering\Large{Lara Hernandez Angel Husiel} &  En el punto 2 en la seccion b del problema, con la creacion del programa en c sobre la determinacion que renglon de la matriz tiene la mayor suma de sus elementos, ademas de eso en la contruccion de cluster propio para la correcta ejecucion del problema, asi como la documentacion del respectivo punto de la seccion 2 inciso b.\\
             \hline
-            Lugo Manzano Rodrigo &  \\
+            \cellcolor{orange!10}\centering\Large{Lugo Manzano Rodrigo} & Desarrollo de la sección 2, inciso a del proyecto, mediante la programación en C para resolver el problema del paso y suma de matrices entre procesos. También, la configuración de su propio clúster virtual para verificar la ejecución distribuida del programa, y finalmente la documentación correspondiente a dicho inciso.\\
             \hline
         \end{tabular}
         \caption{Participacion de integrantes en el proyecto}
@@ -1124,12 +1247,12 @@ Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, y
     \newpage
     \section{Conclusiones:}
 
-    \begin{itemize}
-        \item \textbf{Lugo Manzano Rodrigo:} 
-        
-        \item \textbf{Garcia Cortes Adolfo de jesus:} 
+    \begin{itemize}      
+        \item \textbf{García Cortés Adolfo de Jesús:} 
 
         \item \textbf{Lara Hernandez Angel Husiel:} 
+        
+        \item \textbf{Lugo Manzano Rodrigo:} 
     \end{itemize}
 
     \newpage

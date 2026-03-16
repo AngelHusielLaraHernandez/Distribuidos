@@ -5,7 +5,7 @@
 \contentsline {subsubsection}{\numberline {2.1.1}Actividad 1:}{2}{subsubsection.2.1.1}%
 \contentsline {subsection}{\numberline {2.2}Actividad 2:}{20}{subsection.2.2}%
 \contentsline {subsubsection}{\numberline {2.2.1}Programa a) Paso de matrices entre procesos:}{20}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Programa b) Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}{26}{subsubsection.2.2.2}%
-\contentsline {section}{\numberline {3}Tabla de participacion en el proyecto:}{36}{section.3}%
-\contentsline {section}{\numberline {4}Conclusiones:}{37}{section.4}%
-\contentsline {section}{Referencias}{38}{section*.36}%
+\contentsline {subsubsection}{\numberline {2.2.2}Programa b) Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}{30}{subsubsection.2.2.2}%
+\contentsline {section}{\numberline {3}Tabla de participacion en el proyecto:}{40}{section.3}%
+\contentsline {section}{\numberline {4}Conclusiones:}{41}{section.4}%
+\contentsline {section}{Referencias}{42}{section*.42}%
