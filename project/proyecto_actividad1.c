@@ -1,3 +1,11 @@
+/*
+Nombres:    Lugo Manzano Rodrigo
+            Garcia Cortes Adolfo de Jesus
+            Lara Hernandez Angel Husiel
+Proyecto 1 - Actividad 1. Prueba construccion del mini cluster
+Fecha: 16 de marzo del 2026
+*/
+
 #include <mpi.h>
 #include <stdio.h>
 #include <string.h>

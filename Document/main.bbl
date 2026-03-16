@@ -19,141 +19,89 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global/global}
-    \entry{anaya-no-date}{online}{}{}
+    \entry{oracle-no-date}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=7a7fa193ce621e857274d1987930421b}{%
-           family={Anaya},
-           familyi={A\bibinitperiod},
-           given={Rubén},
-           giveni={R\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=30162ed78b6c10f731411f2fc440c24f}{%
+           family={{Oracle}},
+           familyi={O\bibinitperiod}}}%
       }
-      \strng{namehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{fullhash}{7a7fa193ce621e857274d1987930421b}
-      \strng{fullhashraw}{7a7fa193ce621e857274d1987930421b}
-      \strng{bibnamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorbibnamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authornamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorfullhash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorfullhashraw}{7a7fa193ce621e857274d1987930421b}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \strng{namehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{fullhash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{fullhashraw}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{bibnamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorbibnamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authornamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorfullhash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorfullhashraw}{30162ed78b6c10f731411f2fc440c24f}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{labeldatesource}{nodate}
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Manual de recursos y aplicaciones Plataforma Rasberry Pi}
+      \field{title}{Oracle VM VirtualBox - Downloads | Oracle Technology Network | Oracle}
       \true{nocite}
       \verb{urlraw}
-      \verb https://odin.fi-b.unam.mx/micros/docs/Tutoriales%20Raspberry.pdf
+      \verb https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
       \endverb
       \verb{url}
-      \verb https://odin.fi-b.unam.mx/micros/docs/Tutoriales%20Raspberry.pdf
+      \verb https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
       \endverb
     \endentry
-    \entry{elahi-2022}{book}{}{}
+    \entry{petrosez-2025}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=40e998cd0656a510326169381c5b2249}{%
-           family={Elahi},
-           familyi={E\bibinitperiod},
-           given={Ata},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f2b028d314502753297a3907c3d5986}{%
+           family={Petrosez},
+           familyi={P\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {Springer}%
+        {SourceForge}%
       }
-      \strng{namehash}{40e998cd0656a510326169381c5b2249}
-      \strng{fullhash}{40e998cd0656a510326169381c5b2249}
-      \strng{fullhashraw}{40e998cd0656a510326169381c5b2249}
-      \strng{bibnamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorbibnamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authornamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorfullhash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorfullhashraw}{40e998cd0656a510326169381c5b2249}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \strng{namehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{fullhash}{1f2b028d314502753297a3907c3d5986}
+      \strng{fullhashraw}{1f2b028d314502753297a3907c3d5986}
+      \strng{bibnamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorbibnamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authornamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorfullhash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorfullhashraw}{1f2b028d314502753297a3907c3d5986}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{day}{17}
-      \field{edition}{2}
-      \field{month}{3}
-      \field{subtitle}{Digital Design, Fundamentals of Computer Architecture and ARM Assembly Language}
-      \field{title}{Computer systems}
-      \field{year}{2022}
+      \field{day}{12}
+      \field{month}{9}
+      \field{title}{PelicanHPC}
+      \field{year}{2025}
       \field{dateera}{ce}
       \true{nocite}
       \verb{urlraw}
-      \verb https://doi.org/10.1007/978-3-030-93449-1
+      \verb https://sourceforge.net/projects/pelicanhpc/
       \endverb
       \verb{url}
-      \verb https://doi.org/10.1007/978-3-030-93449-1
+      \verb https://sourceforge.net/projects/pelicanhpc/
       \endverb
     \endentry
-    \entry{harris-2015}{book}{}{}
-      \name{author}{2}{}{%
-        {{un=1,uniquepart=given,hash=8cdcbd39d9ab4a8a997eefe63e71c4dc}{%
-           family={Harris},
-           familyi={H\bibinitperiod},
-           given={David},
-           giveni={D\bibinitperiod},
-           givenun=1}}%
-        {{un=1,uniquepart=given,hash=dd908aeed8c0fdae65045567b1de4390}{%
-           family={Harris},
-           familyi={H\bibinitperiod},
-           given={Sarah},
-           giveni={S\bibinitperiod},
-           givenun=1}}%
-      }
-      \list{publisher}{1}{%
-        {Morgan Kaufmann Pub}%
-      }
-      \strng{namehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{fullhash}{519ef25f331377c3f8a76c796092c007}
-      \strng{fullhashraw}{519ef25f331377c3f8a76c796092c007}
-      \strng{bibnamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorbibnamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authornamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorfullhash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorfullhashraw}{519ef25f331377c3f8a76c796092c007}
-      \field{sortinit}{H}
-      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{22}
-      \field{edition}{Arm Edition}
-      \field{month}{4}
-      \field{title}{Digital Design and Computer Architecture}
-      \field{year}{2015}
-      \field{dateera}{ce}
-      \true{nocite}
-    \endentry
-    \entry{smith-2019}{book}{}{}
+    \entry{saenz-2026}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=c0335390e6dcad77f0091d57516ec815}{%
-           family={Smith},
-           familyi={S\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0051c9001efab730170a00ddcae53992}{%
+           family={{Saenz García, E. K.}},
+           familyi={S\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {Apress}%
+      \list{organization}{1}{%
+        {YouTube}%
       }
-      \strng{namehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{fullhash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{fullhashraw}{c0335390e6dcad77f0091d57516ec815}
-      \strng{bibnamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorbibnamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authornamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorfullhash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorfullhashraw}{c0335390e6dcad77f0091d57516ec815}
+      \strng{namehash}{0051c9001efab730170a00ddcae53992}
+      \strng{fullhash}{0051c9001efab730170a00ddcae53992}
+      \strng{fullhashraw}{0051c9001efab730170a00ddcae53992}
+      \strng{bibnamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorbibnamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authornamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorfullhash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorfullhashraw}{0051c9001efab730170a00ddcae53992}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
@@ -161,154 +109,105 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{month}{10}
-      \field{title}{{Raspberry Pi Assembly Language Programming}}
-      \field{year}{2019}
+      \field{day}{3}
+      \field{month}{3}
+      \field{title}{ClusterHPC}
+      \field{type}{Video}
+      \field{year}{2026}
+      \field{dateera}{ce}
       \true{nocite}
       \verb{urlraw}
-      \verb https://doi.org/10.1007/978-1-4842-5287-1
+      \verb https://www.youtube.com/watch?v=F_LFf0lhbRA
       \endverb
       \verb{url}
-      \verb https://doi.org/10.1007/978-1-4842-5287-1
+      \verb https://www.youtube.com/watch?v=F_LFf0lhbRA
       \endverb
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
-    \entry{anaya-no-date}{online}{}{}
+    \entry{oracle-no-date}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=7a7fa193ce621e857274d1987930421b}{%
-           family={Anaya},
-           familyi={A\bibinitperiod},
-           given={Rubén},
-           giveni={R\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=30162ed78b6c10f731411f2fc440c24f}{%
+           family={{Oracle}},
+           familyi={O\bibinitperiod}}}%
       }
-      \strng{namehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{fullhash}{7a7fa193ce621e857274d1987930421b}
-      \strng{fullhashraw}{7a7fa193ce621e857274d1987930421b}
-      \strng{bibnamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorbibnamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authornamehash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorfullhash}{7a7fa193ce621e857274d1987930421b}
-      \strng{authorfullhashraw}{7a7fa193ce621e857274d1987930421b}
-      \field{sortinit}{A}
-      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \strng{namehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{fullhash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{fullhashraw}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{bibnamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorbibnamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authornamehash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorfullhash}{30162ed78b6c10f731411f2fc440c24f}
+      \strng{authorfullhashraw}{30162ed78b6c10f731411f2fc440c24f}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{labeldatesource}{nodate}
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{title}{Manual de recursos y aplicaciones Plataforma Rasberry Pi}
+      \field{title}{Oracle VM VirtualBox - Downloads | Oracle Technology Network | Oracle}
       \true{nocite}
       \verb{urlraw}
-      \verb https://odin.fi-b.unam.mx/micros/docs/Tutoriales%20Raspberry.pdf
+      \verb https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
       \endverb
       \verb{url}
-      \verb https://odin.fi-b.unam.mx/micros/docs/Tutoriales%20Raspberry.pdf
+      \verb https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html
       \endverb
     \endentry
-    \entry{elahi-2022}{book}{}{}
+    \entry{petrosez-2025}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=40e998cd0656a510326169381c5b2249}{%
-           family={Elahi},
-           familyi={E\bibinitperiod},
-           given={Ata},
-           giveni={A\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=1f2b028d314502753297a3907c3d5986}{%
+           family={Petrosez},
+           familyi={P\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {Springer}%
+        {SourceForge}%
       }
-      \strng{namehash}{40e998cd0656a510326169381c5b2249}
-      \strng{fullhash}{40e998cd0656a510326169381c5b2249}
-      \strng{fullhashraw}{40e998cd0656a510326169381c5b2249}
-      \strng{bibnamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorbibnamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authornamehash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorfullhash}{40e998cd0656a510326169381c5b2249}
-      \strng{authorfullhashraw}{40e998cd0656a510326169381c5b2249}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \strng{namehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{fullhash}{1f2b028d314502753297a3907c3d5986}
+      \strng{fullhashraw}{1f2b028d314502753297a3907c3d5986}
+      \strng{bibnamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorbibnamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authornamehash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorfullhash}{1f2b028d314502753297a3907c3d5986}
+      \strng{authorfullhashraw}{1f2b028d314502753297a3907c3d5986}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
       \field{extradatescope}{labelyear}
       \field{labeldatesource}{}
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{day}{17}
-      \field{edition}{2}
-      \field{month}{3}
-      \field{subtitle}{Digital Design, Fundamentals of Computer Architecture and ARM Assembly Language}
-      \field{title}{Computer systems}
-      \field{year}{2022}
+      \field{day}{12}
+      \field{month}{9}
+      \field{title}{PelicanHPC}
+      \field{year}{2025}
       \field{dateera}{ce}
       \true{nocite}
       \verb{urlraw}
-      \verb https://doi.org/10.1007/978-3-030-93449-1
+      \verb https://sourceforge.net/projects/pelicanhpc/
       \endverb
       \verb{url}
-      \verb https://doi.org/10.1007/978-3-030-93449-1
+      \verb https://sourceforge.net/projects/pelicanhpc/
       \endverb
     \endentry
-    \entry{harris-2015}{book}{}{}
-      \name{author}{2}{}{%
-        {{un=1,uniquepart=given,hash=8cdcbd39d9ab4a8a997eefe63e71c4dc}{%
-           family={Harris},
-           familyi={H\bibinitperiod},
-           given={David},
-           giveni={D\bibinitperiod},
-           givenun=1}}%
-        {{un=1,uniquepart=given,hash=dd908aeed8c0fdae65045567b1de4390}{%
-           family={Harris},
-           familyi={H\bibinitperiod},
-           given={Sarah},
-           giveni={S\bibinitperiod},
-           givenun=1}}%
-      }
-      \list{publisher}{1}{%
-        {Morgan Kaufmann Pub}%
-      }
-      \strng{namehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{fullhash}{519ef25f331377c3f8a76c796092c007}
-      \strng{fullhashraw}{519ef25f331377c3f8a76c796092c007}
-      \strng{bibnamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorbibnamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authornamehash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorfullhash}{519ef25f331377c3f8a76c796092c007}
-      \strng{authorfullhashraw}{519ef25f331377c3f8a76c796092c007}
-      \field{sortinit}{H}
-      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{day}{22}
-      \field{edition}{Arm Edition}
-      \field{month}{4}
-      \field{title}{Digital Design and Computer Architecture}
-      \field{year}{2015}
-      \field{dateera}{ce}
-      \true{nocite}
-    \endentry
-    \entry{smith-2019}{book}{}{}
+    \entry{saenz-2026}{online}{}{}
       \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=c0335390e6dcad77f0091d57516ec815}{%
-           family={Smith},
-           familyi={S\bibinitperiod},
-           given={Stephen},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
+        {{un=0,uniquepart=base,hash=0051c9001efab730170a00ddcae53992}{%
+           family={{Saenz García, E. K.}},
+           familyi={S\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {Apress}%
+      \list{organization}{1}{%
+        {YouTube}%
       }
-      \strng{namehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{fullhash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{fullhashraw}{c0335390e6dcad77f0091d57516ec815}
-      \strng{bibnamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorbibnamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authornamehash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorfullhash}{c0335390e6dcad77f0091d57516ec815}
-      \strng{authorfullhashraw}{c0335390e6dcad77f0091d57516ec815}
+      \strng{namehash}{0051c9001efab730170a00ddcae53992}
+      \strng{fullhash}{0051c9001efab730170a00ddcae53992}
+      \strng{fullhashraw}{0051c9001efab730170a00ddcae53992}
+      \strng{bibnamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorbibnamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authornamehash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorfullhash}{0051c9001efab730170a00ddcae53992}
+      \strng{authorfullhashraw}{0051c9001efab730170a00ddcae53992}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{extradatescope}{labelyear}
@@ -316,15 +215,18 @@
       \true{uniqueprimaryauthor}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{month}{10}
-      \field{title}{{Raspberry Pi Assembly Language Programming}}
-      \field{year}{2019}
+      \field{day}{3}
+      \field{month}{3}
+      \field{title}{ClusterHPC}
+      \field{type}{Video}
+      \field{year}{2026}
+      \field{dateera}{ce}
       \true{nocite}
       \verb{urlraw}
-      \verb https://doi.org/10.1007/978-1-4842-5287-1
+      \verb https://www.youtube.com/watch?v=F_LFf0lhbRA
       \endverb
       \verb{url}
-      \verb https://doi.org/10.1007/978-1-4842-5287-1
+      \verb https://www.youtube.com/watch?v=F_LFf0lhbRA
       \endverb
     \endentry
   \enddatalist

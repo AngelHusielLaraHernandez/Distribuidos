@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber main"] 1773655625.48202 "main.bcf" "main.bbl" "main" 1773660830.63293 0
-  "main.bcf" 1773660829 133950 26ec94d1153c1da8e93a2f966e263df0 "pdflatex"
-  "referencias.bib" 1773561184 1028 159b68a72378e2321df4c2135dc1881f ""
+["biber main"] 1773683440.51757 "main.bcf" "main.bbl" "main" 1773684366.99082 0
+  "main.bcf" 1773684365 133950 26ec94d1153c1da8e93a2f966e263df0 "pdflatex"
+  "referencias.bib" 1773683424 670 c26f86673dd026f453b7ff39ee6e6973 ""
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1773660815.49554 "c:/Users/rodyl/OneDrive/Escritorio/FacultadIngenieria/8vo_Semestre/SistemasDistribuidos/Proyecto1_Cluster/Distribuidos/Document/main.tex" "main.pdf" "main" 1773660830.63618 0
+["pdflatex"] 1773684352.03565 "c:/Users/rodyl/OneDrive/Escritorio/FacultadIngenieria/8vo_Semestre/SistemasDistribuidos/Proyecto1_Cluster/Distribuidos/Document/main.tex" "main.pdf" "main" 1773684366.99396 0
   "C:/Users/rodyl/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1773655608 122913 be30239dddaece5c0f76effdadd8f716 ""
   "C:/Users/rodyl/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs10.tfm" 1738722185 688 37338d6ab346c2f1466b29e195316aa4 ""
   "C:/Users/rodyl/AppData/Local/MiKTeX/fonts/tfm/public/rsfs/rsfs5.tfm" 1738722187 684 3a51bd4fd9600428d5264cf25f04bb9a ""
@@ -259,7 +259,7 @@
   "C:/Users/rodyl/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "C:/Users/rodyl/AppData/Local/Programs/MiKTeX/tex/latex/xpatch/xpatch.sty" 1585221260 8510 7803f78066c4f9d008405191a4b43073 ""
   "C:/Users/rodyl/AppData/Local/Programs/MiKTeX/tex/latex/xstring/xstring.sty" 1693735632 123 a302f2c651a95033260db60e51527ae8 ""
-  "c:/Users/rodyl/OneDrive/Escritorio/FacultadIngenieria/8vo_Semestre/SistemasDistribuidos/Proyecto1_Cluster/Distribuidos/Document/main.tex" 1773660813 64242 2e715f5280f9c740dcc21848ad63ea65 ""
+  "c:/Users/rodyl/OneDrive/Escritorio/FacultadIngenieria/8vo_Semestre/SistemasDistribuidos/Proyecto1_Cluster/Distribuidos/Document/main.tex" 1773684349 65058 b25715a2e363a133e14a833215de1d09 ""
   "img/Cluster/Adaptador1.png" 1773647928 47409 0991bfcb2206b00d10aaec5083c93ea3 ""
   "img/Cluster/Adaptador2.png" 1773647928 45749 3431118ddd27de6e315f8b9207c08fdf ""
   "img/Cluster/Cliente11.png" 1773647928 89434 77b1413b41120bd4e41acbf2c6532c1a ""
@@ -300,12 +300,12 @@
   "img/Seccion2/inciso2/image1_2.png" 1773561184 452403 1c09a1582bb0293ffa94d32405682235 ""
   "img/Seccion2/inciso2/image3.png" 1773561184 337409 5049809742681280e5ae00694114017b ""
   "img/Seccion2/inciso2/image4.png" 1773561184 338955 3050d1b622368a932c72e6825a34bd38 ""
-  "main.aux" 1773660829 20653 9c8ccc1b72d9fa0777a21f41a8200c33 "pdflatex"
-  "main.bbl" 1773655628 12855 6c7dcdf2cdd9bbbc4128a51b2574d899 "biber main"
-  "main.out" 1773660829 1946 a7da08c2801edbef4c0ae889bd69a060 "pdflatex"
-  "main.run.xml" 1773660829 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
-  "main.tex" 1773660813 64242 2e715f5280f9c740dcc21848ad63ea65 ""
-  "main.toc" 1773660829 927 2ee1398f61ad2b6c9010ece74aaa41b2 "pdflatex"
+  "main.aux" 1773684365 20559 689ca07ca6d92f83328f0eb57a718101 "pdflatex"
+  "main.bbl" 1773683444 9123 beccf18bcc070d1ac44d545e6b59f604 "biber main"
+  "main.out" 1773684365 1946 a7da08c2801edbef4c0ae889bd69a060 "pdflatex"
+  "main.run.xml" 1773684365 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
+  "main.tex" 1773684349 65058 b25715a2e363a133e14a833215de1d09 ""
+  "main.toc" 1773684365 927 c32ced0b4ad433553a9c5044bfc87501 "pdflatex"
   "portada.tex" 1773655598 1459 bf1dffc402d5835bf7a3adad8fa3f081 ""
   "portada_img/der.png" 1773561184 210257 06dba9f878f374ac030ef44e424ff46e ""
   "portada_img/izq.png" 1773561184 32490 d7273825e9d4d7935ebf779b146a35ff ""

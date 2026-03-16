@@ -1,6 +1,10 @@
-// Lara Hernandez Angel Husiel
-// Proyecto 1 - Problema b) Fila con mayor suma
-// Sistemas Distribuidos - Profesora: Elba Karen Saenz Garcia
+/*
+Nombres:    Lugo Manzano Rodrigo
+            Garcia Cortes Adolfo de Jesus
+            Lara Hernandez Angel Husiel
+Proyecto 1 - Problema 2-b)  Determinacion de renglos de matriz que tiene la mayor suma de sus elementos
+Fecha: 16 de marzo del 2026
+*/
 
 #include <mpi.h>
 #include <stdio.h>

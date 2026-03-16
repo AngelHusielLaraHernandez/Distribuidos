@@ -8,4 +8,4 @@
 \contentsline {subsubsection}{\numberline {2.2.2}Programa b) Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}{30}{subsubsection.2.2.2}%
 \contentsline {section}{\numberline {3}Tabla de participacion en el proyecto:}{40}{section.3}%
 \contentsline {section}{\numberline {4}Conclusiones:}{41}{section.4}%
-\contentsline {section}{Referencias}{42}{section*.42}%
+\contentsline {section}{Referencias}{41}{section*.42}%
