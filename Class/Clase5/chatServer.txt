@@ -1,0 +1,22 @@
+
+
+
+		Se inicia chat 
+
+
+ otro usuario (13:43) ->Hola
+
+ yo (13:43) ->Hola cliente
+
+ otro usuario (13:44) ->Como estas servidor? 
+
+ yo (13:44) ->probando paso de parametros cliente
+
+ otro usuario (13:44) ->servidor
+
+ yo (13:44) ->adios
+
+
+
+		 Fin  chat 
+
