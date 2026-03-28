@@ -1,4 +1,4 @@
-from multiprocessing import process, Pipe
+from multiprocessing import Process, Pipe
 from os import getpid
 from datetime  import datetime
 
@@ -51,9 +51,9 @@ if __name__ == '__main__':
     pipe12, pipe21 = Pipe()
     pipe23, pipe32 = Pipe()
     
-    p1= process(target=process_one, args=(pipe12,))
-    p2= process(target=process_two, args=(pipe21, pipe23))
-    p3= process(target=process_three, args=(pipe32,))
+    p1= Process(target=process_one, args=(pipe12,))
+    p2= Process(target=process_two, args=(pipe21, pipe23))
+    p3= Process(target=process_three, args=(pipe32,))
     
     p1.start()
     p2.start()
