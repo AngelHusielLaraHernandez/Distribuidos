@@ -1,5 +1,7 @@
 #Algoritmo de Berkey
 
+#Actividad 5 : Modificar la implementación anterior para ejecutar, servidor y clientes en máquinas diferentes. 
+
 import socket
 import time
 import struct
