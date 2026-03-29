@@ -34,6 +34,7 @@ def clienteBerkeley(server_ip, port=60001):
     print("Conexión cerrada.")
 
 if __name__ == "__main__":
+    
     if len(sys.argv) < 2:
         print("Uso: python berkeley_cliente.py <ip_servidor> [puerto]")
         print("Ejemplo: python berkeley_cliente.py 192.168.1.100 60001")
