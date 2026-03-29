@@ -1,0 +1,40 @@
+PS C:\Users\Angel Lara\Music\semestre8\SistemasDistribuidos\Distribuidos\Class\Clase6> python3 .\berkeley_servidor.py
+==================================================
+SERVIDOR BERKELEY - Sincronización de Relojes
+==================================================
+Servidor de Berkeley escuchando en 192.168.0.9:60001
+Esperando 3 clientes...
+Conexión 1/3 establecida con: ('192.168.0.35', 49863)
+Conexión 2/3 establecida con: ('192.168.0.36', 50781)
+Conexión 3/3 establecida con: ('192.168.0.37', 36627)
+
+Todos los clientes conectados. Solicitando tiempos...
+Tiempo recibido del cliente: 1774819586.3848164
+Servidor de Berkeley escuchando en 192.168.0.9:60001
+Esperando 3 clientes...
+Conexión 1/3 establecida con: ('192.168.0.35', 49863)
+Conexión 2/3 establecida con: ('192.168.0.36', 50781)
+Conexión 3/3 establecida con: ('192.168.0.37', 36627)
+
+Todos los clientes conectados. Solicitando tiempos...
+Tiempo recibido del cliente: 1774819586.3848164
+Conexión 2/3 establecida con: ('192.168.0.36', 50781)
+Conexión 3/3 establecida con: ('192.168.0.37', 36627)
+
+Todos los clientes conectados. Solicitando tiempos...
+Tiempo recibido del cliente: 1774819586.3848164
+Tiempo recibido del cliente: 1774819698.9288301
+Tiempo recibido del cliente: 1774819694.6222243
+Tiempo recibido del cliente: 1774819698.9288301
+Tiempo recibido del cliente: 1774819694.6222243
+Tiempo del servidor: 1774819699.4262137
+Tiempo promedio calculado: 1774819669.8405213
+Tiempo del servidor: 1774819699.4262137
+Tiempo promedio calculado: 1774819669.8405213
+Ajustes a enviar: [83.45570492744446, -29.088308811187744, -24.781702995300293]
+Ajustes a enviar: [83.45570492744446, -29.088308811187744, -24.781702995300293]
+Enviando ajuste de tiempo: 83.45570492744446
+Enviando ajuste de tiempo: -29.088308811187744
+Enviando ajuste de tiempo: -24.781702995300293
+
+Sincronización completada. Servidor cerrado.

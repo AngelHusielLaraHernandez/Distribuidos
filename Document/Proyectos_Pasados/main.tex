@@ -1,0 +1,1258 @@
+\documentclass[letterpaper,11pt]{article}
+
+% --- PAQUETES DE IDIOMA
+\usepackage[spanish,mexico]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{iftex}
+
+\ifPDFTeX
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\else
+\usepackage{fontspec}
+\setmainfont{Georgia}
+\usepackage{amssymb}
+\fi
+
+% --- PAQUETES MATEMÁTICOS --
+\usepackage{amsmath}
+\usepackage{cancel}
+\usepackage{mathrsfs}
+
+% --- PAQUETES GRÁFICOS Y DE DISEÑO ---
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{makecell}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage[table]{xcolor}
+\usetikzlibrary{shapes.geometric, shapes.multipart, positioning, arrows.meta, calc, shadows, decorations.pathreplacing,babel}
+
+% --- LISTAS ---
+\usepackage{enumitem}
+
+% --- PAQUETES DE CÓDIGO ---
+\usepackage{listings}
+% Configuración del estilo de listings
+\definecolor{codebg}{rgb}{0.95,0.95,0.95}   
+\definecolor{keyword}{rgb}{0.0,0.2,0.6}     
+\definecolor{comment}{rgb}{0.25,0.5,0.35}   
+\definecolor{string}{rgb}{0.6,0.0,0.0}      
+\definecolor{number}{rgb}{0.5,0.0,0.5}      
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{black},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false,
+  literate={á}{{\'a}}1
+           {é}{{\'e}}1
+           {í}{{\'i}}1
+           {ó}{{\'o}}1
+           {ú}{{\'u}}1
+           {Á}{{\'A}}1
+           {É}{{\'E}}1
+           {Í}{{\'I}}1
+           {Ó}{{\'O}}1
+           {Ú}{{\'U}}1
+           {ñ}{{\~n}}1
+           {Ñ}{{\~N}}1
+           {¿}{{\textquestiondown}}1
+           {¡}{{\textexclamdown}}1
+}
+
+% Definición del lenguaje ARM Assembler para listings
+\lstdefinelanguage[ARM]{Assembler}{
+  morekeywords={MOV, ADD, SUB, SUBS, MUL, AND, ORR, EOR, NOT, CMP, TST,
+                BEQ, BNE, BGT, BLT, BGE, BLE, B, BL, BX, BLX,
+                LDR, STR, LDRB, STRB, PUSH, POP, SVC, LSL, LSR, ASR,
+                ROR, RRX, MVN, RSB, ADC, SBC, MLA, SMULL, UMULL,
+                STMFD, LDMFD, STMIA, LDMIA, NOP},
+  morecomment=[l]{@},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  sensitive=false
+}
+
+% Estilo para código en C
+\lstdefinestyle{cstyle}{
+  language=C,
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+    keywordstyle=[2]\color{yellow!70!orange}\bfseries,
+    morekeywords=[2]{MPI_Init,MPI_Comm_size,MPI_Comm_rank,MPI_Send,MPI_Recv,MPI_Scatter,MPI_Gather,MPI_Bcast,MPI_Reduce,MPI_Finalize},
+    emph={printf},
+    emphstyle=\color{blue}\bfseries,
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{black},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false
+}
+
+% --- ESTILOS PARA DIAGRAMAS DE FLUJO (TIKZ) ---
+\tikzset{
+  startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30},
+  process/.style={rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30},
+  decision/.style={diamond, aspect=2, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30},
+  io/.style={trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30},
+  arrow/.style={thick,->,>=stealth}
+}
+
+
+\definecolor{azulresultado}{HTML}{0072C6}
+\definecolor{rojoacarreo}{HTML}{FF0000}
+
+% --- RUTAS DE IMÁGENES ---
+\graphicspath{{img/}{portada_img/}}
+
+\definecolor{armblue}{RGB}{0, 113, 188}
+
+% --- ÍNDICE CON PUNTOS ---
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% --- CONFIGURACIÓN DE PÁGINA (GEOMETRÍA) ---
+\usepackage[
+    left=25mm, 
+    right=25mm,
+    top=35mm,
+    bottom=30mm,
+    headheight=77pt, 
+    papersize={21.59cm,27.94cm}
+]{geometry}
+
+% --- FORMATO DE TEXTO ---
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip} 
+\usepackage{lipsum}  
+
+% --- VARIABLES GLOBALES ---
+\newcommand{\materia}{}
+
+% --- ENCABEZADOS Y PIES DE PÁGINA ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} 
+\fancyhead[L]{\includegraphics[height=1.5cm]{portada_img/der.png}}
+\fancyhead[R]{\includegraphics[height=1.5cm]{portada_img/izq.png}}
+\fancyfoot[C]{\thepage} 
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0pt}  
+
+% --- BIBLIOGRAFÍA ---
+\usepackage[backend=biber, style=apa, sortcites, url=true]{biblatex}
+\addbibresource{referencias.bib}
+
+% --- HIPERVÍNCULOS ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan
+}
+
+\begin{document}
+
+    \input{portada.tex}
+
+    \newpage
+    {\hypersetup{linkcolor=black}\tableofcontents}
+    
+    \newpage
+
+    \setcounter{page}{1}
+
+    \section{Objetivo:}
+
+    Construir un sistema distribuido de cómputo de alto rendimiento (HPC) y ejecutar programas paralelos que distribuyan el trabajo entre los nodos que lo conforman.
+
+    \section{Desarrollo:}
+    Para realizacion del proyecto se tiene como funciones disponibles de MPI las siguientes:
+    \begin{itemize}
+        \item \textbf{MPI\_Init:} Inicializa el entorno de ejecución de MPI.
+        \item \textbf{MPI\_Comm\_size:} Determina el número total de procesos en el comunicador.
+        \item \textbf{MPI\_Comm\_rank:} Determina el identificador único (rango) del proceso dentro del comunicador.
+        \item \textbf{MPI\_Send:} Envía un mensaje a otro proceso.
+        \item \textbf{MPI\_Recv:} Recibe un mensaje de otro proceso.
+        \item \textbf{MPI\_Finalize:} Finaliza el entorno de ejecución de MPI.
+        \item \textbf{MPI\_Gather:} Recopila datos de todos los procesos en el comunicador.
+        \item \textbf{MPI\_Scatter:} Distribuye datos desde un proceso raíz a todos los procesos en el comunicador.
+        \item \textbf{MPI\_Bcast:} Difunde un mensaje desde un proceso raíz a todos los procesos en el comunicador.
+        \item \textbf{MPI\_Reduce:} Realiza una operación de reducción (como suma, máximo, etc.) en datos distribuidos entre los procesos y devuelve el resultado al proceso raíz.
+    \end{itemize}
+
+    De las cuales, para el desarrollo de los programas, solo se usaron las funciones \textbf{MPI\_Init}, \textbf{MPI\_Comm\_size}, \textbf{MPI\_Comm\_rank}, \textbf{MPI\_Send}, \textbf{MPI\_Recv}, \textbf{MPI\_Scatter}, \textbf{MPI\_Gather} y \textbf{MPI\_Finalize}.
+
+
+    \newpage
+
+    \subsection{Documentacion del cluster:}
+
+    \subsubsection{Actividad 1:}
+
+    Para la realizacion del cluster, se siguieron los siguientes pasos:
+
+    \textbf{Aplicaciones y archivos requeridos para la instalación}
+    
+    1-. Instalación de Oracle VirtualBox Manager
+    Este se instala porque es donde se van a crear las máquinas virtuales que conformarán el cluster HPC.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/oraclevirtualbox.png}
+        \caption{Página de instalación de Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.57\textwidth]{img/Cluster/oraclevirtualboxfuncionando.png}
+        \caption{Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    2-. Instalación de pelicanhpc version 6.1, que esta mediante un archivo tipo ISO, este se instala porque es la distribución de Linux que se va a usar para crear el cluster HPC.
+
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/pelican.png}
+        \caption{Archivo ISO de PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \textbf{Creación del servidor}
+
+    Para la creación del servidor, se crea una máquina virtual en Oracle VirtualBox Manager, asignándole un nombre (en este caso ServidorHPC).
+    Se configuran sus características básicas:
+
+    \begin{itemize}
+        \item Tipo de sistema operativo: Linux
+        \item Memoria Base: 2048 MB
+        \item Procesadores: 2
+        
+    \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor1.png}
+        \caption{Creación del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor2.png}
+        \caption{Especificación de características del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cluster/creacionservidor3.png}
+        \caption{Resumen de características del servidor en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+    Como no necesitamos un disco duro virtual lo vamos a eliminarlo al remover el archivo ServidorHPC.vdi que se creó por default.
+
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/Discodurovirtual.png}
+        \caption{Ubicación del disco duro virtual creado por default en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cluster/Eliminacióndiscodurovirtual.png}
+        \caption{Eliminación del disco duro virtual creado por default en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+
+    Vamos a proseguir con las configuraciónes restantes que nos faltan en nuestro servidor.
+
+    Lo primero que vamos a hacer es cambiar la prioridad de arranque de nuestro servidor, vamos a hacer que arranque en "Optical Drive" para que arranque con el archivo ISO de PelicanHPC que se va a montar posteriormente.   
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Optica.png}
+        \caption{Configuración de la prioridad de arranque en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Vamos a proseguir a poner el archivo ISO de PelicanHPC en la unidad de CD/DVD de nuestro servidor, para esto vamos a ir a la configuración del servidor, luego a la sección de "Storage", seleccionamos el controlador IDE y luego seleccionamos la unidad de CD/DVD, después seleccionamos la opción de "Choose a disk file" y seleccionamos el archivo ISO de PelicanHPC que se encuentra en nuestra computadora.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Optica2.png}
+        \caption{Ponemos el archivo ISO de PelicanHPC en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+
+
+    Proseguimos con la configuración de la red del servidor, para esto vamos a ir a la configuración del servidor, luego a la sección de "Network", seleccionamos el adaptor 1 y lo dejamos de tipo "NAT", para que podamos acceder a internet desde el servidor.
+
+       \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Adaptador1.png}
+        \caption{Configuración del adaptador de red 1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Vamos a activar un segundo adaptador de red y lo vamos a dejar en Red interna solo, para que los nodos puedan comunicarse entre sí y con el servidor.
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Adaptador2.png}
+        \caption{Configuración del adaptador de red 2 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+     \newpage
+
+    Iniciamos nuestra máquina virtual del servidor, siguiendo las propias instrucciones de PelicanHPC
+    Con la única diferencia de que vamos primero a levantar el ambiente gráfico con "startx" y luego vamos a crear el cluster con "pelicansetup"
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{img/Cluster/servidorf1.png}
+        \caption{Levantando el ambiente gráfico en el servidor con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+    Una vez ya levantando el ambiente gráfico, vamos a crear el cluster con el comando "pelicansetup", este comando se encarga de configurar el cluster HPC, asignando las IPs a los nodos y configurando el servicio de SSH para que los nodos puedan comunicarse entre sí y con el servidor. Donde nos aparecen las dos interfaces de red que tenemos
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/servidorf2.png}
+        \caption{Creando el cluster con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    Elegimos la segunda interfaz de red, que es donde estan los nodos del cluster, y empezamos a configurar nuestro cluster, para finalmente empezar a cargar nuestros nodos.
+
+         \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Conficluster.png}
+        \caption{Configurando el cluster con PelicanHPC}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+    \textbf{Creación de los clientes}
+    
+    Para la creación de los clientes, se crearan dos clientes en Oracle VirtualBox Manager, asignándoles un nombre (en este caso ClienteHPC1 y ClienteHPC2).
+
+    Empezando con el ClienteHPC1, se configuran sus características básicas:
+    \begin{itemize}
+        \item Tipo de sistema operativo: Windows
+        \item Memoria Base: 2048 MB
+        \item Procesadores: 1
+    \end{itemize}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente11.png}
+        \caption{Sistema Operativo del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente12.png}
+        \caption{Memoria Base y número de procesadores del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente13.png}
+        \caption{Se crea sin disco duro virtual el ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+
+    \newpage
+    Vamos ahora a configurar la prioridad de arranque del ClienteHPC1, para que arranque en "Network" y pueda arrancar desde el servidor del cluster.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente14.png}
+        \caption{Configuración de la prioridad de arranque del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+
+    Proseguimos con la configuración de la red del ClienteHPC1, para esto vamos a ir a la configuración del cliente, luego a la sección de "Network", seleccionamos el adaptador 1 y lo dejamos en Red interna solo, para que el cliente pueda comunicarse con el servidor y los demás nodos del cluster.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente15.png}
+        \caption{Configuración del adaptador de red del ClienteHPC1 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+    
+    \newpage
+    Inicializamos la máquina virtual, pero como inicializa por red, tenemos que esperar unos momentos hasta que se conecte el servidor y queda de la siguiente manera:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente16.png}
+            \caption{Inicialización del ClienteHPC1 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster} 
+        \end{figure}
+
+
+    Finalmente el servidor detecte que este cliente o nodo ha sido creado, por eso marca que al momento solo nay 1 nodo disponible
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.57\textwidth]{img/Cluster/Cliente17.png}
+            \caption{Servidor detecta el ClienteHPC1 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+    
+
+    \newpage
+    Vamos a proceder a crear el ClienteHPC2, el cual se va a configurar de la misma manera que el ClienteHPC1.
+    
+    Por lo que se mostrara directamente como ya se ve la maquina virtual del ClienteHPC2 y como se ve reflejado en el servidor
+
+      \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente21.png}
+            \caption{ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+    
+          \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente22.png}
+            \caption{Inicialización del ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+        
+
+         \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente23.png}
+            \caption{Servidor detecta el ClienteHPC2 en Oracle VirtualBox Manager}
+            \label{fig:Instalación cluster}
+        \end{figure}
+
+  
+    \textbf{Creación del programa}
+    
+    Se nos pidio hacer lo siguiente: 
+    La ejecución de un programa paralelo que u lice al menos 6 procesos. 
+    Para ello, desarrollar un programa en el que el proceso 0 envíe un dato diferente a otros cinco procesos. 
+    Cada proceso receptor deberá imprimir: El nombre de la máquina o nodo, su iden ficador de proceso y el dato recibido.   
+ 
+    
+    Para esto cree 5 máquinas virtuales más, con las mismas características que los clientes anteriores, pero con la prioridad de arranque en "Optical Drive" para que arranquen con el archivo ISO de PelicanHPC que se encuentra en el servidor, y con la red en Red interna solo para que puedan comunicarse con el servidor y los demás nodos del cluster. 
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente31.png}
+        \caption{Clientes creados en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+
+    \end{figure}
+
+    Observamos que el servidor detecta que se han creado los nuevos nodos, por lo que ahora tenemos un total de 6 nodos disponibles para ejecutar nuestro programa paralelo.
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Cluster/Cliente32.png}
+        \caption{Servidor detecta el ClienteHPC3, ClienteHPC4, ClienteHPC5 y ClienteHPC6 en Oracle VirtualBox Manager}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+    
+El código es el siguiente:
+
+\begin{lstlisting}[style=cstyle,caption={Distribucion de datos desde el proceso maestro a los nodos clientes con MPI},label={lst:programa-distribucion}]
+#include <mpi.h>
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char** argv) {
+    int rank, size;
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+
+    // Inicializar MPI
+    MPI_Init(&argc, &argv);
+    
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    // Verificacion de seguridad
+    if (size < 6) {
+        if (rank == 0) {
+            printf("Error: Se necesitan 6 procesos para los 6 nodos.\n");
+        }
+        MPI_Finalize();
+        return 0;
+    }
+
+    if (rank == 0) {
+        // Logica del Servidor (Proceso 0)
+        printf("Soy el maestro (Proceso 0) en el nodo: %s\n", processor_name);
+        printf("Enviando un dato unico a los 5 nodos clientes...\n\n");
+        
+        // Enviar a los procesos del 1 al 5
+        for (int dest = 1; dest <= 5; dest++) {
+            int dato_a_enviar = dest * 100; // Datos: 100, 200, 300, 400, 500
+            MPI_Send(&dato_a_enviar, 1, MPI_INT, dest, 0, MPI_COMM_WORLD);
+        }
+    } else if (rank >= 1 && rank <= 5) {
+        // Logica de los Clientes (Procesos 1 al 5)
+        int dato_recibido;
+        
+        MPI_Recv(&dato_recibido, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        
+        printf("Nodo cliente: %s | ID de proceso: %d | Dato recibido: %d\n", 
+               processor_name, rank, dato_recibido);
+    }
+
+    // Finalizar MPI
+    MPI_Finalize();
+    return 0;
+}
+\end{lstlisting}
+    
+
+Este programa escrito en C utiliza la biblioteca MPI (\textit{Message Passing Interface}) para comunicar diferentes procesos que pueden estar ejecutándose en distintas computadoras o núcleos (nodos). El código sigue un modelo clásico de ``maestro-cliente''. A continuación, se detalla su funcionamiento paso a paso:
+
+\begin{itemize}
+    \item \textbf{Preparación inicial:} 
+    Las funciones \texttt{MPI\_Init}, \texttt{MPI\_Comm\_rank} y \texttt{MPI\_Comm\_size} se encargan de encender el sistema de comunicación. A cada proceso se le asigna un número identificador único llamado \texttt{rank} (el proceso 0 será nuestro maestro, y los demás serán los clientes). También se cuenta cuántos procesos hay en total (\texttt{size}) y se guarda el nombre del equipo donde se está ejecutando mediante \texttt{MPI\_Get\_processor\_name}.
+
+    \item \textbf{Verificación de seguridad:}
+    El programa comprueba mediante un \texttt{if (size < 6)} que se hayan lanzado al menos 6 procesos en total (1 maestro y 5 clientes). Si el usuario ejecutó el programa con menos procesos, el maestro muestra un mensaje de error y el programa se detiene de forma segura.
+
+    \item \textbf{La labor del Maestro (Proceso 0):}
+    Si el \texttt{rank} es 0, este proceso toma el rol de jefe. Su trabajo es usar un bucle \texttt{for} para enviar un número matemático simple y único a cada cliente. Usando la instrucción \texttt{MPI\_Send}, le envía un 100 al proceso 1, un 200 al proceso 2, un 300 al proceso 3, y así sucesivamente.
+
+    \item \textbf{La labor de los Clientes (Procesos del 1 al 5):}
+    Si el \texttt{rank} está entre el 1 y el 5, el proceso actúa como cliente. Su única tarea es esperar a que el maestro le envíe la información utilizando la instrucción \texttt{MPI\_Recv}. Una vez que el dato llega, el cliente imprime en la pantalla dónde se está ejecutando, cuál es su número de proceso y qué número recibió exactamente.
+
+    \item \textbf{Cierre del programa:}
+    Al final, la instrucción \texttt{MPI\_Finalize()} se asegura de cerrar las conexiones de red y apagar el entorno MPI de manera limpia para no dejar procesos atascados en la memoria.
+\end{itemize}
+
+El resultado del código es el siguiente, primero me gustaria mencionar los procesos que tenemos con el comando "cat /etc/hosts" para mostrar los nodos que tenemos disponibles, que son los siguientes:
+
+
+     \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.0\textwidth]{img/Cluster/codigo1.png}
+        \caption{Nodos disponibles en el cluster con el comando "cat /etc/hosts"}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+
+\newpage
+Este es lo que imprime el programa anteriormente descrito:
+
+
+\begin{figure}[H]
+        \centering
+        \includegraphics[width=1.0\textwidth]{img/Cluster/codigo2.png}
+        \caption{Resultado del programa paralelo en el cluster}
+        \label{fig:Instalación cluster}
+    \end{figure}
+    
+
+Como se puede observar usamos los mismos nodos, al ver el nombre de los nodos, ya que son los mismos que podemos ver en la imagen anterior, corroborando el correcto funcionamiento del programa
+
+
+
+\newpage
+    \subsection{Actividad 2:}
+
+    \subsubsection{Programa a) Paso de matrices entre procesos:}
+
+    \textbf{Enunciado: }
+    Implementar un programa que realice el paso de dos matrices de enteros (A y B) entre varios procesos, utilizando np procesos, tal como se indica en la figura proporcionada. 
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.55\textwidth]{img/Seccion2/inciso1/Enunciado.png}
+        \caption{Diagrama de paso de matrices entre procesos}
+        \label{fig:Enunciado programa a}
+    \end{figure}
+
+    Cada vez que un proceso reciba las matrices A y B, deberá: Sumar ambas matrices, almacenar el resultado en la matriz A y enviar las matrices al siguiente proceso.
+    
+    El proceso 0 deberá imprimir las matrices A y B con sus valores iniciales, el resultado final obtenido después del paso por todos los procesos. 
+
+    \textbf{Resolución :}
+    Al inicio del programa tenemos lo siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Inclusiones, definiciones y funcion de impresion},label={lst:programa-a-init}]
+    #include <mpi.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <unistd.h>
+    #define N 4
+    #define M 4
+
+    void print_matrix(char* titulo, int *mat, int rows, int cols) {
+        printf("  %s:\n", titulo);
+        for (int i = 0; i < rows; i++) {
+            printf("  [");
+            for (int j = 0; j < cols; j++) {
+                printf("%4d", mat[i * cols + j]);
+                if (j < cols - 1) printf(", ");
+            }
+            printf(" ]\n");
+        }
+    }
+    \end{lstlisting}
+
+    En esta primera parte del código, se incluyen las librerías estándar necesarias para la ejecución, tales como \texttt{<mpi.h>} para utilizar el estándar de paso de mensajes, así como \texttt{<stdio.h>} y \texttt{<stdlib.h>} para la entrada/salida de datos en consola y la asignación dinámica de memoria. Además, se definen las constantes \texttt{N} y \texttt{M} con un valor de 4, las cuales determinan el tamaño de las matrices enteras que procesará el anillo ($4 \times 4$).
+
+    Inmediatamente después, se declara la función auxiliar \texttt{print\_matrix()}. Esta función recibe el título de la matriz, el puntero a los datos y sus dimensiones (\texttt{rows} y \texttt{cols}). Su propósito es iterar sobre los elementos del arreglo mediante un ciclo anidado para mostrarlos en pantalla con un formato de cuadrícula uniforme, corchetes y espaciado, lo que facilita la visualización y comprobación de las operaciones matemáticas en la terminal.
+
+    Posterior a esto, se da inicio a la función principal \texttt{main()}:
+
+    \begin{lstlisting}[style=cstyle,caption={Inicializacion del entorno y asignacion de memoria},label={lst:programa-a}]
+    int main(int argc, char **argv) {
+        int np, id;
+        char hostname[256];
+        
+        // Asignacion de memoria para A y B (matrices completas)
+        int *A = (int *)malloc(N * M * sizeof(int));
+        int *B = (int *)malloc(N * M * sizeof(int));
+
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &np);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+        gethostname(hostname, sizeof(hostname));
+
+        if (np < 2) {
+            if (id == 0) printf("Error: Se necesitan al menos 2 procesos\n");
+            MPI_Finalize();
+            return 1;
+        }
+    \end{lstlisting}
+    
+    Primero se declaran las variables necesarias para el programa, como el número de procesos (\texttt{np}), el identificador del proceso (\texttt{id}) y un arreglo para almacenar el nombre del host donde se ejecuta cada proceso (\texttt{hostname}). Además, se reserva la memoria dinámica para los punteros de las matrices enteras $A$ y $B$, las cuales tendrán un tamaño total de $N \times M$.
+    
+    Luego se inicializa el entorno de ejecución de MPI con \texttt{MPI\_Init()}, se obtiene el número total de procesos con \texttt{MPI\_Comm\_size()} y el identificador único de cada proceso con \texttt{MPI\_Comm\_rank()}. También se obtiene el nombre del nodo físico utilizando la función \texttt{gethostname()}. Se implementa una validación para asegurar que existan al menos 2 procesos, ya que es el mínimo indispensable para conformar la topología de anillo.
+
+    Para la impresión de las matrices durante la ejecución, se desarrolló una función auxiliar:
+    
+    \begin{lstlisting} [style=cstyle,caption={Funcion de impresion de matriz},label={lst:programa-a}]
+    void print_matrix(char* titulo, int *mat, int rows, int cols) {
+        printf("  %s:\n", titulo);
+        for (int i = 0; i < rows; i++) {
+            printf("  [");
+            for (int j = 0; j < cols; j++) {
+                printf("%4d", mat[i * cols + j]);
+                if (j < cols - 1) printf(", ");
+            }
+            printf(" ]\n");
+        }
+    }
+    \end{lstlisting}
+
+    Esta función recibe el título de la matriz, el puntero a los datos y sus dimensiones, iterando mediante un ciclo anidado para mostrar los elementos con un formato de espaciado uniforme.
+
+    Posteriormente, comienza la lógica específica del proceso raíz:
+    
+    \textbf{Fragmento de codigo de generacion de matriz (C):}
+
+    \begin{lstlisting}[style=cstyle,caption={Generacion de matrices e inicio del anillo en proceso 0},label={lst:programa-a}]
+    // --- LOGICA DEL PROCESO 0 (Inicia y Termina el ciclo) ---
+    if (id == 0) {
+        // Inicializar matrices A y B
+        for (int i = 0; i < N * M; i++) {
+            A[i] = i + 1; // Valores secuenciales
+            B[i] = 2;     // Valor constante para que sea facil verificar la suma
+        }
+
+        printf("=========================================================\n");
+        printf("  INICIO DEL PROGRAMA - %d procesos\n", np);
+        printf("=========================================================\n");
+        printf("  [P0] Nodo: %s | Genera e imprime matrices iniciales\n\n", hostname);
+        print_matrix("Matriz A (Inicial)", A, N, M);
+        printf("\n");
+        print_matrix("Matriz B (Constante)", B, N, M);
+        printf("=========================================================\n");
+
+        // Enviar A y B al Proceso 1
+        printf("  [P0] Nodo: %s | Enviando matrices a P1...\n", hostname);
+        MPI_Send(A, N * M, MPI_INT, 1, 0, MPI_COMM_WORLD);
+        MPI_Send(B, N * M, MPI_INT, 1, 1, MPI_COMM_WORLD);
+    \end{lstlisting}
+
+    Cuando la condición evalúa al proceso 0, este se encarga de inicializar la matriz $A$ con valores numéricos secuenciales y la matriz $B$ con un valor constante (2) para facilitar la verificación del cálculo distribuido. Tras imprimir los valores iniciales en consola, el proceso 0 envía ambas matrices completas al Proceso 1 utilizando la función \texttt{MPI\_Send()}. 
+    
+    El primer \texttt{MPI\_Send()} envía la matriz $A$, especificando su puntero, la cantidad total de elementos ($N \times M$), el tipo de dato (\texttt{MPI\_INT}), el proceso destino (1), una etiqueta de mensaje (0) y el comunicador. Inmediatamente después, envía la matriz $B$ utilizando la etiqueta de mensaje (1).
+
+    Al mismo tiempo, el resto de los procesos que conforman el anillo ejecutan la lógica de recepción, suma y reenvío:
+
+    \begin{lstlisting}[style=cstyle,caption={Recepcion, suma local y reenvio en procesos trabajadores},label={lst:programa-a}]
+    // --- LOGICA DE LOS PROCESOS TRABAJADORES (1 a np-1) ---
+    else {
+        // Recibir del proceso anterior (id - 1)
+        MPI_Recv(A, N * M, MPI_INT, id - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(B, N * M, MPI_INT, id - 1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        printf("  [P%d] Nodo: %s | Recibio matrices de P%d. Sumando A = A + B...\n", id, hostname, id - 1);
+
+        // Sumar ambas matrices y almacenar en A
+        for (int i = 0; i < N * M; i++) {
+            A[i] = A[i] + B[i];
+        }
+
+        // Determinar el siguiente nodo (si es el ultimo, envia al 0)
+        int next_node = (id + 1) % np;
+        
+        // Enviar al siguiente nodo
+        MPI_Send(A, N * M, MPI_INT, next_node, 0, MPI_COMM_WORLD);
+        MPI_Send(B, N * M, MPI_INT, next_node, 1, MPI_COMM_WORLD);
+        printf("  [P%d] Nodo: %s | Matrices enviadas a P%d.\n", id, hostname, next_node);
+    }
+    \end{lstlisting}
+
+    En este bloque, cada proceso intermedio utiliza \texttt{MPI\_Recv()} para capturar las matrices enviadas por su predecesor (\texttt{id - 1}). Una vez recibidos los datos, se ejecuta un ciclo \texttt{for} lineal que recorre los arreglos unidimensionales para sumar cada celda de la matriz $B$ a su correspondiente en la matriz $A$, sobreescribiendo el valor directamente en $A$. 
+    
+    Para continuar con la topología de anillo, se calcula la identidad del siguiente proceso destino mediante la operación de módulo aritmético \texttt{next\_node = (id + 1) \% np}. Esta fórmula garantiza que el último proceso apunte de vuelta al proceso 0. Finalmente, se despachan los datos al nodo calculado.
+
+    Por último, el programa se cierra de regreso en el flujo del proceso 0, el cual se había quedado bloqueado esperando la conclusión del ciclo:
+
+    \begin{lstlisting}[style=cstyle,caption={Recepcion de resultados y finalizacion en proceso 0},label={lst:programa-a}]
+        // Esperar a recibir el resultado del ultimo proceso
+        MPI_Recv(A, N * M, MPI_INT, np - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(B, N * M, MPI_INT, np - 1, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        // Imprimir resultado final
+        printf("\n");
+        printf("=========================================================\n");
+        printf("  RESULTADO FINAL - Ciclo completado\n");
+        printf("=========================================================\n");
+        printf("  [P0] Nodo: %s | Recibio resultado de P%d\n\n", hostname, np - 1);
+        print_matrix("Matriz A (Final despues de todas las sumas)", A, N, M);
+        printf("=========================================================\n");
+
+    } 
+    
+    free(A);
+    free(B);
+    MPI_Finalize();
+    return 0;
+    }
+    \end{lstlisting}
+
+    El proceso 0 emplea llamadas a \texttt{MPI\_Recv()} indicando explícitamente que espera el mensaje proveniente del último nodo del clúster (\texttt{np - 1}). Al recibir las matrices modificadas tras pasar por todos los procesos trabajadores, el proceso 0 imprime la matriz $A$ resultante que contiene la sumatoria global acumulada. Para finalizar, se libera la memoria reservada para ambas matrices mediante \texttt{free()} y se cierra de forma segura el entorno de paso de mensajes con \texttt{MPI\_Finalize()}.    
+
+
+
+    \textbf{Resultados:}
+
+    Al construir el clúster, primero se verificó que se tuvieran los clientes conectados correctamente al servidor físico, por medio del comando:
+
+    \begin{lstlisting}
+        cat /etc/hosts
+    \end{lstlisting}
+
+    Donde la salida en la terminal fue la siguiente:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_1.png}
+        \caption{Verificación de nodos en el clúster HPC}
+        \label{fig:proyecto_a_hosts}
+    \end{figure}
+
+    \begin{lstlisting}
+        user@pel1:~$ cat /etc/hosts
+        127.0.0.1   localhost
+        10.11.12.1  pel1
+        # The following lines are desirable for IPv6 capable hosts
+        ::1     localhost ip6-localhost ip6-loopback
+        fe00::0 ip6-localnet
+        ff00::0 ip6-mcastprefix
+        ff02::1 ip6-allnodes
+        ff02::2 ip6-allrouters
+        ff02::3 ip6-allhosts
+        10.11.12.16 pel16
+        10.11.12.98 pel98
+    \end{lstlisting}
+
+    En la salida se puede observar que el servidor \texttt{pel1} detecta correctamente a los clientes \texttt{pel16} y \texttt{pel98}, cumpliendo con el mínimo de clientes necesarios para la ejecución del proyecto.
+
+    Después de esto, se procedió a crear y editar el código fuente del programa utilizando el editor de texto \texttt{nano}:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_3.png}
+        \caption{Creación del programa a) en el editor nano}
+        \label{fig:proyecto_a_nano}
+    \end{figure}
+    
+    Una vez guardado, el programa se compiló utilizando el siguiente comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Compilación del programa a)},label={lst:programa-a-comp}]
+        mpicc Proyecto_2a.c -o Proyecto_2a
+    \end{lstlisting}
+
+    Y para ejecutar el programa solicitando 4 procesos, se utilizó el comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Ejecución del programa a)},label={lst:programa-a-exec}]
+        mpirun -np 4 ./Proyecto_2a
+    \end{lstlisting}
+
+    A continuación, se muestra la evidencia en terminal de ambos comandos ingresados:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_6.png}
+        \caption{Comandos de compilación y ejecución del programa a)}
+        \label{fig:proyecto_a_comandos}
+    \end{figure}
+
+    Al ejecutar el programa, la salida se dividió en dos partes para su mejor apreciación. En la primera parte, el Proceso 0 genera e imprime las matrices iniciales, y comienza el envío en anillo:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_7.png}
+        \caption{Evidencia de ejecución del programa a) - Parte 1}
+        \label{fig:proyecto_a_evidencia1}
+    \end{figure}
+
+    En la terminal se observa cómo la Matriz A se inicializa con valores secuenciales del 1 al 16, mientras que la Matriz B se inicializa con una constante de 2. Inmediatamente después, se registra la traza del paso de mensajes entre los distintos nodos:
+
+    \begin{lstlisting}
+        [P0] Nodo: pel1 | Enviando matrices a P1...
+        [P1] Nodo: pel16 | Recibio matrices de P0. Sumando A = A + B...
+        [P1] Nodo: pel16 | Matrices enviadas a P2.
+        [P2] Nodo: pel98 | Recibio matrices de P1. Sumando A = A + B...
+        [P2] Nodo: pel98 | Matrices enviadas a P3.
+        [P3] Nodo: pel1 | Recibio matrices de P2. Sumando A = A + B...
+        [P3] Nodo: pel1 | Matrices enviadas a P0.
+    \end{lstlisting}
+
+    Seguidamente, se tiene la segunda parte de la salida, donde el ciclo se completa y el Proceso 0 recibe e imprime el resultado final:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Seccion2/inciso1/2_8.png}
+        \caption{Evidencia de ejecución del programa a) - Parte 2}
+        \label{fig:proyecto_a_evidencia2}
+    \end{figure}
+
+    La salida demuestra de forma exitosa el comportamiento de la topología de anillo. El Proceso 0 (ubicado en el servidor \texttt{pel1}) envía las matrices al Proceso 1 (\texttt{pel16}), este procesa y envía al Proceso 2 (\texttt{pel98}), y este finalmente envía al Proceso 3 (el cual se ejecuta nuevamente en \texttt{pel1}). El Proceso 3 cierra el anillo devolviendo las matrices al Proceso 0.
+    
+    Dado que las matrices pasaron por 3 procesos trabajadores, y en cada uno se realizó la operación $A = A + B$ (sumando el valor constante de 2 de la matriz B), cada celda de la matriz A incrementó su valor original en \textbf{6 unidades exactas}. Por ejemplo, la primera celda inició con un valor de 1 y finalizó con un valor de \textbf{7}, demostrando que el cálculo distribuido se realizó correctamente a través de todo el clúster.
+
+    Al final, con el propósito de demostrar la escalabilidad del código desarrollado, se intentó realizar una ejecución de prueba incrementando la carga a 6 procesos. Dado que el clúster cuenta con un número limitado de núcleos físicos (slots) asignados a las máquinas virtuales, se intentó forzar la asignación múltiple empleando la bandera \texttt{--oversubscribe} y, posteriormente, la alternativa sugerida por la propia terminal \texttt{--map-by :OVERSUBSCRIBE}. 
+    
+    Los comandos ingresados para estos intentos fueron los siguientes:
+
+    \begin{lstlisting}[style=cstyle,caption={Intentos de ejecución con 6 procesos empleando Oversubscribe},label={lst:programa-a-oversubscribe}]
+        mpirun --oversubscribe -np 6 ./Proyecto_2a
+        mpirun --map-by :OVERSUBSCRIBE -np 6 ./Proyecto_2a
+    \end{lstlisting}
+
+    A continuación, se muestra la respuesta generada por el sistema al ejecutar dichas instrucciones:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso1/2_9.png}
+        \caption{Restricción de asignación de slots en OpenMPI}
+        \label{fig:proyecto_a_error_slots}
+    \end{figure}
+
+    Como se puede observar en la evidencia, el gestor de recursos de OpenMPI detuvo la ejecución al no encontrar suficientes unidades de asignación (slots) disponibles en el entorno de PelicanHPC para satisfacer los 6 procesos solicitados de manera simultánea. 
+    
+    Pero aún asi es importante destacar que esta restricción es una limitación exclusiva de la configuración de hardware del entorno virtualizado. Este caso no compromete el funcionamiento del programa ni invalida la prueba anterior de 4 procesos, demostrando que la lógica de la topología de anillo y el paso de matrices implementados cumplen con todos los requerimientos solicitados para la resolución del problema.
+
+    % \lstinputlisting[style=cstyle,caption={Programa a) Multiplicacion de matrices},label={lst:programa-a}]{../project/proyecto_a.c}
+
+
+    \newpage
+    \subsubsection{Programa b) Determinacion de renglos de matriz que tiene la mayor suma de sus elementos:}
+    
+    \textbf{Enunciado: }
+    Se tiene una matriz $A$ de tamaño $N \times M$ que contiene números enteros. Desarrollar un programa distribuido utilizando MPI que determine qué renglón de la matriz tiene la mayor suma de sus elementos.
+
+    El programa deberá distribuir el trabajo entre varios procesos de manera que cada proceso analice una parte de la matriz.
+
+    El proceso 0 debe generar o inicializar la matriz $A$; la matriz deberá distribuirse entre los procesos utilizando comunicaciones colectivas de MPI. Cada proceso calculará la suma de los elementos de los renglones que le correspondan. Cada proceso determinará la fila con mayor suma dentro de su bloque local.
+
+    El proceso 0 deberá imprimir: el índice de la fila con mayor suma y el valor de dicha suma.
+
+    Suponer que $N$ es divisible entre el número de procesos.
+
+    \textbf{Resolucion :}
+    Al iniciar el programa tenemos las siguientes lineas:
+
+    \begin{lstlisting}[style=cstyle,caption={Generacion de matriz por el proceso 0 e impresion},label={lst:programa-b}]
+        int main(int argc, char **argv) {
+        int np, id;
+        int *A = NULL;
+        int *local_A;
+        int rows_per_proc;
+        char hostname[256];
+
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &np);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+        gethostname(hostname, sizeof(hostname));
+
+        rows_per_proc = N / np;
+
+        if (id == 0 && N % np != 0) {
+            printf("Error: N (%d) debe ser divisible entre np (%d)\n", N, np);
+            MPI_Finalize();
+            return 1;
+        }
+    \end{lstlisting}
+    
+    Primero se declaran las variables necesarias para el programa, como el número de procesos (\texttt{np}), el identificador del proceso (\texttt{id}), un puntero para la matriz $A$ y un puntero para el bloque local de cada proceso (\texttt{local\_A}), una variable para almacenar el número de filas que cada proceso analizará (\texttt{rows\_per\_proc}) y un arreglo para almacenar el nombre del host donde se ejecuta cada proceso.
+    
+    Luego se inicializa el entorno de ejecución de MPI con \texttt{MPI\_Init()}, se obtiene el número total de procesos con \texttt{MPI\_Comm\_size()} y el identificador único de cada proceso con \texttt{MPI\_Comm\_rank()}. También se obtiene el nombre del host utilizando la función \texttt{gethostname()}.
+    
+    Después de esto, se calcula el número de filas que cada proceso analizará dividiendo el número total de filas $N$ entre el número de procesos \texttt{np}. Se verifica que $N$ sea divisible entre \texttt{np}, y si no lo es, el proceso 0 imprime un mensaje de error y finaliza el programa.
+
+    Para la creacion de este programa, primero definimos el tamaño de la matriz $N \times M$ y el número de procesos a utilizar. 
+
+    Para esto el tamaño de N, es de 8 y el tamaño de M es de 5, el proceso 0 se encarga de generar la matriz $A$ con números enteros aleatorios.
+    
+    \textbf{Fragmento de codigo de generacion de matriz (C):}
+
+    \begin{lstlisting}[style=cstyle,caption={Generacion de matriz por el proceso 0 e impresion},label={lst:programa-b}]
+    if (id == 0) {
+        A = (int *)malloc(N * M * sizeof(int));
+        srand(42);
+        for (int i = 0; i < N * M; i++)
+            A[i] = rand() % 100;
+
+        separador();
+        printf("  FILA CON MAYOR SUMA - %d procesos, Matriz %dx%d\n", np, N, M);
+        separador();
+        printf("\n  [P0] Nodo: %s | Genera la matriz A\n\n", hostname);
+        print_matrix(A, N, M);
+        separador();
+        printf("  [P0] Nodo: %s | Distribuyendo %d filas a cada proceso (MPI_Scatter)\n", hostname, rows_per_proc);
+        separador();
+    }
+    \end{lstlisting}
+
+    Para esto, cuando la condicion evalua al proceso 0 se encarga de generar la matriz $A$ con números enteros aleatorios, utilizando la función \texttt{rand()} 
+    y una semilla fija. 
+    Despues de esto, el proceso 0 imprime la matriz generada, llamando a la funcion \texttt{print\_matrix()}, la cual para imprimir la matriz, hace uso 
+    de un ciclo anidado para recorrer los elementos de la matriz y mostrar los elementos de la misma en formato de filas y columnas.
+    
+    \begin{lstlisting} [style=cstyle,caption={Funcion de impresion de matriz},label={lst:programa-b}]
+    void print_matrix(int *mat, int rows, int cols) {
+        printf("         ");
+        for (int j = 0; j < cols; j++)
+            printf("Col%-3d", j);
+        printf("\n");
+        for (int i = 0; i < rows; i++) {
+            printf("  Fila%2d [", i);
+            for (int j = 0; j < cols; j++) {
+                printf("%4d", mat[i * cols + j]);
+                if (j < cols - 1) printf(", ");
+            }
+            printf(" ]\n");
+        }
+    }
+    \end{lstlisting}
+
+    Primero se reserva memoria para el bloque local de cada proceso, que es un bloque de la matriz $A$ con un número de filas igual a \texttt{rows\_per\_proc} y el mismo número de columnas $M$.
+
+    Despues de esto, el proceso 0 distribuye la matriz $A$ entre los procesos utilizando la función \texttt{MPI\_Scatter()},
+    la cual se encarga de enviar partes de la matriz a cada proceso, para esto los elementos de esta funcion se componen:
+
+    \begin{lstlisting}[style=cstyle,caption={Distribucion de matriz con MPI\_Scatter},label={lst:programa-b}]
+        local_A = (int *)malloc(rows_per_proc * M * sizeof(int));
+        MPI_Scatter(A, rows_per_proc * M, MPI_INT, local_A, rows_per_proc * M, MPI_INT, 0, MPI_COMM_WORLD);
+    \end{lstlisting}
+   
+    Donde el primer argumento es el puntero a la matriz $A$ que se va a distribuir, el segundo argumento es el número de elementos que cada proceso recibirá (en este caso, el número de filas por proceso multiplicado por el número de columnas), el tercer argumento especifica el tipo de dato (en este caso, enteros), el cuarto argumento es un puntero al bloque local donde cada proceso almacenará su parte de la matriz, el quinto argumento es nuevamente el número de elementos que cada proceso recibirá, el sexto argumento especifica el tipo de dato para la recepción, el séptimo argumento indica el proceso raíz (en este caso, 0) y el octavo argumento es el comunicador.
+    
+    Ahora vien sepues de estos e empieza con el calculo de la suma, para esto primero inicializaciamos las variables \texttt{fila\_global\_inicio = id * rows\_per\_proc;}, la cual se encarga de calcular el índice de la primera fila que cada proceso analizará, 
+    tambien tenemos a las variables \texttt{local\_max\_sum} y \texttt{local\_max\_row}, las cuales se encargan de almacenar la suma máxima local y el índice de la fila con la suma máxima local, respectivamente.
+
+    Despues de esto se imprime que procesos recibio que pila en especifico, donde la linea de codigo es la siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Impresion de bloque local recibido por cada proceso},label={lst:programa-b}]
+        printf("\n  [P%d] Nodo: %s | Recibio filas %d a %d\n",
+           id, hostname, fila_global_inicio, fila_global_inicio + rows_per_proc - 1);
+    \end{lstlisting}
+
+    Luego de esto, ahora los procesos lo que haran sera entrar en ciclo for para calcular la suma de cada fila dentro de su bloque local, y determinar la fila con la suma máxima local.
+    
+    Para esto, el bloque de codigo es el siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Calculo de suma de filas y determinacion de fila con suma maxima local},label={lst:programa-b}]
+        for (int i = 0; i < rows_per_proc; i++) {
+            int sum = 0;
+            int fila_global = fila_global_inicio + i;
+
+            printf("  [P%d] Nodo: %s | Sumando fila %d: ", id, hostname, fila_global);
+            for (int j = 0; j < M; j++) {
+                sum += local_A[i * M + j];
+                if (j > 0) printf(" + ");
+                printf("%d", local_A[i * M + j]);
+            }
+            printf(" = %d\n", sum);
+
+            if (i == 0 || sum > local_max_sum) {
+                local_max_sum = sum;
+                local_max_row = i;
+            }
+        }
+    \end{lstlisting}
+
+    En este bloque de codigo, cada proceso recorre las filas de su bloque local, calcula la suma de los elementos de cada fila y determina cuál es la fila con la suma máxima local.
+    Para esto, se utiliza un ciclo for para iterar sobre las filas del bloque local, y dentro de este ciclo, se calcula la suma de los elementos de cada fila utilizando otro ciclo for anidado.
+
+    La estructura de funcionamiento del ciclo for anidado, es por medio de un contador de filas locales, el cual se encarga de recorrer las filas del bloque local, y dentro de este ciclo, se tiene otro ciclo for que recorre las columnas de la fila actual para calcular la suma de los elementos de esa fila.
+    
+    Ademas, se imprime el proceso que esta realizando la suma, el nodo en el que se encuentra, la fila que esta sumando y los elementos de esa fila, junto con el resultado de la suma.
+    Luego de esto, se compara la suma calculada con la suma máxima local almacenada en la variable \texttt{local\_max\_sum}, y si la suma actual es mayor, se actualiza la suma máxima local y el índice de la fila con la suma máxima local.
+    
+    Siguiendo con las demas linea de codigo, tenemos la inicializacion de la variables \texttt{global\_max\_row = fila\_global\_inicio + local\_max\_row;}, donde se calcula el índice global de la fila con la suma máxima local, sumando el índice de la primera fila del bloque local con el índice de la fila con la suma máxima local dentro de ese bloque.
+    
+    Luego de esto, se imprime el resultado local de cada proceso, indicando cuál es la fila con la suma máxima local y el valor de esa suma.
+
+    \begin{lstlisting}[style=cstyle,caption={Impresion de resultado local de cada proceso},label={lst:programa-b}]
+        int global_max_row = fila_global_inicio + local_max_row;
+
+        printf("  [P%d] Nodo: %s | Mayor suma local -> Fila %d (suma = %d)\n",
+            id, hostname, global_max_row, local_max_sum);
+        separador();
+    \end{lstlisting}
+
+    Despues de esto, el proceso 0 se encarga de reservar memoria para almacenar los resultados locales de cada proceso, que consisten en el índice global de la fila con la suma máxima local y el valor de esa suma máxima local.
+    Para esto, el bloque de codigo es el siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Reserva de memoria para resultados locales en proceso 0},label={lst:programa-b}]
+        int *local_max_rows = NULL;
+        int *local_max_sums = NULL;
+        if (id == 0) {
+            local_max_rows = (int *)malloc(np * sizeof(int));
+            local_max_sums = (int *)malloc(np * sizeof(int));
+        }
+    \end{lstlisting}
+
+    En seguida, se utiliza la función \texttt{MPI\_Gather()} para recopilar los resultados locales de cada proceso en el proceso 0.
+    
+    Para esto, el bloque de codigo es el siguiente:
+
+    \begin{lstlisting}[style=cstyle,caption={Recopilacion de resultados locales con MPI\_Gather},label={lst:programa-b}]
+        MPI_Gather(&global_max_row, 1, MPI_INT, local_max_rows, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        MPI_Gather(&local_max_sum, 1, MPI_INT, local_max_sums, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    \end{lstlisting}
+
+    Para la primera linea de \texttt{MPI\_Gather()}, tenemos que el primer argumento es un puntero al dato local que cada proceso va a enviar (en este caso, el índice global de la fila con la suma máxima local), el segundo argumento es el número de elementos que cada proceso enviará (en este caso, 1), el tercer argumento especifica el tipo de dato (en este caso, enteros), el cuarto argumento es un puntero al arreglo donde el proceso raíz almacenará los datos recopilados (en este caso, \texttt{local\_max\_rows}), el quinto argumento es nuevamente el número de elementos que cada proceso enviará, el sexto argumento especifica el tipo de dato para la recepción, el séptimo argumento indica el proceso raíz (en este caso, 0) y el octavo argumento es el comunicador.
+    La segunda linea de \texttt{MPI\_Gather()} es similar, pero en este caso se recopilan los valores de las sumas máximas locales en el arreglo \texttt{local\_max\_sums}.
+
+    Por ultimo tenemos el final del programa, donde por medio de una condicional se veririfica que el que imprima el resultado y calcula la ultima parte sea el procesos 0, donde al entrar a la conficional, el proceso 0 imrpimira los resiltados e imprimira un anuncio que el proceo 0 recolecto los resultados
+    y luego de esto, se entra en un ciclo for para determinar cuál es la fila con la suma máxima global, comparando las sumas máximas locales recopiladas y sus correspondientes índices de fila.
+
+    Finalmente, el proceso 0 imprime el resultado final, indicando cuál es la fila con la suma máxima global y el valor de esa suma, esto lo hace por medio de la siguiente linea de codigo:
+
+    \begin{lstlisting}[style=cstyle,caption={Impresion de resultado final en proceso 0},label={lst:programa-b}]
+        if (id == 0) {
+            printf("\n");
+            separador();
+            printf("  RESULTADO FINAL\n");
+            separador();
+            printf("  [P0] Nodo: %s | Recolecto resultados de %d procesos (MPI_Gather)\n\n", hostname, np);
+
+            int best_sum = all_sums[0];
+            int best_row = all_rows[0];
+
+            for (int i = 0; i < np; i++) {
+                printf("  -> P%d reporta: Fila %d con suma %d", i, all_rows[i], all_sums[i]);
+                if (i == 0 || all_sums[i] > best_sum) {
+                    if (i > 0) {
+                        best_sum = all_sums[i];
+                        best_row = all_rows[i];
+                    }
+                }
+                printf("\n");
+            }
+
+            printf("\n  >>> La fila con mayor suma es la FILA %d con suma = %d <<<\n", best_row, best_sum);
+            separador();
+
+            free(all_sums);
+            free(all_rows);
+        }
+    \end{lstlisting}
+
+    La conficional dentro del ciclo for se encarga de comparar las sumas máximas locales recopiladas y actualizar la suma máxima global y el índice de la fila con la suma máxima global si se encuentra una suma mayor, el orden de impresion es por medio de un ciclo for que recorre los resultados recopilados y los imprime, indicando qué proceso reportó cada fila y su suma correspondiente. Finalmente, se imprime el resultado final indicando cuál es la fila con la suma máxima global y el valor de esa suma, esta se almaceno en las variables \texttt{best\_row} y \texttt{best\_sum} respectivamente. Finalmente el proceso 0 libera la memoria asignada para los arreglos de resultados locales.
+
+    \textbf{Resultados:}
+
+    Al contruir el cluster, primero se verifico que se tuvieran el numero de clientes indicados como minimo que fueron 2, por medio del comando:
+
+    \begin{lstlisting}
+        cat /etc/hosts
+    \end{lstlisting}
+
+    Donde la salida fue la siguiente:
+
+    \begin{lstlisting}
+        user@pel1:~$ cat /etc/hosts
+        127.0.0.1	localhost
+        10.11.12.1	pel1
+        # The following lines are desirable for IPv6 capable hosts
+        ::1 	localhost ip6-localhost ip6-loopback
+        fe00::0 ip6-localnet
+        ff00::0 ip6-mcastprefix
+        ff02::1 ip6-allnodes
+        ff02::2 ip6-allrouters
+        ff02::3 ip6-allhosts
+        10.11.12.19 pel19
+        10.11.12.35 pel35
+    \end{lstlisting}
+
+    Donde se puede observar que se tienen los clientes pel19 y pel35, por lo que se tiene el numero de clientes necesarios para la realizacion del proyecto.
+
+    Despues de esto, se crea el programa por medio de la instruccion nano:
+    \begin{lstlisting}
+        user@pel1:~$ nano proyecto_b.c
+    \end{lstlisting}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1.0\textwidth]{img/Seccion2/inciso2/image1_2.png}
+        \caption{Se crea el programa b) utilizando el editor de texto nano}
+        \label{fig:Creacion_codigo}
+    \end{figure}
+    
+    compilamos el programa es por medio del siguiente comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Compilacion de programa b)},label={lst:programa-b}]
+        mpicc proyecto_b.c -o proyecto
+    \end{lstlisting}
+
+    Y para ejecutar el programa, se utiliza el siguiente comando:
+    
+    \begin{lstlisting}[style=cstyle,caption={Ejecucion de programa b)},label={lst:programa-b}]
+        mpirun -np 4 ./proyecto
+    \end{lstlisting}
+
+    Las evidencias son las siguientes:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Seccion2/inciso2/image1.png}
+        \caption{Evidencia de ejecucion del programa b) con 4 procesos}
+        \label{fig:proyecto_b_evidencia}
+    \end{figure}
+
+    Ahora bien, compilando el programa se puede observar la siguiente salida que estan divida en dos fotos:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Seccion2/inciso2/image4.png}
+        \caption{Evidencia de ejecucion del programa b) con 4 procesos (parte 1)}
+        \label{fig:proyecto_b_evidencia_parte1}
+    \end{figure}
+    Se ve como la matriz que fue generada por el proceso 0 es la siguiente:
+    \begin{lstlisting}
+        [P0] Nodo: pel1 | Genera la matriz A
+
+                Col0  Col1  Col2  Col3  Col4  
+        Fila 0 [  66,   40,   81,   41,   12 ]
+        Fila 1 [  58,   21,   40,   35,   43 ]
+        Fila 2 [  74,   43,   17,	4,   96 ]
+        Fila 3 [  62,   92,   48,   98,   59 ]
+        Fila 4 [  67,   52,	9,   33,   27 ]
+        Fila 5 [  79,   69,	4,   41,   76 ]
+        Fila 6 [  33,	7,   16,   14,	0 ]
+        Fila 7 [  80,   24,   21,   21,   60 ]
+    \end{lstlisting}
+    Despues de esto, se ve como los clientes reciben cada seccion de la matriz cada uno respectivamente.
+
+    \begin{lstlisting}
+        [P0] Nodo: pel1 | Recibio filas 0 a 1
+        [P1] Nodo: pel19 | Recibio filas 2 a 3
+        [P2] Nodo: pel35 | Recibio filas 4 a 5
+    \end{lstlisting}
+
+    Seguidamente, se tiene la segunda parte de la salida del programa, que termina con la salida del resultado final, donde se puede observar que la mayor suma es de 359:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Seccion2/inciso2/image3.png}
+        \caption{Evidencia de ejecucion del programa b) con 4 procesos (parte 2)}
+        \label{fig:proyecto_b_evidencia_parte2}
+    \end{figure}
+
+    La salida muestra que el proceso 0 genera la matriz de $8 \times 5$ y la reparte en bloques de 2 filas por proceso mediante \texttt{MPI\_Scatter}. Posteriormente, cada proceso calcula la suma de sus filas locales y reporta su mejor resultado: P0 obtiene fila 0 con 240, P1 obtiene fila 3 con 359, P2 obtiene fila 5 con 269 y P3 obtiene fila 7 con 206. Finalmente, el proceso 0 recopila esos resultados con \texttt{MPI\_Gather}, compara las sumas locales y determina correctamente que la fila con mayor suma global es la \textbf{fila 3} con un valor de \textbf{359}.
+
+
+    \section{Tabla de participacion en el proyecto:}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|m{7cm}|m{7cm}|}
+            \hline
+            \cellcolor{orange!35}\centering\LARGE\textbf{Integrante} & \cellcolor{orange!35}\centering\LARGE\textbf{Participación} \tabularnewline
+            \hline
+            \cellcolor{orange!10}\centering\Large{García Cortés Adolfo de Jesús}  &  En el punto 1, con la creacion del cluster, la configuracion de las maquinas virtuales del servidor así como de los 5 clientes usados , la creación del programa para corrobar el correcto funcionamiento del cluster, así como la documentacion del respectivo punto 1.\\
+            \hline
+            \cellcolor{orange!10}\centering\Large{Lara Hernandez Angel Husiel} &  En el punto 2 en la seccion b del problema, con la creacion del programa en c sobre la determinacion que renglon de la matriz tiene la mayor suma de sus elementos, ademas de eso en la contruccion de cluster propio para la correcta ejecucion del problema, asi como la documentacion del respectivo punto de la seccion 2 inciso b.\\
+            \hline
+            \cellcolor{orange!10}\centering\Large{Lugo Manzano Rodrigo} & Desarrollo de la sección 2, inciso a del proyecto, mediante la programación en C para resolver el problema del paso y suma de matrices entre procesos. También, la configuración de su propio clúster virtual para verificar la ejecución distribuida del programa, y finalmente la documentación correspondiente a dicho inciso.\\
+            \hline
+        \end{tabular}
+        \caption{Participacion de integrantes en el proyecto}
+        \label{tab:participacion-integrantes}
+    \end{table}
+
+    \newpage
+    \section{Conclusiones:}
+    El desarrollo de este proyecto nos permitió cumplir con éxito el objetivo de construir un sistema distribuido de cómputo de alto rendimiento (HPC) y ejecutar programas paralelos para distribuir la carga de trabajo.
+
+    En la primera etapa, logramos virtualizar y configurar un clúster funcional utilizando Oracle VirtualBox y PelicanHPC, estableciendo la comunicación por red entre el servidor maestro y los nodos cliente. Después, aplicamos el estándar MPI mediante el lenguaje C para resolver los problemas planteados. En estas actividades, pusimos en práctica tanto el uso de comunicaciones punto a punto aplicadas en la topología de anillo lógico, como de comunicaciones colectivas empleando MPI\_Scatter y MPI\_Gather para dividir y obtener cálculos de matrices.
+
+    Este proyecto nos demostró de manera práctica cómo la distribución coordinada de tareas entre distintos nodos reduce la carga de procesamiento individual, y notamos la gran utilidad y eficiencia de las arquitecturas distribuidas para resolver problemas.
+
+    % Impresión Referencias
+    \nocite{*}
+    \printbibliography[heading=bibintoc, title={Referencias}]
+\end{document}

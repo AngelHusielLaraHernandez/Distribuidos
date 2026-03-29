@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.9.10)  16 MAR 2026 12:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2025.9.10)  29 MAR 2026 15:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1108,136 +1108,6 @@ LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
 Package babel Info: 'spanish' activates 'spanish' shorthands.
 (babel)             Reported on input line 9.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `fig:Instalación cluster' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-a' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-a' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-a' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-a' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
-
-LaTeX Warning: Label `lst:programa-b' multiply defined.
-
 )
 \openout1 = `main.aux'.
 
@@ -1442,7 +1312,7 @@ LaTeX Font Info:    Trying to load font information for U+rsfs on input line 6.
  (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/jknappen\ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
-<portada_img/der.png, id=70, 332.24126pt x 393.47pt>
+<portada_img/der.png, id=82, 332.24126pt x 393.47pt>
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
 Package pdftex.def Info: portada_img/der.png  used on input line 8.
@@ -1451,7 +1321,7 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 24.88pt on input line 11.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 (Font)              scaled to size 24.88pt on input line 11.
-<portada_img/izq.png, id=72, 254.9525pt x 301.125pt>
+<portada_img/izq.png, id=84, 254.9525pt x 301.125pt>
 File: portada_img/izq.png Graphic file (type png)
 <use portada_img/izq.png>
 Package pdftex.def Info: portada_img/izq.png  used on input line 14.
@@ -1463,9 +1333,9 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 14.4pt on input line 25.
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 14.4pt on input line 44.
+(Font)              scaled to size 14.4pt on input line 40.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.0pt on input line 45.
+(Font)              scaled to size 12.0pt on input line 41.
 )
 
 [1
@@ -1483,738 +1353,65 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
 
 
 [2]
+LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
+(Font)              scaled to size 12.0pt on input line 191.
+LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 196.
+ (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\t1ntxtt.fd
+File: t1ntxtt.fd 2012/04/20 v3.1
+)
+LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
+(Font)              scaled to size 10.95pt on input line 196.
+
 
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 211.
+Package pdftex.def Info: portada_img/der.png  used on input line 212.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
 File: portada_img/izq.png Graphic file (type png)
 <use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 211.
+Package pdftex.def Info: portada_img/izq.png  used on input line 212.
 (pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.211     \newpage
+l.212     \newpage
                    [1]
-LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 12.0pt on input line 213.
-<img/Cluster/oraclevirtualbox.png, id=100, 1196.21906pt x 667.74469pt>
-File: img/Cluster/oraclevirtualbox.png Graphic file (type png)
-<use img/Cluster/oraclevirtualbox.png>
-Package pdftex.def Info: img/Cluster/oraclevirtualbox.png  used on input line 226.
-(pdftex.def)             Requested size: 330.42033pt x 184.44037pt.
-<img/Cluster/oraclevirtualboxfuncionando.png, id=101, 718.18312pt x 560.8453pt>
-File: img/Cluster/oraclevirtualboxfuncionando.png Graphic file (type png)
-<use img/Cluster/oraclevirtualboxfuncionando.png>
-Package pdftex.def Info: img/Cluster/oraclevirtualboxfuncionando.png  used on input line 234.
-(pdftex.def)             Requested size: 269.06119pt x 210.11964pt.
+LaTeX Font Info:    Trying to load font information for TS1+ntxtlf on input line 244.
+ (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\ts1ntxtlf.fd
+File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
+)
+LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.95pt on input line 244.
 
 
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 240.
+Package pdftex.def Info: portada_img/der.png  used on input line 258.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
 File: portada_img/izq.png Graphic file (type png)
 <use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 240.
+Package pdftex.def Info: portada_img/izq.png  used on input line 258.
 (pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.240 
-       [2 <./img/Cluster/oraclevirtualbox.png> <./img/Cluster/oraclevirtualboxfuncionando.png>]
-<img/Cluster/pelican.png, id=109, 491.58656pt x 43.66313pt>
-File: img/Cluster/pelican.png Graphic file (type png)
-<use img/Cluster/pelican.png>
-Package pdftex.def Info: img/Cluster/pelican.png  used on input line 244.
-(pdftex.def)             Requested size: 424.82512pt x 37.73476pt.
-<img/Cluster/creacionservidor1.png, id=110, 611.28375pt x 289.83281pt>
-File: img/Cluster/creacionservidor1.png Graphic file (type png)
-<use img/Cluster/creacionservidor1.png>
-Package pdftex.def Info: img/Cluster/creacionservidor1.png  used on input line 263.
-(pdftex.def)             Requested size: 424.82512pt x 201.42215pt.
-<img/Cluster/creacionservidor2.png, id=111, 615.0478pt x 297.36093pt>
-File: img/Cluster/creacionservidor2.png Graphic file (type png)
-<use img/Cluster/creacionservidor2.png>
-Package pdftex.def Info: img/Cluster/creacionservidor2.png  used on input line 270.
-(pdftex.def)             Requested size: 424.82512pt x 205.39705pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 274.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 274.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[3 <./img/Cluster/pelican.png> <./img/Cluster/creacionservidor1.png>]
-<img/Cluster/creacionservidor3.png, id=120, 607.51968pt x 295.1025pt>
-File: img/Cluster/creacionservidor3.png Graphic file (type png)
-<use img/Cluster/creacionservidor3.png>
-Package pdftex.def Info: img/Cluster/creacionservidor3.png  used on input line 277.
-(pdftex.def)             Requested size: 424.82512pt x 206.36319pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 282.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 282.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[4 <./img/Cluster/creacionservidor2.png> <./img/Cluster/creacionservidor3.png>]
-<img/Cluster/Discodurovirtual.png, id=129, 609.02531pt x 387.69844pt>
-File: img/Cluster/Discodurovirtual.png Graphic file (type png)
-<use img/Cluster/Discodurovirtual.png>
-Package pdftex.def Info: img/Cluster/Discodurovirtual.png  used on input line 288.
-(pdftex.def)             Requested size: 330.42033pt x 210.34789pt.
-<img/Cluster/Eliminacióndiscodurovirtual.png, id=130, 612.03656pt x 390.70969pt>
-File: img/Cluster/Eliminacióndiscodurovirtual.png Graphic file (type png)
-<use img/Cluster/Eliminacióndiscodurovirtual.png>
-Package pdftex.def Info: img/Cluster/Eliminacióndiscodurovirtual.png  used on input line 295.
-(pdftex.def)             Requested size: 330.42033pt x 210.93239pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 300.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 300.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[5 <./img/Cluster/Discodurovirtual.png> <./img/Cluster/Eliminacióndiscodurovirtual.png>]
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.1pt on input line 304.
-<img/Cluster/Optica.png, id=140, 613.54219pt x 384.6872pt>
-File: img/Cluster/Optica.png Graphic file (type png)
-<use img/Cluster/Optica.png>
-Package pdftex.def Info: img/Cluster/Optica.png  used on input line 309.
-(pdftex.def)             Requested size: 283.22156pt x 177.58046pt.
-<img/Cluster/Optica2.png, id=141, 613.54219pt x 385.44pt>
-File: img/Cluster/Optica2.png Graphic file (type png)
-<use img/Cluster/Optica2.png>
-Package pdftex.def Info: img/Cluster/Optica2.png  used on input line 318.
-(pdftex.def)             Requested size: 283.22156pt x 177.92796pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 326.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 326.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[6 <./img/Cluster/Optica.png> <./img/Cluster/Optica2.png>]
-<img/Cluster/Adaptador1.png, id=150, 611.28375pt x 388.45125pt>
-File: img/Cluster/Adaptador1.png Graphic file (type png)
-<use img/Cluster/Adaptador1.png>
-Package pdftex.def Info: img/Cluster/Adaptador1.png  used on input line 329.
-(pdftex.def)             Requested size: 283.22156pt x 179.97595pt.
-<img/Cluster/Adaptador2.png, id=151, 615.0478pt x 391.4625pt>
-File: img/Cluster/Adaptador2.png Graphic file (type png)
-<use img/Cluster/Adaptador2.png>
-Package pdftex.def Info: img/Cluster/Adaptador2.png  used on input line 338.
-(pdftex.def)             Requested size: 283.22156pt x 180.26607pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 343.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 343.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[7 <./img/Cluster/Adaptador1.png> <./img/Cluster/Adaptador2.png>]
-<img/Cluster/servidorf1.png, id=160, 962.09438pt x 660.21657pt>
-File: img/Cluster/servidorf1.png Graphic file (type png)
-<use img/Cluster/servidorf1.png>
-Package pdftex.def Info: img/Cluster/servidorf1.png  used on input line 350.
-(pdftex.def)             Requested size: 306.81734pt x 210.54828pt.
-<img/Cluster/servidorf2.png, id=161, 961.34157pt x 662.475pt>
-File: img/Cluster/servidorf2.png Graphic file (type png)
-<use img/Cluster/servidorf2.png>
-Package pdftex.def Info: img/Cluster/servidorf2.png  used on input line 359.
-(pdftex.def)             Requested size: 283.22156pt x 195.17572pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 365.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 365.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[8 <./img/Cluster/servidorf1.png> <./img/Cluster/servidorf2.png>]
-<img/Cluster/Conficluster.png, id=170, 956.82469pt x 666.99188pt>
-File: img/Cluster/Conficluster.png Graphic file (type png)
-<use img/Cluster/Conficluster.png>
-Package pdftex.def Info: img/Cluster/Conficluster.png  used on input line 368.
-(pdftex.def)             Requested size: 283.22156pt x 197.4326pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 373.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 373.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[9 <./img/Cluster/Conficluster.png>]
-<img/Cluster/Cliente11.png, id=177, 588.69937pt x 442.65375pt>
-File: img/Cluster/Cliente11.png Graphic file (type png)
-<use img/Cluster/Cliente11.png>
-Package pdftex.def Info: img/Cluster/Cliente11.png  used on input line 387.
-(pdftex.def)             Requested size: 283.22156pt x 212.95769pt.
-<img/Cluster/Cliente12.png, id=178, 592.46344pt x 435.87843pt>
-File: img/Cluster/Cliente12.png Graphic file (type png)
-<use img/Cluster/Cliente12.png>
-Package pdftex.def Info: img/Cluster/Cliente12.png  used on input line 394.
-(pdftex.def)             Requested size: 283.22156pt x 208.37459pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 398.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 398.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[10 <./img/Cluster/Cliente11.png>]
-<img/Cluster/Cliente13.png, id=185, 586.44093pt x 440.39531pt>
-File: img/Cluster/Cliente13.png Graphic file (type png)
-<use img/Cluster/Cliente13.png>
-Package pdftex.def Info: img/Cluster/Cliente13.png  used on input line 402.
-(pdftex.def)             Requested size: 283.22156pt x 212.68428pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 407.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 407.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[11 <./img/Cluster/Cliente12.png> <./img/Cluster/Cliente13.png>]
-<img/Cluster/Cliente14.png, id=195, 615.0478pt x 385.44pt>
-File: img/Cluster/Cliente14.png Graphic file (type png)
-<use img/Cluster/Cliente14.png>
-Package pdftex.def Info: img/Cluster/Cliente14.png  used on input line 412.
-(pdftex.def)             Requested size: 283.22156pt x 177.49275pt.
-<img/Cluster/Cliente15.png, id=196, 615.80063pt x 386.94562pt>
-File: img/Cluster/Cliente15.png Graphic file (type png)
-<use img/Cluster/Cliente15.png>
-Package pdftex.def Info: img/Cluster/Cliente15.png  used on input line 422.
-(pdftex.def)             Requested size: 283.22156pt x 177.96762pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 428.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 428.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[12 <./img/Cluster/Cliente14.png> <./img/Cluster/Cliente15.png>]
-<img/Cluster/Cliente16.png, id=205, 764.8575pt x 678.28406pt>
-File: img/Cluster/Cliente16.png Graphic file (type png)
-<use img/Cluster/Cliente16.png>
-Package pdftex.def Info: img/Cluster/Cliente16.png  used on input line 432.
-(pdftex.def)             Requested size: 283.22156pt x 251.1578pt.
-<img/Cluster/Cliente17.png, id=206, 901.11656pt x 662.475pt>
-File: img/Cluster/Cliente17.png Graphic file (type png)
-<use img/Cluster/Cliente17.png>
-Package pdftex.def Info: img/Cluster/Cliente17.png  used on input line 441.
-(pdftex.def)             Requested size: 269.06119pt x 197.80394pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 447.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 447.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[13 <./img/Cluster/Cliente16.png> <./img/Cluster/Cliente17.png>]
-<img/Cluster/Cliente21.png, id=215, 571.38469pt x 52.69687pt>
-File: img/Cluster/Cliente21.png Graphic file (type png)
-<use img/Cluster/Cliente21.png>
-Package pdftex.def Info: img/Cluster/Cliente21.png  used on input line 454.
-(pdftex.def)             Requested size: 283.22156pt x 26.1208pt.
-<img/Cluster/Cliente22.png, id=216, 770.12718pt x 642.14906pt>
-File: img/Cluster/Cliente22.png Graphic file (type png)
-<use img/Cluster/Cliente22.png>
-Package pdftex.def Info: img/Cluster/Cliente22.png  used on input line 461.
-(pdftex.def)             Requested size: 283.22156pt x 236.15106pt.
-<img/Cluster/Cliente23.png, id=217, 999.735pt x 657.95813pt>
-File: img/Cluster/Cliente23.png Graphic file (type png)
-<use img/Cluster/Cliente23.png>
-Package pdftex.def Info: img/Cluster/Cliente23.png  used on input line 469.
-(pdftex.def)             Requested size: 283.22156pt x 186.39557pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 473.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 473.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[14 <./img/Cluster/Cliente21.png> <./img/Cluster/Cliente22.png>]
-<img/Cluster/Cliente31.png, id=226, 606.76688pt x 357.58594pt>
-File: img/Cluster/Cliente31.png Graphic file (type png)
-<use img/Cluster/Cliente31.png>
-Package pdftex.def Info: img/Cluster/Cliente31.png  used on input line 487.
-(pdftex.def)             Requested size: 283.22156pt x 166.91412pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 494.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 494.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[15 <./img/Cluster/Cliente23.png> <./img/Cluster/Cliente31.png>]
-<img/Cluster/Cliente32.png, id=235, 1003.49907pt x 661.72218pt>
-File: img/Cluster/Cliente32.png Graphic file (type png)
-<use img/Cluster/Cliente32.png>
-Package pdftex.def Info: img/Cluster/Cliente32.png  used on input line 497.
-(pdftex.def)             Requested size: 283.22156pt x 186.76521pt.
- (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
-File: lstlang1.sty 2024/09/23 1.10c listings language file
-) (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstmisc.sty
-File: lstmisc.sty 2024/09/23 1.10c (Carsten Heinz)
-)
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on input line 505.
-LaTeX Font Info:    Trying to load font information for T1+ntxtt on input line 505.
- (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/newtx\t1ntxtt.fd
-File: t1ntxtt.fd 2012/04/20 v3.1
-)
-LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.95pt on input line 505.
-LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 10.0pt on input line 505.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.0pt on input line 506.
-LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 6.0pt on input line 506.
-LaTeX Font Info:    Trying to load font information for T1+txtt on input line 506.
- (C:\Users\Angel Lara\AppData\Local\Programs\MiKTeX\tex/latex/txfonts\t1txtt.fd
-File: t1txtt.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Font shape `T1/ntxtt/b/n' in size <10> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 506.
-LaTeX Font Info:    Font shape `T1/ntxtt/m/it' in size <10> not available
-(Font)              Font shape `T1/txtt/m/sl' tried instead on input line 515.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 526.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 526.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[16 <./img/Cluster/Cliente32.png>]
-LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `OT1/minntx/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `OML/ntxmi/m/it' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `LMS/ntxsy/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `LMX/ntxexx/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxmia/m/it' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsym/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxsyc/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 10.0pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 7.3pt on input line 533.
-LaTeX Font Info:    Font shape `U/ntxexa/m/n' will be
-(Font)              scaled to size 5.5pt on input line 533.
-
-
-LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 533.
-
+l.258     \newpage
+                   [2{C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/tex-gyre/q-ts1.enc}]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.95pt on input line 558.
+(Font)              scaled to size 10.95pt on input line 285.
 
 
 File: portada_img/der.png Graphic file (type png)
 <use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 566.
+Package pdftex.def Info: portada_img/der.png  used on input line 286.
 (pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
 File: portada_img/izq.png Graphic file (type png)
 <use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 566.
+Package pdftex.def Info: portada_img/izq.png  used on input line 286.
 (pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[17]
-<img/Cluster/codigo1.png, id=301, 994.46532pt x 398.99063pt>
-File: img/Cluster/codigo1.png Graphic file (type png)
-<use img/Cluster/codigo1.png>
-Package pdftex.def Info: img/Cluster/codigo1.png  used on input line 582.
-(pdftex.def)             Requested size: 472.03113pt x 189.38858pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 588.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 588.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[18 <./img/Cluster/codigo1.png>]
-<img/Cluster/codigo2.png, id=308, 997.47656pt x 660.96938pt>
-File: img/Cluster/codigo2.png Graphic file (type png)
-<use img/Cluster/codigo2.png>
-Package pdftex.def Info: img/Cluster/codigo2.png  used on input line 594.
-(pdftex.def)             Requested size: 472.03113pt x 312.7837pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 604.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 604.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[19 <./img/Cluster/codigo2.png>]
-<img/Seccion2/inciso1/Enunciado.png, id=315, 441.90094pt x 140.02313pt>
-File: img/Seccion2/inciso1/Enunciado.png Graphic file (type png)
-<use img/Seccion2/inciso1/Enunciado.png>
-Package pdftex.def Info: img/Seccion2/inciso1/Enunciado.png  used on input line 614.
-(pdftex.def)             Requested size: 259.61856pt x 82.2668pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 647.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 647.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[20 <./img/Seccion2/inciso1/Enunciado.png>]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 678.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 678.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[21{C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/newtx/ntx-ot1-tlf.enc}]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 718.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 718.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[22]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 750.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 750.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[23]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 784.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 784.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[24]
-<img/Seccion2/inciso1/2_1.png, id=457, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_1.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_1.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_1.png  used on input line 799.
-(pdftex.def)             Requested size: 424.82512pt x 238.9549pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 814.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 814.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[25 <./img/Seccion2/inciso1/2_1.png>]
-<img/Seccion2/inciso1/2_3.png, id=475, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_3.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_3.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_3.png  used on input line 825.
-(pdftex.def)             Requested size: 424.82512pt x 238.9549pt.
-<img/Seccion2/inciso1/2_6.png, id=476, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_6.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_6.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_6.png  used on input line 846.
-(pdftex.def)             Requested size: 424.82512pt x 238.9549pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 850.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 850.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[26 <./img/Seccion2/inciso1/2_3.png>]
-<img/Seccion2/inciso1/2_7.png, id=491, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_7.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_7.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_7.png  used on input line 855.
-(pdftex.def)             Requested size: 424.82512pt x 238.9549pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 861.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 861.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[27 <./img/Seccion2/inciso1/2_6.png> <./img/Seccion2/inciso1/2_7.png>]
-<img/Seccion2/inciso1/2_8.png, id=500, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_8.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_8.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_8.png  used on input line 876.
-(pdftex.def)             Requested size: 377.62634pt x 212.40619pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 886.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 886.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[28 <./img/Seccion2/inciso1/2_8.png>]
-<img/Seccion2/inciso1/2_9.png, id=516, 1927.2pt x 1084.05pt>
-File: img/Seccion2/inciso1/2_9.png Graphic file (type png)
-<use img/Seccion2/inciso1/2_9.png>
-Package pdftex.def Info: img/Seccion2/inciso1/2_9.png  used on input line 898.
-(pdftex.def)             Requested size: 424.82512pt x 238.9549pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 910.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 910.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[29 <./img/Seccion2/inciso1/2_9.png>]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 952.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 952.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[30]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 985.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 985.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[31]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1017.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1017.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[32]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1054.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1054.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[33]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1086.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1086.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[34]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1113.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1113.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[35]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1151.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1151.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[36]
-<img/Seccion2/inciso2/image1_2.png, id=689, 2569.6pt x 1445.4pt>
-File: img/Seccion2/inciso2/image1_2.png Graphic file (type png)
-<use img/Seccion2/inciso2/image1_2.png>
-Package pdftex.def Info: img/Seccion2/inciso2/image1_2.png  used on input line 1162.
-(pdftex.def)             Requested size: 472.03113pt x 265.49808pt.
-<img/Seccion2/inciso2/image1.png, id=690, 2569.6pt x 1445.4pt>
-File: img/Seccion2/inciso2/image1.png Graphic file (type png)
-<use img/Seccion2/inciso2/image1.png>
-Package pdftex.def Info: img/Seccion2/inciso2/image1.png  used on input line 1182.
-(pdftex.def)             Requested size: 424.82512pt x 238.94386pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1186.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1186.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[37 <./img/Seccion2/inciso2/image1_2.png>]
-<img/Seccion2/inciso2/image4.png, id=704, 2182.1525pt x 1446.40375pt>
-File: img/Seccion2/inciso2/image4.png Graphic file (type png)
-<use img/Seccion2/inciso2/image4.png>
-Package pdftex.def Info: img/Seccion2/inciso2/image4.png  used on input line 1191.
-(pdftex.def)             Requested size: 377.62634pt x 250.29945pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1196.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1196.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[38 <./img/Seccion2/inciso2/image1.png> <./img/Seccion2/inciso2/image4.png>]
-<img/Seccion2/inciso2/image3.png, id=713, 2175.12625pt x 1439.3775pt>
-File: img/Seccion2/inciso2/image3.png Graphic file (type png)
-<use img/Seccion2/inciso2/image3.png>
-Package pdftex.def Info: img/Seccion2/inciso2/image3.png  used on input line 1221.
-(pdftex.def)             Requested size: 377.62634pt x 249.87422pt.
-
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1227.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1227.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[39 <./img/Seccion2/inciso2/image3.png>]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1247.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1247.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[40]
-
-File: portada_img/der.png Graphic file (type png)
-<use portada_img/der.png>
-Package pdftex.def Info: portada_img/der.png  used on input line 1258.
-(pdftex.def)             Requested size: 36.0346pt x 42.67912pt.
-File: portada_img/izq.png Graphic file (type png)
-<use portada_img/izq.png>
-Package pdftex.def Info: portada_img/izq.png  used on input line 1258.
-(pdftex.def)             Requested size: 36.13269pt x 42.67912pt.
-[41] (main.aux
+[3] (main.aux
 LaTeX Info: Redefining \sptext on input line 9.
 LaTeX Info: Redefining \. on input line 9.
 LaTeX Info: Redefining \% on input line 9.
@@ -2223,32 +1420,24 @@ LaTeX Info: Redefining \% on input line 9.
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2020/03/25>
  ***********
-
-
-LaTeX Font Warning: Size substitutions with differences
-(Font)              up to 0.5pt have occurred.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A7DA08C2801EDBEF4C0AE889BD69A060;1946.
+(rerunfilecheck)             Checksum: E23680955896E18F37297BADF651D3A9;1687.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 42117 strings out of 468133
- 797810 string characters out of 5428256
- 2033968 words of memory out of 5000000
- 69651 multiletter control sequences out of 15000+600000
- 696529 words of font info for 121 fonts, out of 8000000 for 9000
+ 40531 strings out of 468133
+ 772325 string characters out of 5428256
+ 1758342 words of memory out of 5000000
+ 68500 multiletter control sequences out of 15000+600000
+ 672338 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,16n,131p,899b,2899s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/NewTXMI.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xbtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txmiaX.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/txsys.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmb.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmr.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmri.pfb>
-Output written on main.pdf (43 pages, 5411972 bytes).
+ 84i,15n,131p,774b,2899s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/tex-gyre/qtmr.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/txfonts/t1xtt.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmb.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmr.pfb><C:/Users/Angel Lara/AppData/Local/Programs/MiKTeX/fonts/type1/public/newtx/ztmri.pfb>
+Output written on main.pdf (5 pages, 346708 bytes).
 PDF statistics:
- 892 PDF objects out of 1000 (max. 8388607)
- 447 named destinations out of 1000 (max. 500000)
- 399 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 170 PDF objects out of 1000 (max. 8388607)
+ 27 named destinations out of 1000 (max. 500000)
+ 223 words of extra memory for PDF output out of 10000 (max. 10000000)
 

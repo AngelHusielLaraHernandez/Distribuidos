@@ -2,7 +2,8 @@
 
 ## Estructura del Repositorio
 
-El proyecto cuenta con la siguiente jerarquía de archivos y carpetas agrupados por clase:
+
+El proyecto cuenta con la siguiente jerarquía de archivos y carpetas agrupados por clase y tema:
 
 - `Clase1/` - Introducción a MPI y paso básico de mensajes
   - `primero.c`: El clásico "Hola Mundo" en MPI.
@@ -12,7 +13,7 @@ El proyecto cuenta con la siguiente jerarquía de archivos y carpetas agrupados 
 
 - `Clase2/` - Operaciones Colectivas y Distribución de arreglos
   - `Ejemplo3.c`: Uso de la función colectiva `MPI_Gather` para recolectar datos desde todos los procesos hacia el proceso raíz (`id == 0`).
-  - `Ejemplos2.c`: Ejemplos con uso de punteros. 
+  - `Ejemplos2.c`: Ejemplos con uso de punteros.
   - `EjercicioClase2.c`: Multiplicación o suma de matrices. El proceso maestro distribuye las matrices y recolecta el resultado usando paso de mensajes tradicional.
   - `VariacionEjercicio1.c`: Modificación de datos locales y ensamble para devolver la matriz trabajada al proceso raíz.
 
@@ -21,9 +22,44 @@ El proyecto cuenta con la siguiente jerarquía de archivos y carpetas agrupados 
   - `Ejemplo5.c`: Variación de `MPI_Reduce` reduciendo arreglos (vectores) mediante su suma global (operación `MPI_SUM`).
   - `Ejercicio3.c`: Uso de arreglos para inicializarlos en base al id (puros 1, puros 2), uso de memoria con Calloc para `MPI_Gather`.
   - `Tarea1.c` / `Tarea2.c`: Crear un arreglo con números repetidos por id de proceso (e.j., P1 = [2,2,2,2...]) y recolectarlo al P0 usando operaciones colectivas de MPI.
+  - `ProductoM.c`: Multiplicación de dos matrices usando operaciones colectivas.
 
-- `/` (Raíz del proyecto)
-  - `ProductoM.c`: Multiplicación de dos matrices usando operaciones colectivas. Envío de las partes de `A` con `MPI_Scatter`, copia completa de la matriz `B` a todos los procesos usando `MPI_Bcast`, y recolección del resultado en matriz `C` con `MPI_Gather`.
+- `Clase5/` - Chat distribuido en C y Python
+  - `chatCliente.txt`, `chatServer.txt`: Ejemplo de comunicación de chat (teoría o logs).
+  - `Cliente.py`, `servidor.py`: Implementación de chat cliente-servidor en Python.
+  - `cliente1.c`, `servidor1.c`: Implementación de chat cliente-servidor en C.
+  - `cliente1`, `servidor1`: Ejecutables generados.
+  - Imágenes: `InicioChat.png`, `TerminacionChat.png` (si existen).
+
+- `Clase6/` - Sincronización de relojes distribuidos
+  - `Berkely.py`: Algoritmo de Berkeley en Python.
+  - `ClienteCristian.py`, `ServidorCritian.py`, `CristianServerCon1.py`: Algoritmo de Cristian en Python.
+  - `lamport.py`: Algoritmo de Lamport en Python.
+
+- `Ejemplo1/` - Ejemplo básico de cliente-servidor en C
+  - `cliente.c`, `servidor.c`: Código fuente.
+  - `cliente`, `servidor`: Ejecutables generados.
+
+- `project/berkeley/` - Prácticas de sincronización de relojes
+  - `Actividad3/Berkely.py`: Implementación de Berkeley.
+  - `Actividad4/Berkely.py`: Variante de Berkeley.
+  - `Actividad5/berkeley_cliente.py`, `berkeley_servidor.py`, `PruebaVLANs.py`: Cliente, servidor y pruebas de red.
+
+- `project/Cristian/` - Prácticas de sincronización de relojes
+  - `ClienteCristian.py`, `ServidorCritian.py`: Implementaciones del algoritmo de Cristian.
+
+- `project/Lamport/` - Prácticas de sincronización de relojes
+  - `lamport.py`: Implementación del algoritmo de Lamport.
+
+- `Document/` - Documentación y reportes en LaTeX
+  - `main.tex`, `portada.tex`, `referencias.bib`: Archivos principales de LaTeX.
+  - `img/`, `portada_img/`, `outputs/`, `Salidas/`: Carpetas de imágenes, portadas, salidas y resultados.
+  - `Proyectos_Pasados/`: Documentos y proyectos de ciclos anteriores.
+
+- `Home/Tarea1/` - Ejercicios y reportes auxiliares
+  - `main.tex` y archivos auxiliares de compilación.
+
+Esta estructura cubre ejemplos en C con MPI, prácticas de chat distribuido, sincronización de relojes distribuidos en Python, y documentación en LaTeX.
 
 ## ¿Cómo Compilar y Ejecutar?
 
