@@ -110,6 +110,20 @@
   showstringspaces=false
 }
 
+% Estilo para salidas de consola/terminal
+\lstdefinestyle{output}{
+  backgroundcolor=\color{black!5},
+  basicstyle=\ttfamily\footnotesize,
+  numbers=none,
+  frame=single,
+  rulecolor=\color{black!30},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false,
+  xleftmargin=0.5cm,
+  xrightmargin=0.5cm
+}
+
 % --- ESTILOS PARA DIAGRAMAS DE FLUJO (TIKZ) ---
 \tikzset{
   startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30},
@@ -224,8 +238,57 @@
         \end{enumerate}
 
     \end{itemize}
+
+    \textbf{Salida del programa:}
+    \begin{lstlisting}[style=output]
+Servidor de Berkeley escuchando en el puerto 60001...
+Conexion establecida con: ('127.0.0.1', 47948)
+Conexion establecida con: ('127.0.0.1', 47954)
+Conexion establecida con: ('127.0.0.1', 47968)
+Tiempo recibido del cliente: 1774828614.6528187
+Tiempo recibido del cliente: 1774828611.847464
+Tiempo recibido del cliente: 1774828616.3387685
+Tiempo del servidor: 1774828613.939467
+Tiempo promedio calculado por el servidor es: 1774828614.1946297
+Ajuste del servidor: [-0.458, 2.347, -2.144]
+
+Cliente 1 - Tiempo local antes del ajuste: 1774828611.847464
+Cliente 1 - Ajuste recibido: 2.347165584564209
+Cliente 1 - Nuevo tiempo despues del ajuste: 1774828614.1946297
+
+Cliente 2 - Tiempo local antes del ajuste: 1774828614.6528187
+Cliente 2 - Ajuste recibido: -0.4581890106201172
+Cliente 2 - Nuevo tiempo despues del ajuste: 1774828614.1946297
+
+Cliente 3 - Tiempo local antes del ajuste: 1774828616.3387685
+Cliente 3 - Ajuste recibido: -2.144138813018799
+Cliente 3 - Nuevo tiempo despues del ajuste: 1774828614.1946297
+    \end{lstlisting}
+
+    \textbf{Respuestas:}
+    \begin{enumerate}
+        \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
+
+        Los tiempos iniciales de cada cliente fueron:
+        \begin{itemize}
+            \item Cliente 1: 1774828611.847464 (2.35 segundos atrás del promedio)
+            \item Cliente 2: 1774828614.652818 (0.46 segundos adelante del promedio)
+            \item Cliente 3: 1774828616.338768 (2.14 segundos adelante del promedio)
+        \end{itemize}
+        Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema.
+
+        \item \textbf{¿Cuál fue el promedio?}
+
+        El tiempo promedio calculado por el servidor fue \textbf{1774828614.1946297}. Este valor se obtiene promediando los tiempos de los 3 clientes más el tiempo del servidor (1774828613.939467), resultando en: $(611.84 + 614.65 + 616.34 + 613.94) / 4 = 614.19$ (últimos dígitos significativos).
+
+        \item \textbf{¿A qué tiempo convergen?}
+
+        Todos los clientes convergen al tiempo promedio \textbf{1774828614.1946297}. Como se puede observar en la salida, después de aplicar los ajustes correspondientes, el ``Nuevo tiempo después del ajuste'' es idéntico para los tres clientes, demostrando que el algoritmo de Berkeley logra sincronizar exitosamente todos los relojes al mismo valor.
+    \end{enumerate}
     \subsubsection{Actividad 3}
-    
+
+    Para esta actividad se modificó el programa original para soportar un número variable de clientes. Los cambios principales fueron: (1) parametrizar la función \texttt{servidorBerkeley} y \texttt{ejecutaCliente} para recibir el número de clientes como argumento, (2) agregar la opción \texttt{SO\_REUSEADDR} al socket para evitar errores de ``address already in use'' entre ejecuciones, (3) usar puertos diferentes para cada prueba (60001, 60002, 60003) evitando conflictos, y (4) crear una función \texttt{ejecutarPrueba} que encapsula la ejecución completa de servidor y clientes para cada configuración.
+
     Modificar el programa para trabajar con:
     \begin{itemize}
         \item 5, 10 y 20 clientes
@@ -236,7 +299,60 @@
         \end{enumerate}
     \end{itemize}
 
+    \textbf{Salida del programa con 10 clientes:}
+    \begin{lstlisting}[style=output]
+============================================================
+                     SERVIDOR BERKELEY
+============================================================
+| Numero de clientes esperados: 10
+| Puerto: 60002
+============================================================
+
+[SERVIDOR] Tiempos recibidos de clientes:
+[SERVIDOR]   Cliente 01: 1774828674.637297
+[SERVIDOR]   Cliente 02: 1774828676.781445
+[SERVIDOR]   Cliente 03: 1774828670.725160
+[SERVIDOR]   Cliente 04: 1774828674.653284
+[SERVIDOR]   Cliente 05: 1774828678.582883
+[SERVIDOR]   Cliente 06: 1774828675.318715
+[SERVIDOR]   Cliente 07: 1774828670.358184
+[SERVIDOR]   Cliente 08: 1774828678.589895
+[SERVIDOR]   Cliente 09: 1774828678.777744
+[SERVIDOR]   Cliente 10: 1774828680.287497
+[SERVIDOR]   Servidor:   1774828675.524798
+
+[SERVIDOR] Tiempo promedio: 1774828675.839719
+
+[SERVIDOR] AJUSTES CALCULADOS
+[SERVIDOR]   Cliente 01: +1.202421 segundos
+[SERVIDOR]   Cliente 02: -0.941726 segundos
+[SERVIDOR]   Cliente 03: +5.114559 segundos
+[SERVIDOR]   Cliente 04: +1.186435 segundos
+[SERVIDOR]   Cliente 05: -2.743164 segundos
+[SERVIDOR]   Cliente 06: +0.521003 segundos
+[SERVIDOR]   Cliente 07: +5.481535 segundos
+[SERVIDOR]   Cliente 08: -2.750176 segundos
+[SERVIDOR]   Cliente 09: -2.938025 segundos
+[SERVIDOR]   Cliente 10: -4.447779 segundos
+[SERVIDOR]   Servidor:   +0.314920 segundos
+
+[SERVIDOR] SINCRONIZACION COMPLETADA
+    \end{lstlisting}
+
+    \textbf{Respuestas:}
+    \begin{enumerate}
+        \item \textbf{¿Cómo cambia el tiempo promedio?}
+
+        El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
+
+        \item \textbf{¿El sistema sigue siendo estable?}
+
+        Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
+    \end{enumerate}
+
     \subsubsection{Actividad 4}
+
+    Para simular la latencia de red, se agregó un retraso aleatorio en la función \texttt{ClienteBerkeley} usando \texttt{time.sleep(random.uniform(0, 3))}. Este retraso se aplica en dos momentos: (1) antes de enviar el tiempo local al servidor (simulando latencia de envío), y (2) antes de recibir el ajuste del servidor (simulando latencia de recepción). De esta manera, cada cliente puede experimentar una latencia total de 0 a 6 segundos, representando condiciones variables de red.
 
     \begin{itemize}
         \item Agrega un retraso aleatorio en los clientes:
@@ -249,6 +365,59 @@
             \item \textbf{¿Por qué el algoritmo de Berkeley es sensible o no a este factor?}
         \end{enumerate}
     \end{itemize}
+
+    \textbf{Salida del programa con latencia simulada:}
+    \begin{lstlisting}[style=output]
+============================================================
+ACTIVIDAD 4 - SIMULACION DE LATENCIA DE RED
+============================================================
+[CLIENTE 01] Tiempo local: 1774828782.780560 (var: -0.93s)
+[CLIENTE 01] Latencia simulada: 2.674 seg
+[CLIENTE 01] Ajuste: -0.138924 -> Nuevo tiempo: 1774828782.641636
+
+[CLIENTE 02] Tiempo local: 1774828779.546950 (var: -4.37s)
+[CLIENTE 02] Latencia simulada: 1.777 seg
+[CLIENTE 02] Ajuste: +3.094686 -> Nuevo tiempo: 1774828782.641636
+
+[CLIENTE 03] Tiempo local: 1774828783.538568 (var: -0.57s)
+[CLIENTE 03] Latencia simulada: 0.232 seg
+[CLIENTE 03] Ajuste: -0.896932 -> Nuevo tiempo: 1774828782.641636
+
+[CLIENTE 04] Tiempo local: 1774828779.330222 (var: -4.99s)
+[CLIENTE 04] Latencia simulada: 2.648 seg
+[CLIENTE 04] Ajuste: +3.311414 -> Nuevo tiempo: 1774828782.641636
+
+[CLIENTE 05] Tiempo local: 1774828783.458510 (var: -1.06s)
+[CLIENTE 05] Latencia simulada: 2.423 seg
+[CLIENTE 05] Ajuste: -0.816874 -> Nuevo tiempo: 1774828782.641636
+
+[SERVIDOR] Tiempo promedio: 1774828782.641636
+[SERVIDOR] SINCRONIZACION COMPLETADA
+============================================================
+    \end{lstlisting}
+
+    \textbf{Respuestas:}
+    \begin{enumerate}
+        \item \textbf{¿La latencia afecta el resultado final?}
+
+        No, la latencia \textbf{no afecta el resultado final} de la sincronización en términos de convergencia. Como se puede observar en la salida, a pesar de que cada cliente experimentó diferentes latencias (desde 0.232 hasta 2.674 segundos), todos convergieron al mismo tiempo promedio (1774828782.641636). Esto se debe a que el algoritmo de Berkeley trabaja con los \textit{valores de tiempo reportados} por cada cliente, no con el momento exacto en que esos valores llegan al servidor.
+
+        Sin embargo, la latencia sí afecta la \textbf{precisión} del resultado. Si un cliente tiene alta latencia, el tiempo que reporta ya estará ``desactualizado'' cuando llegue al servidor, introduciendo un error sistemático. En nuestra implementación, el cliente captura su tiempo local \textit{antes} de la latencia, por lo que el ajuste calculado es correcto para ese instante, pero cuando el cliente finalmente aplica el ajuste, su reloj real ya avanzó.
+
+        \item \textbf{¿Por qué el algoritmo de Berkeley es sensible o no a este factor?}
+
+        El algoritmo de Berkeley es \textbf{parcialmente sensible} a la latencia por las siguientes razones:
+
+        \textbf{Insensibilidad:} El algoritmo no depende de una fuente de tiempo externa (como NTP), sino que calcula un promedio democrático de todos los participantes. La latencia no impide que el algoritmo calcule y distribuya los ajustes correctamente.
+
+        \textbf{Sensibilidad:} En redes con alta latencia o latencia asimétrica, el algoritmo puede introducir errores porque:
+        \begin{itemize}
+            \item El tiempo que tarda un mensaje en llegar no se compensa (a diferencia del algoritmo de Cristian que usa RTT/2).
+            \item Si la latencia varía significativamente entre clientes, algunos recibirán sus ajustes más tarde, acumulando desfase adicional.
+        \end{itemize}
+
+        Para mitigar esto, implementaciones robustas de Berkeley incorporan estimación de RTT (Round-Trip Time) y compensan la latencia al calcular los ajustes.
+    \end{enumerate}
 
     \subsubsection{Actividad 5}
 
