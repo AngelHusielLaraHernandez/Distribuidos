@@ -204,24 +204,318 @@
 
     \subsection{Algoritmo de Cristian:}
 
-    \subsubsection{Actividad 1}
+    \subsubsection{\textcolor{red}{Actividad 1}}
 
-    Simular latencia en red agregando
+    Antes de comenzar con la simulación de latencia, se modificaron ligeramente los códigos originales del cliente para mejorar la presentación de los resultados en la consola. Específicamente, se actualizó el bloque de impresiones (\texttt{print}) al final del script para tabular los datos, limitar la salida a 6 decimales (\texttt{:.6f}) y mostrar claramente cada una de las variables matemáticas que son parte del algoritmo ($t_0, C_s, t_1$, RTT y RTT/2). 
+    
+    El fragmento modificado para la salida en consola es el siguiente:
+
+    \begin{lstlisting}[language=Python]
+# --- Salida en consola ---
+print("\n" + "="*65)
+print("   RESULTADOS DE SINCRONIZACION (CRISTIAN)")
+print("="*65)
+print(f"Tiempo de envio (t0):                   {t0:.6f}")
+print(f"Tiempo del servidor (Cs):               {tiempoServi:.6f}")
+print(f"Tiempo de recepcion (t1):               {t1:.6f}")
+print("-" * 65)
+print(f"RTT Tiempo de viaje total (t1 - t0):    {RTT:.6f} segundos")
+print(f"Desfase calculado (RTT/2):              {RTT/2:.6f} segundos")
+print("-" * 65)
+print(f"Reloj actual del cliente:               {t1:.6f}")
+print(f"NUEVO RELOJ AJUSTADO (C):               {C:.6f}")
+print("="*65 + "\n")
+    \end{lstlisting}
+
+    \textbf{\textcolor{blue}{Simular latencia en red agregando}}
     \begin{verbatim}
         delay = 2 # segundos
         time.sleep(delay)
     \end{verbatim}
+    \vspace{-0.5cm}
 
-    \textbf{¿Como cambia el ajuste del reloj?}
+    Este fragmento se implementó en el script del cliente en la siguiente ubicación exacta:
 
-    \subsubsection{Actividad 2}
+    \begin{lstlisting}[language=Python]
+# 2. Registrar el tiempo exacto antes de enviar la solicitud (t0)
+t0 = time.time()
+# Actividad 1: Simular latencia en red de 2 segundos
+delay = 2 # segundos
+time.sleep(delay)
+# 3. Recibir el tiempo del servidor (Cs) y convertirlo a float
+tiempoServi = float(client.recv(1024).decode())
+    \end{lstlisting}
 
-    \begin{itemize}
-        \item \textbf{Modificar la implementación anterior para que se pueda trabajar con varios clientes al mismo tiempo (máquinas diferentes, pueden ser físicas o virtuales y multithread) y se vea una
-        diferencia de tiempo.}
-        \item \textbf{¿Todos obtienen el mismo ajuste?  ¿Por qué?}
-        \item \textbf{Agregar al código lo necesario para considerar cuando C > Cc o C<Cc.}
-    \end{itemize}
+    La ubicación de este retardo (\texttt{time.sleep(2)}) se implementó en esa parte para que la simulación funcione correctamente. Al colocarlo justo después de haber guardado el tiempo de envío local ($t_0$) y antes de procesar la respuesta del servidor ($C_s$), se obliga al cliente a pausar su ejecución durante 2 segundos y con esto simulamos el comportamiento de una red con alta latencia donde el mensaje tarda más tiempo en viajar, lo que incrementará directamente el RTT (Round-Trip Time) calculado posteriormente.
+
+    \textbf{\textcolor{blue}{¿Como cambia el ajuste del reloj?}}
+
+    Antes de responder a la pregunta debemos observar el comportamiento de la simulación mediante las salidas en consola, tanto en una ejecución normal (sin latencia) como en la simulación con latencia, como se muestra a continuación:
+
+    \textbf{Salida en consola sin latencia:}
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN)
+=================================================================
+Tiempo de envio (t0):                   1775026700.020524
+Tiempo del servidor (Cs):               1775026700.020815
+Tiempo de recepcion (t1):               1775026700.021159
+-----------------------------------------------------------------
+RTT Tiempo de viaje total (t1 - t0):    0.000635 segundos
+Desfase calculado (RTT/2):              0.000318 segundos
+-----------------------------------------------------------------
+Reloj actual del cliente:               1775026700.021159
+NUEVO RELOJ AJUSTADO (C):               1775026700.021132
+=================================================================
+    \end{lstlisting}
+
+    \textbf{Salida en consola con latencia simulada (2 segundos):}
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN)
+=================================================================
+Tiempo de envio (t0):                   1775026739.583974
+Tiempo del servidor (Cs):               1775026739.584519
+Tiempo de recepcion (t1):               1775026741.584483
+-----------------------------------------------------------------
+RTT Tiempo de viaje total (t1 - t0):    2.000508 segundos
+Desfase calculado (RTT/2):              1.000254 segundos
+-----------------------------------------------------------------
+Reloj actual del cliente:               1775026741.584483
+NUEVO RELOJ AJUSTADO (C):               1775026740.584774
+=================================================================
+    \end{lstlisting}
+
+    Al analizar ambas salidas, el cambio en el ajuste del reloj es evidente. En la ejecución sin latencia, el tiempo de viaje total (RTT) es de apenas unos microsegundos (0.000635 s), lo que resulta en un desfase prácticamente nulo. Por lo tanto, el nuevo reloj ajustado ($C$) es casi idéntico al reloj local actual del cliente.
+
+    Por el contrario, al introducir el retardo de 2 segundos, el RTT se dispara a $\approx$ 2.0005 segundos, y el algoritmo de Cristian asume un desfase simétrico para el viaje de regreso de $\approx$ 1.0002 segundos. Dado que el servidor guardó su tiempo ($C_s$) de forma inmediata tras recibir la petición, pero el cliente tardó 2 segundos en procesarla, el cálculo final del nuevo reloj ($C$) resulta ser un segundo menor que el tiempo local actual del cliente ($C < C_c$). 
+
+    Específicamente, el tiempo calculado es \texttt{1775026740.58}, mientras que el reloj local ya avanzó hasta \texttt{1775026741.58}. Bajo estas condiciones, las reglas de sincronización nos dicen que el reloj se debe detener o se ralentizar gradualmente por la diferencia calculada ($C_c - C$ unidades) hasta lograr la coincidencia.
+
+    \subsubsection{\textcolor{red}{Actividad 2}}
+    
+    \textbf{\textcolor{blue}{Modificar la implementación anterior para que se pueda trabajar con varios clientes al mismo tiempo (máquinas diferentes, pueden ser físicas o virtuales y multithread) y se vea una diferencia de tiempo.}}
+
+    Para lograr que el servidor atienda a múltiples clientes de manera simultánea, se modificó el script original incorporando la librería \texttt{threading}. En lugar de procesar cada conexión de manera secuencial y bloqueante, se definió una función \texttt{manejar\_cliente} y se instanció un nuevo hilo por cada conexión entrante en el ciclo principal.
+
+    \textbf{Fragmento modificado en el Servidor (Multithread):}
+    \begin{lstlisting}[language=Python]
+import socket
+import time
+import threading # Libreria agregada para soporte multihilo
+
+# Funcion que maneja la peticion de cada cliente de forma independiente
+def manejar_cliente(conn, addr):
+    print(f"[+] Hilo iniciado para conexion desde: {addr}")
+    Cs = time.time()
+    conn.send(str(Cs).encode())
+    conn.close()
+    print(f"[-] Tiempo enviado ({Cs}) a {addr}. Hilo terminado.\n")
+
+# ... (Configuracion del socket) ...
+server.listen(10) # Se permite una cola de hasta 10 conexiones simultaneas
+
+while True:
+    conn, addr = server.accept()
+    # Se crea y arranca un nuevo hilo por cada cliente conectado
+    hilo = threading.Thread(target=manejar_cliente, args=(conn, addr))
+    hilo.start()
+    \end{lstlisting}
+
+    Por el lado del cliente, para generar una diferencia de tiempo visible entre cada ejecución, se sustituyó el retardo fijo de 2 segundos por un retardo dinámico utilizando la librería \texttt{random}.
+
+    \textbf{Fragmento modificado en el Cliente (Latencia aleatoria):}
+    \begin{lstlisting}[language=Python]
+import random
+
+# Simulamos una latencia aleatoria para cada cliente (entre 0.1 y 2.5 segundos)
+delay = random.uniform(0.1, 2.5)
+time.sleep(delay)
+    \end{lstlisting}
+
+    \vspace{0.3cm}
+    \textbf{\textcolor{blue}{¿Todos obtienen el mismo ajuste? ¿Por qué?}}
+
+    Para responder a esta pregunta, se ejecutó el servidor multihilo junto con tres instancias del cliente de forma casi simultánea. 
+
+    \textbf{Salidas del Servidor y 3 Clientes (Caso sin atraso local):}
+    
+    Salida del servidor:
+    \begin{lstlisting}[style=output]
+=================================================================
+Servidor MULTIHILO de Cristian escuchando en puerto 5000...
+=================================================================
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48216)
+[-] Tiempo enviado (1775028039.400636) a ('127.0.0.1', 48216). Hilo terminado.
+
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48230)
+[-] Tiempo enviado (1775028040.8103802) a ('127.0.0.1', 48230). Hilo terminado.
+
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48234)
+[-] Tiempo enviado (1775028042.0961967) a ('127.0.0.1', 48234). Hilo terminado.
+    \end{lstlisting}
+
+    Salida del cliente 1:
+
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 1
+=================================================================
+Tiempo local actual (Cc/t1): 1775028040.311921
+RTT (Tiempo de viaje total): 0.911910 segundos
+Desfase calculado (RTT/2):   0.455955 segundos
+Tiempo calculado (C):          1775028039.856591
+-----------------------------------------------------------------
+[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
+        -> ACCION: El reloj local NO se retrasa bruscamente.
+        -> Se debe RALENTIZAR el reloj por 0.455330 unidades.
+    \end{lstlisting}
+
+    Salida del cliente 2:
+
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 2
+=================================================================
+Tiempo local actual (Cc/t1): 1775028043.593453
+RTT (Tiempo de viaje total): 2.783776 segundos
+Desfase calculado (RTT/2):   1.391888 segundos
+Tiempo calculado (C):          1775028042.202268
+-----------------------------------------------------------------
+[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
+        -> ACCION: El reloj local NO se retrasa bruscamente.
+        -> Se debe RALENTIZAR el reloj por 1.391185 unidades.
+    \end{lstlisting}
+
+    Salida del cliente 3:
+
+    \begin{lstlisting}[style=output]
+    =================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 3
+=================================================================
+Tiempo local actual (Cc/t1): 1775028044.711709
+RTT (Tiempo de viaje total): 2.616132 segundos
+Desfase calculado (RTT/2):   1.308066 segundos
+Tiempo calculado (C):          1775028043.404263
+-----------------------------------------------------------------
+[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
+        -> ACCION: El reloj local NO se retrasa bruscamente.
+        -> Se debe RALENTIZAR el reloj por 1.307447 unidades.
+    \end{lstlisting}
+
+    Al analizar las salidas, es evidente que \textbf{no, ninguno de los clientes obtuvo el mismo ajuste}. 
+    
+    Esto sucede porque el algoritmo de Cristian depende en su totalidad del RTT (tiempo de viaje de los mensajes). Al haber introducido una latencia aleatoria para simular diferentes condiciones de red en cada cliente, el RTT varió (0.91s, 2.78s y 2.61s respectivamente). Por lo tanto, el desfase calculado ($RTT/2$) fue distinto para cada nodo, obligando a que cada cliente se ralentice por una cantidad de unidades diferente e independiente de los demás.
+
+    \vspace{0.3cm}
+    \textbf{\textcolor{blue}{Agregar al código lo necesario para considerar cuando C > Cc o C < Cc.}}
+
+    Para cumplir con este punto, se agregó un bloque lógico \texttt{if / elif} al final del script del cliente. Este bloque evalúa la relación entre el nuevo tiempo calculado ($C$) y el tiempo local actual del cliente ($C_c$), calculando las diferencias exactas y determina la acción correcta según las reglas de sincronización.
+
+    \textbf{Fragmento modificado en el Cliente (Lógica de evaluación):}
+    \begin{lstlisting}[language=Python]
+# --- LOGICA DE AJUSTE ---
+if C > Cc:
+    diferencia = C - Cc
+    print("[ATENCION] C > Cc (El tiempo calculado es MAYOR al local)")
+    print("         -> ACCION: Se ADELANTA el reloj local a la nueva hora.")
+    print(f"        -> El salto hacia adelante es de {diferencia:.6f} segundos.")
+elif C < Cc:
+    diferencia = Cc - C
+    print("[ATENCION] C < Cc (El tiempo calculado es MENOR al local)")
+    print(f"         -> ACCION: El reloj local se debe ralentizar gradualmente.")
+    print(f"         -> Se debe RALENTIZAR el reloj por {diferencia:.6f} unidades.")
+else:
+    print("[LISTO] C == Cc (El reloj ya esta sincronizado).")
+    \end{lstlisting}
+
+    Como se vio en la prueba anterior, si los relojes locales ya están en hora con el servidor pero hay latencia de red, siempre se da el caso de $C < C_c$. Para demostrar que el código también considera y evalúa correctamente el caso opuesto ($C > C_c$), se implementó un mecanismo para simular que el cliente tiene su reloj interno atrasado 10 segundos respecto a la realidad. 
+    
+    Para simular el caso normal sin retraso, se utilizaron las siguientes líneas:
+    \begin{lstlisting}[language=Python]
+t0 = time.time()
+Cc = time.time() # Caso sin atraso
+    \end{lstlisting}
+
+    Para forzar el escenario $C > C_c$, se comentaron las líneas anteriores y se descomentaron las siguientes:
+    \begin{lstlisting}[language=Python]
+# Caso: Simulamos un reloj atrasado
+atraso_falso = 10 # El cliente cree que son 10 segundos antes
+t0 = time.time() - atraso_falso
+Cc = time.time() - atraso_falso # Caso con atraso simulado
+    \end{lstlisting}
+
+    Con este atraso simulado, el bloque condicional detecta que el tiempo calculado es mayor al local, ejecutando la acción de ``Adelantar el reloj". A continuación se muestran las salidas de este segundo caso:
+
+    \textbf{Salidas del Servidor y 3 Clientes (Caso con reloj atrasado simulado):}
+    
+    Salida del servidor:
+    
+    \begin{lstlisting}[style=output]
+=================================================================
+Servidor MULTIHILO de Cristian escuchando en puerto 5000...
+=================================================================
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 33688)
+[-] Tiempo enviado (1775028149.109033) a ('127.0.0.1', 33688). Hilo terminado.
+
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 33702)
+[-] Tiempo enviado (1775028150.400608) a ('127.0.0.1', 33702). Hilo terminado.
+
+[+] Hilo iniciado para conexion desde: ('127.0.0.1', 57254)
+[-] Tiempo enviado (1775028151.4355612) a ('127.0.0.1', 57254). Hilo terminado.
+    \end{lstlisting}
+
+    Salida del cliente 1:
+
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 1
+=================================================================
+Tiempo local actual (Cc/t1): 1775028140.150724
+RTT (Tiempo de viaje total): 1.042983 segundos
+Desfase calculado (RTT/2):   0.521491 segundos
+Tiempo calculado (C):          1775028149.630525
+-----------------------------------------------------------------
+[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
+        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
+        -> El salto hacia adelante es de 9.479800 segundos.
+    \end{lstlisting}
+
+    Salida del cliente 2:
+
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 2
+=================================================================
+Tiempo local actual (Cc/t1): 1775028141.977979
+RTT (Tiempo de viaje total): 1.577898 segundos
+Desfase calculado (RTT/2):   0.788949 segundos
+Tiempo calculado (C):          1775028151.189557
+-----------------------------------------------------------------
+[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
+        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
+        -> El salto hacia adelante es de 9.211578 segundos.
+    \end{lstlisting}
+
+    Salida del cliente 3:
+
+    \begin{lstlisting}[style=output]
+=================================================================
+    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 3
+=================================================================
+Tiempo local actual (Cc/t1): 1775028142.441949
+RTT (Tiempo de viaje total): 1.006896 segundos
+Desfase calculado (RTT/2):   0.503448 segundos
+Tiempo calculado (C):          1775028151.939009
+-----------------------------------------------------------------
+[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
+        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
+        -> El salto hacia adelante es de 9.497060 segundos.
+    \end{lstlisting}
+
+
+
+
 
     \newpage
     \subsection{Algoritmo de Berkeley:}
