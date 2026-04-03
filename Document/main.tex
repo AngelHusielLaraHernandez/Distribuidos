@@ -727,21 +727,479 @@ ACTIVIDAD 4 - SIMULACION DE LATENCIA DE RED
 
     \subsubsection{Actividad 6}
 
-    \textbf{Nota: en las secciones que se pide ambiente propuesto, se tiene que cambiar a un ambiente que propongamos nosotros, la profa quiere que todos los ambies sean diferentes, por eso no podemos trabajar con el que ella quiere}
-
     \begin{itemize}
         \item El programa es de acuerdo a un ambiente de eventos establecido de cada proceso.
         \item Se pide probarlo y entenderlo para poder plantear en equipo un ambiente sugerido con 7 procesos.
         \item Entregar diagrama de ambiente propuesto
     \end{itemize}
 
+    Para la implementación del algoritmo de relojes lógicos de Lamport, se analizó inicialmente un programa base en Python que utiliza el módulo \texttt{multiprocessing} para la generación de procesos locales de forma concurrente, usando tuberías (\texttt{Pipe}) para la comunicación entre ellos.
+
+    El objetivo principal de esta actividad fue probar y comprender el funcionamiento de este mecanismo de sincronización basado en el paso de mensajes y eventos locales, para posteriormente plantear, diseñar e implementar un \textbf{ambiente sugerido por 7 procesos}. Dado que se requiere que cada ambiente sea diferente y original, se diseñó una topología en cascada con ramificaciones y convergencia.
+
+
+    El ambiente diseñado para esta simulación tiene siete procesos (P0 a P6) que interactúan de la siguiente manera, asegurando que el reloj de Lamport siga funcionando bien cuando el sistema crece, incluso si las conexiones entre los nodos no son simples o en línea recta.
+
+\begin{itemize}
+    \item \textbf{P0:} Inicia la cascada ejecutando un evento local y enviando un mensaje a P1.
+    \item \textbf{P1:} Recibe el mensaje de P0, procesa un evento local, y envía mensajes hacia dos procesos distintos: P2 y P3.
+    \item \textbf{P2 y P3:} Reciben los mensajes de P1 de manera paralela. P2 envía su mensaje a P4, mientras que P3 envía su mensaje a P5.
+    \item \textbf{P4 y P5:} Reciben la información de sus respectivos emisores y la reenvían hacia el nodo final, P6.
+    \item \textbf{P6:} Actúa como nodo colector. Recibe los mensajes tanto de P4 como de P5, actualizando su reloj de Lamport según las estampas de tiempo recibidas, y finaliza con un evento local.
+\end{itemize}
+
+\textbf{Diagrama del Ambiente Propuesto}
+
+A continuación, se presenta el diagrama propuesto que modela el intercambio de mensajes y la secuencia de eventos del ambiente propuesto.
+
+\begin{center}
+\begin{tikzpicture}[x=1.2cm, y=-1cm, >=stealth, thick]
+    % Líneas de los procesos
+    \foreach \i in {0,...,6} {
+        \node[left, font=\bfseries] at (0, \i) {P\i};
+        \draw[->, color=gray] (0, \i) -- (11, \i);
+    }
+
+    % Nodos y eventos P0
+    \filldraw[blue] (1, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[blue] (2, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P1};
+    
+    % Nodos y eventos P1
+    \filldraw[red] (3, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (2, 0) -- (3, 1);
+    \filldraw[red] (4, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[red] (5, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P2, P3};
+
+    % Nodos P2 y P3
+    \filldraw[orange] (6, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (5, 1) -- (6, 2);
+    \filldraw[magenta] (6, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (5, 1) -- (6, 3);
+    
+    \filldraw[orange] (7, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+    \filldraw[magenta] (7, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P5};
+
+    % Nodos P4 y P5
+    \filldraw[cyan] (8, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (7, 2) -- (8, 4);
+    \filldraw[teal] (8, 5) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (7, 3) -- (8, 5);
+    
+    \filldraw[cyan] (9, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P6};
+    \filldraw[teal] (9, 5) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P6};
+
+    % Nodos P6
+    \filldraw[violet] (10, 6) circle (2pt) node[above=2pt, font=\scriptsize] {Recep. P4};
+    \draw[->, dashed] (9, 4) -- (10, 6);
+    \filldraw[violet] (10.5, 6) circle (2pt) node[below=2pt, font=\scriptsize] {Recep. P5};
+    \draw[->, dashed] (9, 5) -- (10.5, 6);
+    
+    \filldraw[violet] (11.5, 6) circle (2pt) node[above=2pt, font=\scriptsize] {Evento Final};
+    \draw[->, color=gray] (11, 6) -- (12, 6); % Extender la línea de P6 un poco más
+\end{tikzpicture}
+\end{center}
+
+\textbf{Implementación del Código}
+
+El siguiente código implementa el ambiente propuesto de 7 procesos utilizando la regla de actualización de relojes de Lamport: $C_j = \max(C_j, C_m) + 1$. Para mejorar la depuración, se incluyó código de color ANSI en la salida estándar, lo que permite diferenciar visualmente la naturaleza de cada acción.
+
+\begin{lstlisting}[language=Python, caption=Implementación de Lamport con 7 Procesos]
+from multiprocessing import Process, Pipe
+from os import getpid
+from datetime import datetime
+
+# ==========================================
+# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
+# ==========================================
+RESET = "\033[0m"
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m"  
+C_RECV  = "\033[96m"  
+C_TIME  = "\033[90m"  
+
+def local_time(counter):
+    time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+    return f'{C_TIME}[ Reloj Lamport: {counter:02d} | Hora: {time_str} ]{RESET}'
+
+def calc_recv_timestamp(recv_time_stamp, counter):
+    return max(recv_time_stamp, counter) + 1
+
+def event(pid, counter, p_num):
+    counter += 1
+    accion = f'{C_EVENT}[P{p_num}] EVENTO LOCAL   (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def send_message(pipe, pid, counter, p_num, dest_num):
+    counter += 1
+    pipe.send(('Mensaje', counter))
+    accion = f'{C_SEND}[P{p_num}] ENVÍA a P{dest_num}    (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def recv_message(pipe, pid, counter, p_num, src_num):
+    message, timestamp = pipe.recv()
+    counter = calc_recv_timestamp(timestamp, counter)
+    accion = f'{C_RECV}[P{p_num}] RECIBE de P{src_num}  (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+# ==========================================
+# DEFINICIÓN DE LOS 7 PROCESOS
+# ==========================================
+def p0(pipe01):
+    pid = getpid()
+    counter = 0
+    counter = event(pid, counter, 0)
+    counter = send_message(pipe01, pid, counter, 0, 1)
+
+def p1(pipe10, pipe12, pipe13):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe10, pid, counter, 1, 0)
+    counter = event(pid, counter, 1)
+    counter = send_message(pipe12, pid, counter, 1, 2)
+    counter = send_message(pipe13, pid, counter, 1, 3)
+
+def p2(pipe21, pipe24):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe21, pid, counter, 2, 1)
+    counter = send_message(pipe24, pid, counter, 2, 4)
+
+def p3(pipe31, pipe35):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe31, pid, counter, 3, 1)
+    counter = send_message(pipe35, pid, counter, 3, 5)
+
+def p4(pipe42, pipe46):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe42, pid, counter, 4, 2)
+    counter = send_message(pipe46, pid, counter, 4, 6)
+
+def p5(pipe53, pipe56):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe53, pid, counter, 5, 3)
+    counter = send_message(pipe56, pid, counter, 5, 6)
+
+def p6(pipe64, pipe65):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe64, pid, counter, 6, 4)
+    counter = recv_message(pipe65, pid, counter, 6, 5)
+    counter = event(pid, counter, 6)
+
+if __name__ == '__main__':
+    print("\n" + "="*70)
+    print(" INICIANDO SIMULACIÓN DE RELOJES DE LAMPORT (7 PROCESOS) ".center(70, "="))
+    print("="*70 + "\n")
+
+    # Creación de tuberías para comunicación
+    pipe01, pipe10 = Pipe()
+    pipe12, pipe21 = Pipe()
+    pipe13, pipe31 = Pipe()
+    pipe24, pipe42 = Pipe()
+    pipe35, pipe53 = Pipe()
+    pipe46, pipe64 = Pipe()
+    pipe56, pipe65 = Pipe()
+
+    # Inicialización
+    procesos = [
+        Process(target=p0, args=(pipe01,)),
+        Process(target=p1, args=(pipe10, pipe12, pipe13)),
+        Process(target=p2, args=(pipe21, pipe24)),
+        Process(target=p3, args=(pipe31, pipe35)),
+        Process(target=p4, args=(pipe42, pipe46)),
+        Process(target=p5, args=(pipe53, pipe56)),
+        Process(target=p6, args=(pipe64, pipe65))
+    ]
+
+    for p in procesos:
+        p.start()
+    for p in procesos:
+        p.join()
+        
+    print("\n" + "="*70)
+    print(" SIMULACIÓN FINALIZADA ".center(70, "="))
+    print("="*70 + "\n")
+\end{lstlisting}
+
+El código implementa el algoritmo de sincronización de Lamport usando la librería \texttt{multiprocessing} de Python, la cual permite ejecutar los 7 procesos de manera verdaderamente concurrente, cada uno con su propio espacio de memoria y su propio Identificador de Proceso (PID).
+
+\textbf {1. Reglas Lógicas del Reloj de Lamport}
+
+El núcleo del algoritmo se divide en tres funciones fundamentales que alteran la variable \texttt{counter} (el reloj lógico local de cada proceso):
+\begin{itemize}
+    \item \textbf{Eventos Locales (\texttt{event}):} Simplemente incrementan el reloj local en 1 unidad ($C_i = C_i + 1$).
+    \item \textbf{Envío de Mensajes (\texttt{send\_message}):} Antes de enviar, el proceso incrementa su reloj local en 1 ($C_i = C_i + 1$) y luego adjunta ese valor actualizado (estampa de tiempo) dentro de la tubería junto con el mensaje mediante \texttt{pipe.send(('Mensaje', counter))}.
+    \item \textbf{Recepción de Mensajes (\texttt{recv\_message}):} Cuando un proceso extrae un mensaje de la tubería mediante \texttt{pipe.recv()}, lee la estampa de tiempo adjunta. Es aquí donde se aplica la regla de convergencia principal de Lamport implementada en la función \texttt{calc\_recv\_timestamp}: el nuevo tiempo del proceso receptor será el valor máximo entre su propio reloj local y la estampa de tiempo recibida del mensaje, más uno ($C_j = \max(C_j, C_m) + 1$).
+\end{itemize}
+
+\textbf{2. Cumplimeiento del ambiente propuesto}
+
+La comunicación entre procesos se logra mediante objetos \texttt{Pipe()}, que actúan como canales bidireccionales. Para garantizar que el programa se comporte exactamente como el diagrama porpuesto, las conexiones y llamadas a las funciones se estructuraron de la siguiente forma:
+\begin{itemize}
+    \item \textbf{El Inicio (P0):} La función \texttt{p0} arranca el sistema ejecutando un \texttt{event()} seguido de un \texttt{send\_message()} usando \texttt{pipe01}. Esto coincide con el origen de la cascada.
+    \item \textbf{La Ramificación (P1):} La función \texttt{p1} está diseñada para bloquearse hasta recibir el mensaje de P0 mediante \texttt{recv\_message(pipe10)}. Una vez que el reloj se actualiza, P1 ejecuta un evento local y luego se divide, llamando a \texttt{send\_message} dos veces: una hacia P2 (\texttt{pipe12}) y otra hacia P3 (\texttt{pipe13}). 
+    \item \textbf{El Paralelismo (P2, P3, P4, P5):} Las funciones \texttt{p2} y \texttt{p3} funcionan como intermediarios en paralelo. Al recibir el mensaje de P1, envían su propio mensaje hacia P4 y P5 respectivamente. A su vez, \texttt{p4} y \texttt{p5} reciben esos mensajes y los retransmiten hacia el colector final. Esto asegura que la estampa de tiempo siga arrastrando la historia causal de los eventos previos de manera paralela.
+    \item \textbf{La Convergencia (P6):} La función \texttt{p6} consolida la información de las dos ramas. Realiza dos llamadas a \texttt{recv\_message}, extrayendo los mensajes de \texttt{pipe64} y \texttt{pipe65}. La función \texttt{calc\_recv\_timestamp} internamente se asegurará de que el reloj de P6 absorba el tiempo más grande que le llegue de ambas ramas. Finalmente, realiza un último \texttt{event()} para marcar la conclusión del flujo. 
+\end{itemize}
+
+Este diseño refleja fielmente las flechas trazadas en el diagrama de ambiente propuesto, forzando a los procesos a respetar la relación ``sucedió antes que'' ($\rightarrow$) diseñada para esta topología de 7 nodos y validando el correcto funcionamiento de los relojes lógicos.
+
+\newpage
+
+\textbf{Funcionamiento del código}
+
+Al ejecutar el programa, pudimos comprobar que los relojes de Lamport funcionan correctamente. Notamos que, aunque los mensajes se impriman en distinto orden en la consola (ya que la computadora ejecuta los procesos al mismo tiempo), los tiempos lógicos siempre se mantienen organizados. 
+
+Lo más importante que observamos es que el reloj lógico del proceso final (\texttt{P6}) siempre termina con un valor mayor al de todos los procesos que le enviaron información. Esto demuestra que el sistema cumple a la perfección con la regla de ``sucedió antes que'' (\textit{happened-before}) de Leslie Lamport: si un evento ocurre antes que otro, su marca de tiempo siempre será menor.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/Lamport/actividad6.png}
+    \caption{Simulación de relojes de Lamport con 7 procesos}
+    \label{fig:lamport}
+\end{figure}
+
+
+
+\newpage
+
     \subsubsection{Actividad 7}
 
-    \textbf{Nota: en las secciones que se pide ambiente propuesto, se tiene que cambiar a un ambiente que propongamos nosotros, la profa quiere que todos los ambies sean diferentes, por eso no podemos trabajar con el que ella quiere}
     
     Con la idea anterior implementar una solución al algoritmo de
     relojes vectoriales, plantear un ambiente con 5 procesos.
     Entregar la figura con el ambiente sugerido que se programará.
+
+
+    Para esta actividad, se adaptó la arquitectura concurrente basada en \texttt{multiprocessing} y \texttt{Pipe} de la Actividad 6. La diferencia principal es que, en lugar de usar un único contador entero (Lamport), cada proceso mantiene un arreglo (vector) con el registro del tiempo lógico de todos los participantes del sistema. Al ser 5 procesos, el reloj de cada uno es una lista de 5 posiciones: \texttt{[P0, P1, P2, P3, P4]}.
+
+   El objetivo fue crear un sistema con 5 procesos donde la información se divide en varios caminos y luego se vuelve a juntar, para ver cómo cada proceso va guardando y combinando la información de lo que pasó en los distintos caminos.
+
+El ambiente diseñado interactúa de la siguiente manera:
+\begin{itemize}
+    \item \textbf{P0:} Inicia la ejecución con un evento local. Posteriormente, envía un mensaje a P1 y luego otro mensaje a P2.
+    \item \textbf{P1:} Recibe el mensaje de P0, actualiza su vector y envía un mensaje a P3.
+    \item \textbf{P2:} Recibe el mensaje de P0 de forma paralela a P1, actualiza su vector y envía un mensaje a P4.
+    \item \textbf{P3:} Recibe el mensaje de P1, procesa la información y reenvía su mensaje a P4.
+    \item \textbf{P4:} Actúa como el nodo de convergencia. Primero recibe el mensaje de P2, luego recibe el mensaje de P3 (uniendo ambas ramas), y finaliza su ejecución con un evento local.
+\end{itemize}
+
+\newpage
+\textbf{Diagrama del Ambiente Propuesto}
+
+A continuación, se presenta el diagrama propuesto que modela el intercambio de mensajes y eventos para el ambiente de 5 procesos.
+
+\begin{center}
+\begin{tikzpicture}[x=1.3cm, y=-1.2cm, >=stealth, thick]
+    % Líneas de los procesos
+    \foreach \i in {0,...,4} {
+        \node[left, font=\bfseries] at (0, \i) {P\i};
+        \draw[->, color=gray] (0, \i) -- (10, \i);
+    }
+
+    % P0
+    \filldraw[blue] (1, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[blue] (2, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P1};
+    \filldraw[blue] (3, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P2};
+    
+    % P1
+    \filldraw[red] (3, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (2, 0) -- (3, 1);
+    \filldraw[red] (4, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P3};
+
+    % P2
+    \filldraw[orange] (4, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (3, 0) -- (4, 2);
+    \filldraw[orange] (5, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+    
+    % P3
+    \filldraw[magenta] (5, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (4, 1) -- (5, 3);
+    \filldraw[magenta] (6, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+
+    % P4
+    \filldraw[violet] (7, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Recep. P2};
+    \draw[->, dashed] (5, 2) -- (7, 4);
+    \filldraw[violet] (8, 4) circle (2pt) node[below=2pt, font=\scriptsize] {Recep. P3};
+    \draw[->, dashed] (6, 3) -- (8, 4);
+    \filldraw[violet] (9, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Evento Final};
+    
+\end{tikzpicture}
+\end{center}
+
+\textbf{Implementación del Código}
+
+El siguiente código implementa el algoritmo de relojes vectoriales para los 5 procesos. La regla de actualización principal al recibir un mensaje toma el máximo valor posición por posición entre el reloj local y el recibido.
+
+\begin{lstlisting}[language=Python, caption=Implementación de Relojes Vectoriales con 5 Procesos]
+from multiprocessing import Process, Pipe
+from os import getpid
+from datetime import datetime
+
+# ==========================================
+# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
+# ==========================================
+RESET = "\033[0m"
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m"  
+C_RECV  = "\033[96m"  
+C_TIME  = "\033[90m"  
+
+def local_time(counter):
+    time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+    vector_str = f"[{', '.join(f'{x:02d}' for x in counter)}]"
+    return f'{C_TIME}[ Reloj Vectorial: {vector_str} | Hora: {time_str} ]{RESET}'
+
+def calc_recv_timestamp(recv_time_stamp, counter):
+    return [max(r, c) for r, c in zip(recv_time_stamp, counter)]
+
+def event(pid, p_index, counter):
+    counter[p_index] += 1
+    accion = f'{C_EVENT}[P{p_index}] EVENTO LOCAL   (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def send_message(pipe, pid, p_index, counter, dest_num):
+    counter[p_index] += 1
+    pipe.send(('Mensaje', counter))
+    accion = f'{C_SEND}[P{p_index}] ENVÍA a P{dest_num}    (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def recv_message(pipe, pid, p_index, counter, src_num):
+    message, timestamp = pipe.recv()
+    counter = calc_recv_timestamp(timestamp, counter)
+    counter[p_index] += 1
+    accion = f'{C_RECV}[P{p_index}] RECIBE de P{src_num}  (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+# ==========================================
+# DEFINICIÓN DE LOS 5 PROCESOS
+# ==========================================
+def p0(pipe01, pipe02):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = event(pid, 0, counter)
+    counter = send_message(pipe01, pid, 0, counter, 1)
+    counter = send_message(pipe02, pid, 0, counter, 2)
+
+def p1(pipe10, pipe13):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe10, pid, 1, counter, 0)
+    counter = send_message(pipe13, pid, 1, counter, 3)
+
+def p2(pipe20, pipe24):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe20, pid, 2, counter, 0)
+    counter = send_message(pipe24, pid, 2, counter, 4)
+
+def p3(pipe31, pipe34):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe31, pid, 3, counter, 1)
+    counter = send_message(pipe34, pid, 3, counter, 4)
+
+def p4(pipe42, pipe43):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe42, pid, 4, counter, 2)
+    counter = recv_message(pipe43, pid, 4, counter, 3)
+    counter = event(pid, 4, counter)
+
+if __name__ == '__main__':
+    print("\n" + "="*80)
+    print(" INICIANDO SIMULACIÓN DE RELOJES VECTORIALES (5 PROCESOS) ".center(80, "="))
+    print("="*80 + "\n")
+
+    pipe01, pipe10 = Pipe()
+    pipe02, pipe20 = Pipe()
+    pipe13, pipe31 = Pipe()
+    pipe24, pipe42 = Pipe()
+    pipe34, pipe43 = Pipe()
+
+    procesos = [
+        Process(target=p0, args=(pipe01, pipe02)),
+        Process(target=p1, args=(pipe10, pipe13)),
+        Process(target=p2, args=(pipe20, pipe24)),
+        Process(target=p3, args=(pipe31, pipe34)),
+        Process(target=p4, args=(pipe42, pipe43))
+    ]
+
+    for p in procesos:
+        p.start()
+    for p in procesos:
+        p.join()
+        
+    print("\n" + "="*80)
+    print(" SIMULACIÓN FINALIZADA ".center(80, "="))
+    print("="*80 + "\n")
+\end{lstlisting}
+
+Al igual que en el algoritmo anterior, usamos \texttt{multiprocessing} para garantizar la ejecución concurrente, pero el manejo del tiempo cambia significativamente.
+
+\textbf{1. Reglas Lógicas del Reloj Vectorial}
+
+Cada proceso inicia con un arreglo de ceros: \texttt{[0, 0, 0, 0, 0]}. La posición \texttt{i} del arreglo corresponde al conocimiento que tiene el proceso sobre el tiempo del proceso \texttt{i}.
+\begin{itemize}
+    \item \textbf{Eventos Locales y Envíos:} Cada vez que un proceso \texttt{Pi} hace un evento o envía un mensaje, incrementa únicamente su propia posición en el vector (\texttt{counter[i] += 1}). En el caso de envío, manda el arreglo completo por la tubería.
+    \item \textbf{Recepción de Mensajes:} Cuando \texttt{Pi} recibe un mensaje, compara su vector actual con el vector recibido. Usa la función \texttt{max()} \textbf{posición por posición} para quedarse con el valor más grande de cada índice. Finalmente, incrementa su propio índice para registrar el evento de recepción.
+\end{itemize}
+
+\textbf{2. Cumplimiento del ambiente propuesto}
+
+La estructura de las tuberías (\texttt{Pipe}) sigue fielmente el diagrama diseñado:
+\begin{itemize}
+    \item \textbf{P0} tiene su vector inicial y tras sus tres acciones (un evento local y dos envíos) su índice 0 avanza, propagando esos valores a P1 y P2.
+    \item \textbf{P1 y P2} reciben la historia de P0. Al actualizar sus vectores, adoptan el valor del índice 0 que traía P0, y luego incrementan sus respectivos índices (1 y 2) para retransmitirlos a los siguientes procesos.
+    \item \textbf{P3} actúa como puente, absorbiendo la historia de P1 (que ya incluía a P0) y enviándola a P4.
+    \item \textbf{P4 (Convergencia):} Es el punto clave de la simulación. Al recibir información de P2 y de P3, su función \texttt{calc\_recv\_timestamp} combina ambas historias usando los máximos. Esto le permite a P4 tener una ``fotografía'' completa de cuántos eventos ocurrieron en cada uno de los procesos anteriores.
+\end{itemize}
+
+\newpage
+
+\textbf{Funcionamiento del código}
+
+Al analizar los resultados de la consola , podemos comprobar paso a paso cómo los relojes vectoriales preservan toda la historia causal. A diferencia de Lamport, que solo daba un número general, aquí podemos ver exactamente qué sabe cada proceso sobre el resto del sistema.
+
+Observando la ejecución, el proceso \textbf{P0} inicia la cascada: tras su primer evento local y sus envíos a P1 y P2, vemos cómo únicamente incrementa su propia posición (la posición 0 del arreglo), llegando hasta el vector \texttt{[03, 00, 00, 00, 00]}. 
+
+Cuando los demás procesos reciben mensajes, podemos notar cómo absorben esta historia. Por ejemplo, cuando \textbf{P1} recibe el mensaje de P0, compara el vector recibido con el suyo y actualiza su reloj a \texttt{[02, 01, 00, 00, 00]}, adoptando la información de los 2 eventos que llevaba P0 en ese instante y sumando el suyo propio. De igual forma, cuando \textbf{P2} recibe su mensaje, su vector se actualiza a \texttt{[03, 00, 01, 00, 00]}.
+
+La ventaja principal de este algoritmo se demuestra en el nodo de convergencia, \textbf{P4}. En la imagen, vemos que P4 recibe primero el mensaje de P2, actualizando su vector a \texttt{[03, 00, 02, 00, 01]}. Inmediatamente después, recibe el mensaje de P3 (el cual trae un vector de \texttt{[02, 02, 00, 02, 00]}). Al aplicar la regla de tomar el valor máximo posición por posición entre ambos vectores, P4 fusiona exitosamente ambas ramas. 
+
+Tras su evento local final, P4 concluye con el vector \texttt{[03, 02, 02, 02, 03]}. Este arreglo final nos dice con exactitud que, antes de que P4 terminara, ocurrieron 3 eventos en P0, 2 en P1, 2 en P2 y 2 en P3. Esto demuestra que la topología funcionó perfectamente y que no hubo ninguna pérdida de información en todo el sistema.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/Vectorial/actividad7.png}
+    \caption{Simulación de relojes Vectoriales con 5 procesos}
+    \label{fig:vectorial}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     % Impresión Referencias
     \nocite{*}

@@ -10,5 +10,5 @@
 \contentsline {subsubsection}{\numberline {1.2.4}Actividad 5}{14}{subsubsection.1.2.4}%
 \contentsline {subsection}{\numberline {1.3}Algoritmo de Lamport:}{15}{subsection.1.3}%
 \contentsline {subsubsection}{\numberline {1.3.1}Actividad 6}{15}{subsubsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.2}Actividad 7}{15}{subsubsection.1.3.2}%
-\contentsline {section}{Referencias}{15}{section*.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}Actividad 7}{22}{subsubsection.1.3.2}%
+\contentsline {section}{Referencias}{28}{section*.3}%
