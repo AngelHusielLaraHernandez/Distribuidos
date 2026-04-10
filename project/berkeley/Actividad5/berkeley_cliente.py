@@ -17,7 +17,7 @@ def clienteBerkeley(server_ip, port=60001):
 
     # Simular variación en el tiempo local
     local_time = time.time() + random.uniform(-5, 5)
-    print(f"Tiempo local del cliente antes del ajuste: {local_time}")
+    print(f"Tiempo local del cliente antes del ajuste: {local_time:.2f}")
 
     data = sockClient.recv(1024)
     if data == b'TIME_REQUEST':

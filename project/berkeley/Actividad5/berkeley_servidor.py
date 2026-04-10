@@ -36,21 +36,25 @@ def servidorBerkeley(port=60001, num_clients=3):
 
     for conn in connections:
         client_time = struct.unpack('d', conn.recv(8))[0]
-        print(f"Tiempo recibido del cliente: {client_time}")
+        print(f"Tiempo recibido del cliente: {client_time:.2f}")
         times.append(client_time)
 
     server_time = time.time()
-    print(f"Tiempo del servidor: {server_time}")
+    print(f"Tiempo del servidor: {server_time:.2f}")
 
     all_times = times + [server_time]
     average_time = sum(all_times) / len(all_times)
-    print(f"Tiempo promedio calculado: {average_time}")
+    print(f"Tiempo promedio calculado: {average_time:.2f}")
 
     adjusted_times = [average_time - t for t in times]
-    print(f"Ajustes a enviar: {adjusted_times}")
+    
+    # Para imprimir una lista con 2 decimales, usamos esta técnica de comprensión de listas:
+    ajustes_formateados = [f"{adj:.2f}" for adj in adjusted_times]
+    print(f"Ajustes a enviar: {ajustes_formateados}")
 
     for conn, adjustment in zip(connections, adjusted_times):
-        print(f"Enviando ajuste de tiempo: {adjustment}")
+        # Aquí SÍ podemos usar :.2f directamente porque adjustment es un número individual
+        print(f"Enviando ajuste de tiempo: {adjustment:.2f}")
         conn.send(struct.pack('f', adjustment))
 
     for conn in connections:
