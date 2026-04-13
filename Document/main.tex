@@ -1059,7 +1059,8 @@ Tiempo calculado (C):          1775028151.939009
         \caption{Salida del programa de Berkeley con Servidor.}
     \end{figure}
 
-    \newpage
+    La Ultima captura es de la consola del servidor, alojado en Linux, el cual registra las conexiones entrantes de tres nodos distintos, consolida los tiempos locales, calcula el promedio del clúster y determina los deltas de ajuste precisos para cada conexión. Por su parte, la primera y segunda imagen documentan el comportamiento de los nodos cliente ejecutándose de manera remota desde máquinas independientes con sistema operativo Windows. En estas terminales periféricas se observa el ciclo completo de sincronización: los clientes establecen el enlace mediante la dirección IP del servidor, reportan su tiempo local afectado por la variación aleatoria, reciben su valor de compensación individual calculado por el coordinador (por ejemplo, los ajustes de 0.43 y 1.14 segundos mostrados en pantalla) y finalmente aplican dicha corrección.
+
     \subsection{Algoritmo de Lamport:}
     Para la implementación del algoritmo de relojes
     lógicos de Lamport se proporciona un programa en Python que
