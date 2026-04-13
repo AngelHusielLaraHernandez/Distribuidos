@@ -1,3 +1,9 @@
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
+
 import socket
 import time
 import struct
@@ -35,7 +41,7 @@ def servidorBerkeley(port=60001, num_clients=3):
     adjusted_times = [adjustment - t for t in times]
     print(f"Ajustes calculados para los clientes: {adjusted_times}")
     
-    # Se cambia el nombre de la variable de iteración a 'adj' para no sobreescribir 'adjustment'
+    
     for conn, adj in zip(connections, adjusted_times):
         print(f"Enviando ajuste de tiempo: {adj} al cliente")
         conn.send(struct.pack('f', adj))
@@ -73,7 +79,7 @@ def ejecutaCliente(num_clients=3):
         p = Process(target=ClienteBerkeley, args=(i + 1,))
         processes.append(p)
         p.start()
-        time.sleep(1)  # Agregar un pequeño retraso para evitar que los clientes se conecten exactamente al mismo tiempo
+        time.sleep(1)  
     
     for p in processes:
         p.join()
@@ -82,7 +88,7 @@ if __name__ == "__main__":
     p_servidor = Process(target=servidorBerkeley)
     p_servidor.start()
     
-    time.sleep(2)  # Asegurarse de que el servidor esté listo antes de iniciar los clientes
+    time.sleep(2)  
     ejecutaCliente(num_clients=3)
     
     p_servidor.join()

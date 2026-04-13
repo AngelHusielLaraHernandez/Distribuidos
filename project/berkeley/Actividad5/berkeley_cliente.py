@@ -1,6 +1,11 @@
-# Algoritmo de Berkeley - Cliente
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
+
 # Actividad 5: Ejecutar servidor y clientes en máquinas diferentes
-# Ejecutar: python berkeley_cliente.py <ip_servidor> [puerto]
+
 
 import socket
 import time
@@ -15,7 +20,7 @@ def clienteBerkeley(server_ip, port=60001):
     sockClient.connect((server_ip, port))
     print("Conexión establecida.")
 
-    # Simular variación en el tiempo local
+    
     local_time = time.time() + random.uniform(-5, 5)
     print(f"Tiempo local del cliente antes del ajuste: {local_time:.2f}")
 

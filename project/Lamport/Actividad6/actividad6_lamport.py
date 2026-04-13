@@ -1,18 +1,21 @@
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
+
 from multiprocessing import Process, Pipe
 from os import getpid
 from datetime import datetime
 
-# ==========================================
-# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
-# ==========================================
+
 RESET = "\033[0m"
-C_EVENT = "\033[93m"  # Amarillo para eventos locales
-C_SEND  = "\033[92m"  # Verde para envíos
-C_RECV  = "\033[96m"  # Cian para recepciones
-C_TIME  = "\033[90m"  # Gris para los relojes
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m"  
+C_RECV  = "\033[96m"  
+C_TIME  = "\033[90m"  
 
 def local_time(counter):
-    # Formateamos la hora para que sea más limpia (HH:MM:SS.mmm)
     time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
     return f'{C_TIME}[ Reloj Lamport: {counter:02d} | Hora: {time_str} ]{RESET}'
 
@@ -21,7 +24,6 @@ def calc_recv_timestamp(recv_time_stamp, counter):
 
 def event(pid, counter, p_num):
     counter += 1
-    # Se ajusta el espaciado (ljust) para crear un efecto de tabla
     accion = f'{C_EVENT}[P{p_num}] EVENTO LOCAL   (PID:{pid}){RESET}'.ljust(52)
     print(f'{accion} {local_time(counter)}')
     return counter
@@ -40,9 +42,6 @@ def recv_message(pipe, pid, counter, p_num, src_num):
     print(f'{accion} {local_time(counter)}')
     return counter
 
-# ==========================================
-# DEFINICIÓN DE LOS 7 PROCESOS
-# ==========================================
 def p0(pipe01):
     pid = getpid()
     counter = 0
@@ -93,7 +92,6 @@ if __name__ == '__main__':
     print(" INICIANDO SIMULACIÓN DE RELOJES DE LAMPORT (7 PROCESOS) ".center(70, "="))
     print("="*70 + "\n")
 
-    # Creación de tuberías para comunicación
     pipe01, pipe10 = Pipe()
     pipe12, pipe21 = Pipe()
     pipe13, pipe31 = Pipe()
@@ -102,7 +100,6 @@ if __name__ == '__main__':
     pipe46, pipe64 = Pipe()
     pipe56, pipe65 = Pipe()
 
-    # Inicialización
     procesos = [
         Process(target=p0, args=(pipe01,)),
         Process(target=p1, args=(pipe10, pipe12, pipe13)),

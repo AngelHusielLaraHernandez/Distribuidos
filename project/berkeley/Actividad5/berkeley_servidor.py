@@ -1,6 +1,10 @@
-# Algoritmo de Berkeley - Servidor
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
+
 # Actividad 5: Ejecutar servidor y clientes en máquinas diferentes
-# Ejecutar: python berkeley_servidor.py [puerto] [num_clientes]
 
 import socket
 import time
@@ -11,11 +15,11 @@ def servidorBerkeley(port=60001, num_clients=3):
     sockServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sockServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-    # Usar '0.0.0.0' para aceptar conexiones de cualquier IP
+    
     sockServer.bind(('0.0.0.0', port))
     sockServer.listen(num_clients)
 
-    # Obtener la IP local para mostrar al usuario
+    
     hostname = socket.gethostname()
     local_ip = socket.gethostbyname(hostname)
     print(f"Servidor de Berkeley escuchando en {local_ip}:{port}")
@@ -48,12 +52,12 @@ def servidorBerkeley(port=60001, num_clients=3):
 
     adjusted_times = [average_time - t for t in times]
     
-    # Para imprimir una lista con 2 decimales, usamos esta técnica de comprensión de listas:
+   
     ajustes_formateados = [f"{adj:.2f}" for adj in adjusted_times]
     print(f"Ajustes a enviar: {ajustes_formateados}")
 
     for conn, adjustment in zip(connections, adjusted_times):
-        # Aquí SÍ podemos usar :.2f directamente porque adjustment es un número individual
+       
         print(f"Enviando ajuste de tiempo: {adjustment:.2f}")
         conn.send(struct.pack('f', adjustment))
 

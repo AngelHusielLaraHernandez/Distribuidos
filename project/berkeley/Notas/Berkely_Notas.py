@@ -1,4 +1,8 @@
-#Algoritmo de Berkey
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
 
 #Actividad 5 : Modificar la implementación anterior para ejecutar, servidor y clientes en máquinas diferentes. 
 
@@ -49,7 +53,7 @@ def servidorBerkeley(port=60001, num_clients=3):
 def ClienteBerkeley(client_id, port=60001):
     sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sockClient.connect(('localhost', port))
-    local_time = time.time() + random.uniform(-5, 5)  # Simular una pequeña variación en el tiempo local
+    local_time = time.time() + random.uniform(-5, 5)  
     print(f"Cliente {client_id} - tiempo local antes del ajuste: {local_time}")
    
     data = sockClient.recv(1024)
@@ -68,13 +72,13 @@ def ejecutaCliente(num_clients=3):
         p = Process(target=ClienteBerkeley, args=(i + 1,))
         processes.append(p)
         p.start()
-        time.sleep(1)  # Agregar un pequeño retraso para evitar que los clientes se conecten exactamente al mismo tiempo
+        time.sleep(1)  
     for p in processes:
         p.join()
 
 if __name__ == "__main__":
     p_servidor = Process(target=servidorBerkeley)
     p_servidor.start()
-    time.sleep(2)  # Asegurarse de que el servidor esté listo antes de iniciar los clientes
+    time.sleep(2)  
     ejecutaCliente(num_clients=3)
     p_servidor.join()

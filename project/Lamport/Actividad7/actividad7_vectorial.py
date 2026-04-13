@@ -1,19 +1,22 @@
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
+
 from multiprocessing import Process, Pipe
 from os import getpid
 from datetime import datetime
 
-# ==========================================
-# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
-# ==========================================
 RESET = "\033[0m"
-C_EVENT = "\033[93m"  # Amarillo
-C_SEND  = "\033[92m"  # Verde
-C_RECV  = "\033[96m"  # Cian
-C_TIME  = "\033[90m"  # Gris
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m" 
+C_RECV  = "\033[96m" 
+C_TIME  = "\033[90m"  
 
 def local_time(counter):
     time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-    # Se formatea el arreglo vectorial para que todos tengan el mismo espacio
+    #
     vector_str = f"[{', '.join(f'{x:02d}' for x in counter)}]"
     return f'{C_TIME}[ Reloj Vectorial: {vector_str} | Hora: {time_str} ]{RESET}'
 
@@ -41,9 +44,7 @@ def recv_message(pipe, pid, p_index, counter, src_num):
     print(f'{accion} {local_time(counter)}')
     return counter
 
-# ==========================================
-# DEFINICIÓN DE LOS 5 PROCESOS
-# ==========================================
+
 def p0(pipe01, pipe02):
     pid = getpid()
     counter = [0, 0, 0, 0, 0]

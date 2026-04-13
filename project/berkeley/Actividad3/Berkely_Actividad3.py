@@ -1,4 +1,8 @@
-#Algoritmo de Berkey
+
+#17 de abril del 2026
+#Garcia Cortes Adolfo de Jesus
+#Lara Hernandez Angel Husiel
+#Lugo Manzano Rodrigo
 
 #Actividad 3 - Modificar el programa para que trabaje ahora con 5, 10 y 20 clientes
 
@@ -89,7 +93,7 @@ def ClienteBerkeley(client_id, port=60001):
     sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sockClient.connect(('localhost', port))
 
-    # Simular variación en el tiempo local
+    
     variacion = random.uniform(-5, 5)
     local_time = time.time() + variacion
 
@@ -119,7 +123,7 @@ def ejecutaCliente(num_clients=3, port=60001):
         p = Process(target=ClienteBerkeley, args=(i+1, port))
         processes.append(p)
         p.start()
-        time.sleep(0.3)  # Pequeño retraso entre conexiones
+        time.sleep(0.3)  
     for p in processes:
         p.join()
 
