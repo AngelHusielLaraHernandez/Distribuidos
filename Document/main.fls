@@ -1022,14 +1022,6 @@ INPUT ./portada_img/izq.png
 INPUT ./portada_img/izq.png
 INPUT ./portada_img/izq.png
 INPUT ./portada_img/izq.png
-INPUT ./portada_img/der.png
-INPUT ./portada_img/der.png
-INPUT ./portada_img/der.png
-INPUT ./portada_img/der.png
-INPUT ./portada_img/izq.png
-INPUT ./portada_img/izq.png
-INPUT ./portada_img/izq.png
-INPUT ./portada_img/izq.png
 INPUT main.aux
 INPUT ./main.out
 INPUT ./main.out

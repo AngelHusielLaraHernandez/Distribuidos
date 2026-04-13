@@ -14,6 +14,7 @@ int32 resultado = 1;
 //servicio gRPC
 service Calculadora{
 rpc Sumar (SumaRequest) returns (SumaResponse);
+rpc Multi (SumaRequest) returns (SumaResponse);
 }
 //Se compila de esta forma
 //python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. calculadora.proto

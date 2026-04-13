@@ -1,12 +1,11 @@
 # Fdb version 4
-["biber main"] 1776091044.97063 "main.bcf" "main.bbl" "main" 1776091761.60613 0
-  "main.bcf" 1776091761.39766 133950 26ec94d1153c1da8e93a2f966e263df0 "pdflatex"
-  "referencias.bib" 1773689985.61521 649 c26f86673dd026f453b7ff39ee6e6973 ""
+["biber main"] 1776102473.80735 "main.bcf" "main.bbl" "main" 1776102490.79579 0
+  "main.bcf" 1776102490.59958 133480 c9ded7f1d38596a91a6e2bded9638c81 "pdflatex"
   (generated)
   "main.bbl"
   "main.blg"
   (rewritten before read)
-["pdflatex"] 1776091756.3088 "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" "main.pdf" "main" 1776091761.60648 0
+["pdflatex"] 1776102485.48723 "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" "main.pdf" "main" 1776102490.79611 0
   "/home/angel/.miktex/texmfs/data/fonts/map/pdftex/pdftex.map" 1774827956.72921 164858 1926c8d7bd1823f0c8393a5c0272d2d9 ""
   "/home/angel/.miktex/texmfs/data/fonts/tfm/public/rsfs/rsfs10.tfm" 1771247627.58304 688 37338d6ab346c2f1466b29e195316aa4 ""
   "/home/angel/.miktex/texmfs/data/fonts/tfm/public/rsfs/rsfs5.tfm" 1771247628.21908 684 3a51bd4fd9600428d5264cf25f04bb9a ""
@@ -266,7 +265,7 @@
   "/home/angel/.miktex/texmfs/install/tex/latex/xkeyval/xkeyval.sty" 1743537584.32545 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/home/angel/.miktex/texmfs/install/tex/latex/xpatch/xpatch.sty" 1773548563.28166 8510 9829c50ab36366d4da41fdc87e7d0699 ""
   "/home/angel/.miktex/texmfs/install/tex/latex/xstring/xstring.sty" 1773548566.46585 123 a302f2c651a95033260db60e51527ae8 ""
-  "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" 1776091745.23444 72436 978597ed5c040adb4bcf1c9f7fa449c6 ""
+  "/home/angel/Documentos/distribuidos/ejemplos1/Document/main.tex" 1776102477.83116 72446 58d94778e95207c17bfed1684c63417b ""
   "img/Berkeley/Actividad3/image1_1.png" 1776089609.01016 262297 3040afd4417a886a20caa09b2792bb4f ""
   "img/Berkeley/Actividad3/image1_2.png" 1776089609.01816 289975 03e2019ceb8bd2b02659f16b28b7fe33 ""
   "img/Berkeley/Actividad3/image1_3.png" 1776089609.07815 263158 09bc9e829b3d7e1bdb864dde16e190d9 ""
@@ -289,12 +288,12 @@
   "img/Berkeley/Notas/image1.jpg" 1776087654.44116 133609 2b5de6b97f64c483268d49945a3817db ""
   "img/Lamport/actividad6.png" 1775850013.15643 129914 92f33818e8e73afdcf0b8194f3cf4b1a ""
   "img/Vectorial/actividad7.png" 1775850013.15643 146657 2135e0e97074d364245537be15c07736 ""
-  "main.aux" 1776091761.39367 8054 3f1849da929ab77d549aaac3fb326f06 "pdflatex"
-  "main.bbl" 1776091046.00377 8888 beccf18bcc070d1ac44d545e6b59f604 "biber main"
-  "main.out" 1776091761.39367 1688 fce5b4fd6bc9e5a4dbad06660fca4021 "pdflatex"
-  "main.run.xml" 1776091761.40166 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
-  "main.tex" 1776091745.23444 72436 978597ed5c040adb4bcf1c9f7fa449c6 ""
-  "main.toc" 1776091761.40166 1148 2719451b01d9ed05bada9d53b95a7448 "pdflatex"
+  "main.aux" 1776102490.59158 7641 0eb1a183438736636e09877650f4f17d "pdflatex"
+  "main.bbl" 1776102480.13524 466 76d65a242ec496c9b4361af646ff12cb "biber main"
+  "main.out" 1776102490.59558 1587 02d6f51f012a721fc3683d0ee8973a41 "pdflatex"
+  "main.run.xml" 1776102490.59958 2360 e823dede0fdb354f7eff64774b1cfad0 "pdflatex"
+  "main.tex" 1776102477.83116 72446 58d94778e95207c17bfed1684c63417b ""
+  "main.toc" 1776102490.59958 1093 d66abab46516a6c0fd3affcc17c800f7 "pdflatex"
   "portada.tex" 1775850013.16443 1351 9d7588ac3a3197121da44d3afcba3402 ""
   "portada_img/der.png" 1773419953.27933 210257 6d0c4d2ce4cceedcb4c586a3b72b8bc2 ""
   "portada_img/izq.png" 1773419953.28333 32490 e04d7053102a8639b2d7b450d226ab82 ""

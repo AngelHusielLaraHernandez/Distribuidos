@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63\x61lculadora.proto\x12\x0b\x63\x61lculadora\"#\n\x0bSumaRequest\x12\t\n\x01\x61\x18\x01 \x01(\x05\x12\t\n\x01\x62\x18\x02 \x01(\x05\"!\n\x0cSumaResponse\x12\x11\n\tresultado\x18\x01 \x01(\x05\x32K\n\x0b\x43\x61lculadora\x12<\n\x05Sumar\x12\x18.calculadora.SumaRequest\x1a\x19.calculadora.SumaResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11\x63\x61lculadora.proto\x12\x0b\x63\x61lculadora\"#\n\x0bSumaRequest\x12\t\n\x01\x61\x18\x01 \x01(\x05\x12\t\n\x01\x62\x18\x02 \x01(\x05\"!\n\x0cSumaResponse\x12\x11\n\tresultado\x18\x01 \x01(\x05\x32\x89\x01\n\x0b\x43\x61lculadora\x12<\n\x05Sumar\x12\x18.calculadora.SumaRequest\x1a\x19.calculadora.SumaResponse\x12<\n\x05Multi\x12\x18.calculadora.SumaRequest\x1a\x19.calculadora.SumaResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -35,6 +35,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SUMAREQUEST']._serialized_end=69
   _globals['_SUMARESPONSE']._serialized_start=71
   _globals['_SUMARESPONSE']._serialized_end=104
-  _globals['_CALCULADORA']._serialized_start=106
-  _globals['_CALCULADORA']._serialized_end=181
+  _globals['_CALCULADORA']._serialized_start=107
+  _globals['_CALCULADORA']._serialized_end=244
 # @@protoc_insertion_point(module_scope)

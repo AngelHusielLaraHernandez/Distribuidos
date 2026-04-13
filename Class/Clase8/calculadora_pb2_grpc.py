@@ -40,6 +40,11 @@ class CalculadoraStub(object):
                 request_serializer=calculadora__pb2.SumaRequest.SerializeToString,
                 response_deserializer=calculadora__pb2.SumaResponse.FromString,
                 _registered_method=True)
+        self.Multi = channel.unary_unary(
+                '/calculadora.Calculadora/Multi',
+                request_serializer=calculadora__pb2.SumaRequest.SerializeToString,
+                response_deserializer=calculadora__pb2.SumaResponse.FromString,
+                _registered_method=True)
 
 
 class CalculadoraServicer(object):
@@ -52,11 +57,22 @@ class CalculadoraServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def Multi(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_CalculadoraServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'Sumar': grpc.unary_unary_rpc_method_handler(
                     servicer.Sumar,
+                    request_deserializer=calculadora__pb2.SumaRequest.FromString,
+                    response_serializer=calculadora__pb2.SumaResponse.SerializeToString,
+            ),
+            'Multi': grpc.unary_unary_rpc_method_handler(
+                    servicer.Multi,
                     request_deserializer=calculadora__pb2.SumaRequest.FromString,
                     response_serializer=calculadora__pb2.SumaResponse.SerializeToString,
             ),
@@ -87,6 +103,33 @@ class Calculadora(object):
             request,
             target,
             '/calculadora.Calculadora/Sumar',
+            calculadora__pb2.SumaRequest.SerializeToString,
+            calculadora__pb2.SumaResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def Multi(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/calculadora.Calculadora/Multi',
             calculadora__pb2.SumaRequest.SerializeToString,
             calculadora__pb2.SumaResponse.FromString,
             options,
