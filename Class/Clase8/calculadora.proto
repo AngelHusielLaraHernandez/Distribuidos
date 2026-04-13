@@ -1,0 +1,19 @@
+syntax = "proto3";
+package calculadora;
+
+//mensaje que el cliuente enviara
+message SumaRequest{
+int32 a = 1;
+int32 b = 2;
+}
+//mensaje qye el servidor devuelve
+message SumaResponse{
+int32 resultado = 1;
+}
+
+//servicio gRPC
+service Calculadora{
+rpc Sumar (SumaRequest) returns (SumaResponse);
+}
+//Se compila de esta forma
+//python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. calculadora.proto
