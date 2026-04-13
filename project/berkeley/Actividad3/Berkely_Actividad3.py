@@ -29,7 +29,7 @@ def servidorBerkeley(port=60001, num_clients=3):
 
     for i in range(num_clients):
         conn, addr = sockServer.accept()
-        print(f"[SERVIDOR] ✓ Cliente {i+1:02d} conectado desde {addr}")
+        print(f"[SERVIDOR] Cliente {i+1:02d} conectado desde {addr}")
         connections.append(conn)
         client_addresses.append(addr)
 
@@ -75,7 +75,7 @@ def servidorBerkeley(port=60001, num_clients=3):
     print(f"\n[SERVIDOR] Enviando ajustes a clientes...")
     for i, (conn, adj) in enumerate(zip(connections, adjusted_times)):
         conn.send(struct.pack('f', adj))
-        print(f"[SERVIDOR]   → Ajuste enviado a Cliente {i+1:02d}")
+        print(f"[SERVIDOR]  Ajuste enviado a Cliente {i+1:02d}")
 
     for conn in connections:
         conn.close()
@@ -149,11 +149,11 @@ if __name__ == "__main__":
     print("Pruebas con 5, 10 y 20 clientes")
     print("="*60)
 
-    # Ejecutar pruebas con diferentes números de clientes
+   
     configuraciones = [5, 10, 20]
 
     for i, num_clients in enumerate(configuraciones):
-        puerto = 60001 + i  # Usar puertos diferentes para evitar conflictos
+        puerto = 60001 + i  
         ejecutarPrueba(num_clients, puerto)
 
     print("\n" + "="*60)

@@ -75,20 +75,6 @@
            {¡}{{\textexclamdown}}1
 }
 
-% Definición del lenguaje ARM Assembler para listings
-\lstdefinelanguage[ARM]{Assembler}{
-  morekeywords={MOV, ADD, SUB, SUBS, MUL, AND, ORR, EOR, NOT, CMP, TST,
-                BEQ, BNE, BGT, BLT, BGE, BLE, B, BL, BX, BLX,
-                LDR, STR, LDRB, STRB, PUSH, POP, SVC, LSL, LSR, ASR,
-                ROR, RRX, MVN, RSB, ADC, SBC, MLA, SMULL, UMULL,
-                STMFD, LDMFD, STMIA, LDMIA, NOP},
-  morecomment=[l]{@},
-  morecomment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  morestring=[b]",
-  sensitive=false
-}
-
 % Estilo para código en C
 \lstdefinestyle{cstyle}{
   language=C,
@@ -108,6 +94,19 @@
   breaklines=true,
   tabsize=4,
   showstringspaces=false
+}
+
+% Definición del lenguaje Python para listings
+\lstdefinelanguage[LAB]{Python}{
+    morekeywords={False, None, True, and, as, assert, async, await, break,
+                                class, continue, def, del, elif, else, except, finally,
+                                for, from, global, if, import, in, is, lambda, nonlocal,
+                                not, or, pass, raise, return, try, while, with, yield,
+                                machine, Pin, PWM, ADC, Timer, sleep_ms, sleep_us},
+    morecomment=[l]{\#},
+    morestring=[b]",
+    morestring=[b]',
+    sensitive=true
 }
 
 % Estilo para salidas de consola/terminal
@@ -527,61 +526,207 @@ Tiempo calculado (C):          1775028151.939009
         \item Ejecutar el programa y responder:
         \begin{enumerate}
             \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
+
+            Los tiempos iniciales de cada cliente fueron:
+            \begin{itemize}
+                \item Cliente 1: 1776087876.551237 
+                \item Cliente 2: 1776087876.277657 
+                \item Cliente 3: 1776087877.5864637 
+            \end{itemize}
+            Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema. Con estos valores, el promedio entre los tres clientes es aproximadamente \textbf{1776087876.8051193}.
+
             \item \textbf{¿Cuál fue el promedio?}
+
+            El tiempo promedio calculado por el servidor en esta ejecución se ubicó alrededor de \textbf{1776087876.8051193}, es decir, un valor muy cercano al promedio de los tiempos reportados por los clientes. Esto ocurre porque los tres relojes iniciales están muy próximos entre sí y el algoritmo de Berkeley toma el tiempo del servidor como un valor más dentro del cálculo global.
+
             \item \textbf{¿A qué tiempo convergen?}
+
+            Todos los clientes convergen al mismo valor promedio calculado por el servidor, que en esta corrida queda aproximadamente en \textbf{1776087876.8051193}. 
         \end{enumerate}
 
     \end{itemize}
 
+    \newpage
+
     \textbf{Salida del programa:}
-    \begin{lstlisting}[style=output]
-Servidor de Berkeley escuchando en el puerto 60001...
-Conexion establecida con: ('127.0.0.1', 47948)
-Conexion establecida con: ('127.0.0.1', 47954)
-Conexion establecida con: ('127.0.0.1', 47968)
-Tiempo recibido del cliente: 1774828614.6528187
-Tiempo recibido del cliente: 1774828611.847464
-Tiempo recibido del cliente: 1774828616.3387685
-Tiempo del servidor: 1774828613.939467
-Tiempo promedio calculado por el servidor es: 1774828614.1946297
-Ajuste del servidor: [-0.458, 2.347, -2.144]
 
-Cliente 1 - Tiempo local antes del ajuste: 1774828611.847464
-Cliente 1 - Ajuste recibido: 2.347165584564209
-Cliente 1 - Nuevo tiempo despues del ajuste: 1774828614.1946297
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Notas/image1.jpg}
+        \caption{Salida del programa de Berkeley con 3 clientes.}
+    \end{figure}
 
-Cliente 2 - Tiempo local antes del ajuste: 1774828614.6528187
-Cliente 2 - Ajuste recibido: -0.4581890106201172
-Cliente 2 - Nuevo tiempo despues del ajuste: 1774828614.1946297
-
-Cliente 3 - Tiempo local antes del ajuste: 1774828616.3387685
-Cliente 3 - Ajuste recibido: -2.144138813018799
-Cliente 3 - Nuevo tiempo despues del ajuste: 1774828614.1946297
-    \end{lstlisting}
-
-    \textbf{Respuestas:}
-    \begin{enumerate}
-        \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
-
-        Los tiempos iniciales de cada cliente fueron:
-        \begin{itemize}
-            \item Cliente 1: 1774828611.847464 (2.35 segundos atrás del promedio)
-            \item Cliente 2: 1774828614.652818 (0.46 segundos adelante del promedio)
-            \item Cliente 3: 1774828616.338768 (2.14 segundos adelante del promedio)
-        \end{itemize}
-        Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema.
-
-        \item \textbf{¿Cuál fue el promedio?}
-
-        El tiempo promedio calculado por el servidor fue \textbf{1774828614.1946297}. Este valor se obtiene promediando los tiempos de los 3 clientes más el tiempo del servidor (1774828613.939467), resultando en: $(611.84 + 614.65 + 616.34 + 613.94) / 4 = 614.19$ (últimos dígitos significativos).
-
-        \item \textbf{¿A qué tiempo convergen?}
-
-        Todos los clientes convergen al tiempo promedio \textbf{1774828614.1946297}. Como se puede observar en la salida, después de aplicar los ajustes correspondientes, el ``Nuevo tiempo después del ajuste'' es idéntico para los tres clientes, demostrando que el algoritmo de Berkeley logra sincronizar exitosamente todos los relojes al mismo valor.
-    \end{enumerate}
+    
     \subsubsection{Actividad 3}
 
-    Para esta actividad se modificó el programa original para soportar un número variable de clientes. Los cambios principales fueron: (1) parametrizar la función \texttt{servidorBerkeley} y \texttt{ejecutaCliente} para recibir el número de clientes como argumento, (2) agregar la opción \texttt{SO\_REUSEADDR} al socket para evitar errores de ``address already in use'' entre ejecuciones, (3) usar puertos diferentes para cada prueba (60001, 60002, 60003) evitando conflictos, y (4) crear una función \texttt{ejecutarPrueba} que encapsula la ejecución completa de servidor y clientes para cada configuración.
+    Para esta actividad se modificó el programa original para soportar un número variable de clientes. 
+    
+    Los cambios principales fueron: 
+    
+    \begin{enumerate}
+        \item Se cambio la función \texttt{servidorBerkeley} y \texttt{ejecutaCliente} para recibir el número de clientes como argumento, esto para hacer variables la ejecuciones de un solo golpe.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion del cliente}, basicstyle=\ttfamily\scriptsize]
+            def ClienteBerkeley(client_id, port=60001):
+            sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockClient.connect(('localhost', port))
+
+            # Simular variación en el tiempo local
+            variacion = random.uniform(-5, 5)
+            local_time = time.time() + variacion
+
+            print(f"    [CLIENTE {client_id:02d}] Conectado al servidor")
+            print(f"    [CLIENTE {client_id:02d}] Variación simulada: {variacion:+.4f} seg")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo local: {local_time:.6f}")
+
+            data = sockClient.recv(1024)
+            if data == b'TIME_REQUEST':
+                sockClient.send(struct.pack('d', local_time))
+                print(f"    [CLIENTE {client_id:02d}] Tiempo enviado al servidor")
+
+            adjustment = struct.unpack('f', sockClient.recv(4))[0]
+            new_time = local_time + adjustment
+
+            
+            print(f"    [CLIENTE {client_id:02d}] Ajuste recibido: {adjustment:+.6f} seg")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo anterior: {local_time:.6f}")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo ajustado: {new_time:.6f}")
+
+            sockClient.close()
+
+        def ejecutaCliente(num_clients=3, port=60001):
+            processes = []
+            for i in range(num_clients):
+                p = Process(target=ClienteBerkeley, args=(i+1, port))
+                processes.append(p)
+                p.start()
+                time.sleep(0.3)  # Pequeño retraso entre conexiones
+            for p in processes:
+                p.join()
+        \end{lstlisting}
+
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del servidor}, basicstyle=\ttfamily\scriptsize]
+        def servidorBerkeley(port=60001, num_clients=3):
+            sockServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sockServer.bind(('localhost', port))
+            sockServer.listen(num_clients)
+
+            print(f"\n{'='*60}")
+            print(f"{'SERVIDOR BERKELEY':^60}")
+            print(f"{'='*60}")
+            print(f"| Número de clientes esperados: {num_clients}")
+            print(f"| Puerto: {port}")
+            print(f"{'='*60}")
+            print(f"\n[SERVIDOR] Esperando conexiones...")
+
+            connections = []
+            client_addresses = []
+            times = []
+
+            for i in range(num_clients):
+                conn, addr = sockServer.accept()
+                print(f"[SERVIDOR] Cliente {i+1:02d} conectado desde {addr}")
+                connections.append(conn)
+                client_addresses.append(addr)
+
+            print(f"[SERVIDOR] Todos los {num_clients} clientes conectados")
+            print(f"[SERVIDOR] Solicitando tiempos a los clientes...")
+             
+            for conn in connections:
+                conn.send(b'TIME_REQUEST')
+
+            print(f"\n[SERVIDOR] Tiempos recibidos de clientes:")
+             
+            for i, conn in enumerate(connections):
+                client_time = struct.unpack('d', conn.recv(8))[0]
+                print(f"[SERVIDOR]   Cliente {i+1:02d}: {client_time:.6f}")
+                times.append(client_time)
+
+            server_time = time.time()
+             
+            print(f"[SERVIDOR]   Servidor:   {server_time:.6f}")
+
+            all_times = times + [server_time]
+            average_time = sum(all_times) / len(all_times)
+              
+            print(f"[SERVIDOR] CÁLCULO DEL TIEMPO PROMEDIO")
+             
+            print(f"[SERVIDOR]   Tiempo promedio: {average_time:.6f}")
+
+            adjusted_times = [average_time - t for t in times]
+            server_adjustment = average_time - server_time
+ 
+            print(f"[SERVIDOR] AJUSTES CALCULADOS")
+             
+            for i, adj in enumerate(adjusted_times):
+                signo = "+" if adj >= 0 else ""
+                print(f"[SERVIDOR]   Cliente {i+1:02d}: {signo}{adj:.6f} segundos")
+            signo_srv = "+" if server_adjustment >= 0 else ""
+            print(f"[SERVIDOR]   Servidor:   {signo_srv}{server_adjustment:.6f} segundos")
+
+            print(f"\n[SERVIDOR] Enviando ajustes a clientes...")
+            for i, (conn, adj) in enumerate(zip(connections, adjusted_times)):
+                conn.send(struct.pack('f', adj))
+                print(f"[SERVIDOR]  Ajuste enviado a Cliente {i+1:02d}")
+
+            for conn in connections:
+                conn.close()
+            sockServer.close()
+
+            print(f"\n[SERVIDOR] {'='*50}")
+            print(f"[SERVIDOR] SINCRONIZACIÓN COMPLETADA")
+            print(f"[SERVIDOR] {'='*50}\n")
+        \end{lstlisting}
+
+        
+        \item Agregar la opción \texttt{SO\_REUSEADDR} al socket para evitar errores de ``address already in use'' entre ejecuciones.
+        \item Usar puertos diferentes para cada prueba (60001, 60002, 60003) evitando conflictos.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion principal donde se ve el cambio de puertos}, basicstyle=\ttfamily\scriptsize]
+        if __name__ == "__main__":
+            print("\n" + "="*60)
+            print("ALGORITMO DE BERKELEY - ACTIVIDAD 3")
+            print("Pruebas con 5, 10 y 20 clientes")
+            print("="*60)
+
+        
+            configuraciones = [5, 10, 20]
+
+            for i, num_clients in enumerate(configuraciones):
+                puerto = 60001 + i  
+                ejecutarPrueba(num_clients, puerto)
+
+            print("\n" + "="*60)
+            print("TODAS LAS PRUEBAS COMPLETADAS")
+            print("="*60 + "\n")
+        \end{lstlisting}
+
+        \item Crear una función \texttt{ejecutarPrueba} que encapsula la ejecución completa de servidor y clientes para cada configuración.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion ejecutarPrueba}, basicstyle=\ttfamily\scriptsize]
+            def ejecutarPrueba(num_clients, port):
+            """Ejecuta una prueba completa con el número especificado de clientes"""
+            print(f"\n{'#'*60}")
+            print(f"{'#'*60}")
+            print(f"##  PRUEBA CON {num_clients} CLIENTES")
+            print(f"{'#'*60}")
+            print(f"{'#'*60}")
+
+            p_servidor = Process(target=servidorBerkeley, args=(port, num_clients))
+            p_servidor.start()
+            time.sleep(1)
+
+            ejecutaCliente(num_clients=num_clients, port=port)
+            p_servidor.join()
+
+            
+            print(f"Prueba con {num_clients} clientes finalizada")
+            
+            time.sleep(2)  # Pausa entre pruebas
+        \end{lstlisting}
+    \end{enumerate}
+    
 
     Modificar el programa para trabajar con:
     \begin{itemize}
@@ -589,60 +734,105 @@ Cliente 3 - Nuevo tiempo despues del ajuste: 1774828614.1946297
         \item Respondera las preguntas:
         \begin{enumerate}
             \item \textbf{¿Cómo cambia el tiempo promedio?}
+
+            El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
+
             \item \textbf{¿El sistema sigue siendo estable?}
+
+            Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
         \end{enumerate}
     \end{itemize}
 
-    \textbf{Salida del programa con 10 clientes:}
-    \begin{lstlisting}[style=output]
-============================================================
-                     SERVIDOR BERKELEY
-============================================================
-| Numero de clientes esperados: 10
-| Puerto: 60002
-============================================================
+    \textbf{Salidas del programa:}
 
-[SERVIDOR] Tiempos recibidos de clientes:
-[SERVIDOR]   Cliente 01: 1774828674.637297
-[SERVIDOR]   Cliente 02: 1774828676.781445
-[SERVIDOR]   Cliente 03: 1774828670.725160
-[SERVIDOR]   Cliente 04: 1774828674.653284
-[SERVIDOR]   Cliente 05: 1774828678.582883
-[SERVIDOR]   Cliente 06: 1774828675.318715
-[SERVIDOR]   Cliente 07: 1774828670.358184
-[SERVIDOR]   Cliente 08: 1774828678.589895
-[SERVIDOR]   Cliente 09: 1774828678.777744
-[SERVIDOR]   Cliente 10: 1774828680.287497
-[SERVIDOR]   Servidor:   1774828675.524798
+    \textbf{Salida para 5 clientes:}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_1.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 1-3.}
+    \end{figure}
 
-[SERVIDOR] Tiempo promedio: 1774828675.839719
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_2.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 2-3.}
+    \end{figure}
 
-[SERVIDOR] AJUSTES CALCULADOS
-[SERVIDOR]   Cliente 01: +1.202421 segundos
-[SERVIDOR]   Cliente 02: -0.941726 segundos
-[SERVIDOR]   Cliente 03: +5.114559 segundos
-[SERVIDOR]   Cliente 04: +1.186435 segundos
-[SERVIDOR]   Cliente 05: -2.743164 segundos
-[SERVIDOR]   Cliente 06: +0.521003 segundos
-[SERVIDOR]   Cliente 07: +5.481535 segundos
-[SERVIDOR]   Cliente 08: -2.750176 segundos
-[SERVIDOR]   Cliente 09: -2.938025 segundos
-[SERVIDOR]   Cliente 10: -4.447779 segundos
-[SERVIDOR]   Servidor:   +0.314920 segundos
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_3.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 3-3.}
+    \end{figure}
 
-[SERVIDOR] SINCRONIZACION COMPLETADA
-    \end{lstlisting}
+    \textbf{Salida para 10 clientes:}
 
-    \textbf{Respuestas:}
-    \begin{enumerate}
-        \item \textbf{¿Cómo cambia el tiempo promedio?}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_1.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 1-4.}
+    \end{figure}
 
-        El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_2.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 2-4.}
+    \end{figure}
 
-        \item \textbf{¿El sistema sigue siendo estable?}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_3.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 3-4.}
+    \end{figure}
 
-        Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
-    \end{enumerate}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_4.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 4-4.}
+    \end{figure}
+
+    \textbf{Salida para 20 clientes:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_1.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 1-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_2.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 2-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_3.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 3-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_4.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 4-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_5.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 5-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_6.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 6-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_7.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 7-7.}
+    \end{figure}
 
     \subsubsection{Actividad 4}
 
@@ -653,70 +843,221 @@ Cliente 3 - Nuevo tiempo despues del ajuste: 1774828614.1946297
         \begin{itemize}
             \item time.sleep(random.uniform(0, 3))
         \end{itemize}
+
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion del cliente actulizado con el nuevo tiempo random}, basicstyle=\ttfamily\scriptsize]
+        def ClienteBerkeley(client_id, port=60001):
+            time.sleep(random.uniform(0, 3))
+
+            
+            sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockClient.connect(('localhost', port))
+            
+            local_time = time.time() + random.uniform(-5, 5)  
+            print(f"Cliente {client_id} - tiempo local antes del ajuste: {local_time}")
+        
+            data = sockClient.recv(1024)
+            if data == b'TIME_REQUEST':
+                sockClient.send(struct.pack('d', local_time))
+                
+            adjustment_received = struct.unpack('f', sockClient.recv(4))[0]
+            print(f"Cliente {client_id} - ajuste de tiempo recibido del servidor: {adjustment_received}")
+            
+            new_time = local_time + adjustment_received
+            print(f"Cliente {client_id} - nuevo tiempo después del ajuste: {new_time}")
+            
+            sockClient.close()
+        \end{lstlisting}
         \item Responder a las preguntas:
         \begin{enumerate}
             \item \textbf{¿La latencia afecta el resultado final?}
+
+            No, la latencia \textbf{no afecta el resultado final} de la sincronización en términos de convergencia. Como se puede observar en la salida, a pesar de que cada cliente experimentó diferentes latencias (desde 0.232 hasta 2.674 segundos), todos convergieron al mismo tiempo promedio (1774828782.641636). Esto se debe a que el algoritmo de Berkeley trabaja con los \textit{valores de tiempo reportados} por cada cliente, no con el momento exacto en que esos valores llegan al servidor.
+
+            Sin embargo, la latencia sí afecta la \textbf{precisión} del resultado. Si un cliente tiene alta latencia, el tiempo que reporta ya estará ``desactualizado'' cuando llegue al servidor, introduciendo un error sistemático. En nuestra implementación, el cliente captura su tiempo local \textit{antes} de la latencia, por lo que el ajuste calculado es correcto para ese instante, pero cuando el cliente finalmente aplica el ajuste, su reloj real ya avanzó.
+
             \item \textbf{¿Por qué el algoritmo de Berkeley es sensible o no a este factor?}
+
+            El algoritmo de Berkeley es \textbf{parcialmente sensible} a la latencia por las siguientes razones:
+
+            \textbf{Insensibilidad:} El algoritmo no depende de una fuente de tiempo externa (como NTP), sino que calcula un promedio democrático de todos los participantes. La latencia no impide que el algoritmo calcule y distribuya los ajustes correctamente.
+
+            \textbf{Sensibilidad:} En redes con alta latencia o latencia asimétrica, el algoritmo puede introducir errores porque:
+            \begin{itemize}
+                \item El tiempo que tarda un mensaje en llegar no se compensa (a diferencia del algoritmo de Cristian que usa RTT/2).
+                \item Si la latencia varía significativamente entre clientes, algunos recibirán sus ajustes más tarde, acumulando desfase adicional.
+            \end{itemize}
+
+            Para mitigar esto, implementaciones robustas de Berkeley incorporan estimación de RTT (Round-Trip Time) y compensan la latencia al calcular los ajustes.
         \end{enumerate}
     \end{itemize}
 
     \textbf{Salida del programa con latencia simulada:}
-    \begin{lstlisting}[style=output]
-============================================================
-ACTIVIDAD 4 - SIMULACION DE LATENCIA DE RED
-============================================================
-[CLIENTE 01] Tiempo local: 1774828782.780560 (var: -0.93s)
-[CLIENTE 01] Latencia simulada: 2.674 seg
-[CLIENTE 01] Ajuste: -0.138924 -> Nuevo tiempo: 1774828782.641636
 
-[CLIENTE 02] Tiempo local: 1774828779.546950 (var: -4.37s)
-[CLIENTE 02] Latencia simulada: 1.777 seg
-[CLIENTE 02] Ajuste: +3.094686 -> Nuevo tiempo: 1774828782.641636
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad4/image1.jpg}
+        \caption{Salida del programa de Berkeley con latencia simulada.}
+    \end{figure}
 
-[CLIENTE 03] Tiempo local: 1774828783.538568 (var: -0.57s)
-[CLIENTE 03] Latencia simulada: 0.232 seg
-[CLIENTE 03] Ajuste: -0.896932 -> Nuevo tiempo: 1774828782.641636
-
-[CLIENTE 04] Tiempo local: 1774828779.330222 (var: -4.99s)
-[CLIENTE 04] Latencia simulada: 2.648 seg
-[CLIENTE 04] Ajuste: +3.311414 -> Nuevo tiempo: 1774828782.641636
-
-[CLIENTE 05] Tiempo local: 1774828783.458510 (var: -1.06s)
-[CLIENTE 05] Latencia simulada: 2.423 seg
-[CLIENTE 05] Ajuste: -0.816874 -> Nuevo tiempo: 1774828782.641636
-
-[SERVIDOR] Tiempo promedio: 1774828782.641636
-[SERVIDOR] SINCRONIZACION COMPLETADA
-============================================================
-    \end{lstlisting}
-
-    \textbf{Respuestas:}
-    \begin{enumerate}
-        \item \textbf{¿La latencia afecta el resultado final?}
-
-        No, la latencia \textbf{no afecta el resultado final} de la sincronización en términos de convergencia. Como se puede observar en la salida, a pesar de que cada cliente experimentó diferentes latencias (desde 0.232 hasta 2.674 segundos), todos convergieron al mismo tiempo promedio (1774828782.641636). Esto se debe a que el algoritmo de Berkeley trabaja con los \textit{valores de tiempo reportados} por cada cliente, no con el momento exacto en que esos valores llegan al servidor.
-
-        Sin embargo, la latencia sí afecta la \textbf{precisión} del resultado. Si un cliente tiene alta latencia, el tiempo que reporta ya estará ``desactualizado'' cuando llegue al servidor, introduciendo un error sistemático. En nuestra implementación, el cliente captura su tiempo local \textit{antes} de la latencia, por lo que el ajuste calculado es correcto para ese instante, pero cuando el cliente finalmente aplica el ajuste, su reloj real ya avanzó.
-
-        \item \textbf{¿Por qué el algoritmo de Berkeley es sensible o no a este factor?}
-
-        El algoritmo de Berkeley es \textbf{parcialmente sensible} a la latencia por las siguientes razones:
-
-        \textbf{Insensibilidad:} El algoritmo no depende de una fuente de tiempo externa (como NTP), sino que calcula un promedio democrático de todos los participantes. La latencia no impide que el algoritmo calcule y distribuya los ajustes correctamente.
-
-        \textbf{Sensibilidad:} En redes con alta latencia o latencia asimétrica, el algoritmo puede introducir errores porque:
-        \begin{itemize}
-            \item El tiempo que tarda un mensaje en llegar no se compensa (a diferencia del algoritmo de Cristian que usa RTT/2).
-            \item Si la latencia varía significativamente entre clientes, algunos recibirán sus ajustes más tarde, acumulando desfase adicional.
-        \end{itemize}
-
-        Para mitigar esto, implementaciones robustas de Berkeley incorporan estimación de RTT (Round-Trip Time) y compensan la latencia al calcular los ajustes.
-    \end{enumerate}
-
+    \newpage
     \subsubsection{Actividad 5}
 
     Modificar la implementación anterior para ejecutar, servidor y clientes en máquinas diferentes.
 
+    \textbf{Explicacion:}
+
+    La arquitectura original se modificó para que el servidor escuche activamente en la red local, mientras que los scripts de los clientes fueron ajustados para recibir por línea de comandos la dirección IP del servidor al que deben conectarse. Además, se utilizó el módulo \texttt{struct} para garantizar que las marcas de tiempo (datos de punto flotante) se empaqueten y transmitan correctamente a través de la red sin pérdida de precisión. Como resultado de la ejecución, las pruebas demuestran que el servidor recolecta con éxito los tiempos locales de tres nodos distintos, calcula el promedio del sistema y distribuye los valores de ajuste precisos.
+    \textbf{Codigo de los clientes:}
+
+    \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del cliente actualizado para correr en maquinas diferentes}, basicstyle=\ttfamily\scriptsize]
+    import socket
+    import time
+    import struct
+    import sys
+    import random
+
+    def clienteBerkeley(server_ip, port=60001):
+        sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        print(f"Conectando al servidor {server_ip}:{port}...")
+        sockClient.connect((server_ip, port))
+        print("Conexión establecida.")
+
+        # Simular variación en el tiempo local
+        local_time = time.time() + random.uniform(-5, 5)
+        print(f"Tiempo local del cliente antes del ajuste: {local_time:.2f}")
+
+        data = sockClient.recv(1024)
+        if data == b'TIME_REQUEST':
+            print("Solicitud de tiempo recibida. Enviando tiempo local...")
+            sockClient.send(struct.pack('d', local_time))
+
+        adjustment = struct.unpack('f', sockClient.recv(4))[0]
+        print(f"Ajuste de tiempo recibido del servidor: {adjustment}")
+
+        new_time = local_time + adjustment
+        print(f"Nuevo tiempo del cliente después del ajuste: {new_time}")
+
+        sockClient.close()
+        print("Conexión cerrada.")
+
+    if __name__ == "__main__":
+        
+        if len(sys.argv) < 2:
+            print("Uso: python berkeley_cliente.py <ip_servidor> [puerto]")
+            print("Ejemplo: python berkeley_cliente.py 192.168.1.100 60001")
+            sys.exit(1)
+
+        server_ip = sys.argv[1]
+        port = int(sys.argv[2]) if len(sys.argv) > 2 else 60001
+
+        print("=" * 50)
+        print("CLIENTE BERKELEY - Sincronización de Relojes")
+        print("=" * 50)
+        clienteBerkeley(server_ip, port)
+
+    \end{lstlisting}
+
+    \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del servidor actualizado para correr en maquinas diferentes}, basicstyle=\ttfamily\scriptsize]
+       
+    import socket
+    import time
+    import struct
+    import sys
+
+    def servidorBerkeley(port=60001, num_clients=3):
+        sockServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sockServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Usar '0.0.0.0' para aceptar conexiones de cualquier IP
+        sockServer.bind(('0.0.0.0', port))
+        sockServer.listen(num_clients)
+
+        # Obtener la IP local para mostrar al usuario
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        print(f"Servidor de Berkeley escuchando en {local_ip}:{port}")
+        print(f"Esperando {num_clients} clientes...")
+
+        connections = []
+        times = []
+
+        for i in range(num_clients):
+            conn, addr = sockServer.accept()
+            print(f"Conexión {i+1}/{num_clients} establecida con: {addr}")
+            connections.append(conn)
+
+        print("\nTodos los clientes conectados. Solicitando tiempos...")
+
+        for conn in connections:
+            conn.send(b'TIME_REQUEST')
+
+        for conn in connections:
+            client_time = struct.unpack('d', conn.recv(8))[0]
+            print(f"Tiempo recibido del cliente: {client_time:.2f}")
+            times.append(client_time)
+
+        server_time = time.time()
+        print(f"Tiempo del servidor: {server_time:.2f}")
+
+        all_times = times + [server_time]
+        average_time = sum(all_times) / len(all_times)
+        print(f"Tiempo promedio calculado: {average_time:.2f}")
+
+        adjusted_times = [average_time - t for t in times]
+        
+        # Para imprimir una lista con 2 decimales, usamos esta técnica de comprensión de listas:
+        ajustes_formateados = [f"{adj:.2f}" for adj in adjusted_times]
+        print(f"Ajustes a enviar: {ajustes_formateados}")
+
+        for conn, adjustment in zip(connections, adjusted_times):
+            # Aquí SÍ podemos usar :.2f directamente porque adjustment es un número individual
+            print(f"Enviando ajuste de tiempo: {adjustment:.2f}")
+            conn.send(struct.pack('f', adjustment))
+
+        for conn in connections:
+            conn.close()
+
+        sockServer.close()
+        print("\nSincronización completada. Servidor cerrado.")
+
+    if __name__ == "__main__":
+        port = int(sys.argv[1]) if len(sys.argv) > 1 else 60001
+        num_clients = int(sys.argv[2]) if len(sys.argv) > 2 else 3
+
+        print("=" * 50)
+        print("SERVIDOR BERKELEY - Sincronización de Relojes")
+        print("=" * 50)
+        servidorBerkeley(port, num_clients)
+
+    \end{lstlisting}
+
+    \textbf{Imagenes de los resultados:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Berkeley/Actividad5/image2.png}
+        \caption{Salida del programa de Berkeley con Cliente 1.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Berkeley/Actividad5/image3.png}
+        \caption{Salida del programa de Berkeley con Cliente 2.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Berkeley/Actividad5/image1_1.png}
+        \caption{Salida del programa de Berkeley con Cliente 3.}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image1.png}
+        \caption{Salida del programa de Berkeley con Servidor.}
+    \end{figure}
 
     \newpage
     \subsection{Algoritmo de Lamport:}

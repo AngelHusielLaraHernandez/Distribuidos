@@ -46,26 +46,26 @@ def servidorBerkeley(port=60001, num_clients=3):
         
     sockServer.close()
     
-def ClienteBerkeley(port=60001):
+def ClienteBerkeley(client_id, port=60001):
     sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sockClient.connect(('localhost', port))
     local_time = time.time() + random.uniform(-5, 5)  # Simular una pequeña variación en el tiempo local
-    print(f"Tiempo local del cliente antes del ajuste: {local_time}")
+    print(f"Cliente {client_id} - tiempo local antes del ajuste: {local_time}")
    
     data = sockClient.recv(1024)
     if data == b'TIME_REQUEST':
         sockClient.send(struct.pack('d', local_time))
     adjustment = struct.unpack('f', sockClient.recv(4))[0]
-    print(f"Ajuste de tiempo recibido del servidor: {adjustment}")
+    print(f"Cliente {client_id} - ajuste de tiempo recibido del servidor: {adjustment}")
     new_time = local_time + adjustment
-    print(f"Nuevo tiempo del cliente después del ajuste: {new_time}")
+    print(f"Cliente {client_id} - nuevo tiempo después del ajuste: {new_time}")
     
     sockClient.close()
 
 def ejecutaCliente(num_clients=3):
     processes= []
-    for _ in range(num_clients):
-        p = Process(target=ClienteBerkeley)
+    for i in range(num_clients):
+        p = Process(target=ClienteBerkeley, args=(i + 1,))
         processes.append(p)
         p.start()
         time.sleep(1)  # Agregar un pequeño retraso para evitar que los clientes se conecten exactamente al mismo tiempo
