@@ -252,45 +252,27 @@ tiempoServi = float(client.recv(1024).decode())
     Antes de responder a la pregunta debemos observar el comportamiento de la simulación mediante las salidas en consola, tanto en una ejecución normal (sin latencia) como en la simulación con latencia, como se muestra a continuación:
 
     \textbf{Salida en consola sin latencia:}
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN)
-=================================================================
-Tiempo de envio (t0):                   1775026700.020524
-Tiempo del servidor (Cs):               1775026700.020815
-Tiempo de recepcion (t1):               1775026700.021159
------------------------------------------------------------------
-RTT Tiempo de viaje total (t1 - t0):    0.000635 segundos
-Desfase calculado (RTT/2):              0.000318 segundos
------------------------------------------------------------------
-Reloj actual del cliente:               1775026700.021159
-NUEVO RELOJ AJUSTADO (C):               1775026700.021132
-=================================================================
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act1_1.png}
+        \caption{Salida del programa de Cristian sin latencia.}
+    \end{figure}
 
+    \newpage
     \textbf{Salida en consola con latencia simulada (2 segundos):}
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN)
-=================================================================
-Tiempo de envio (t0):                   1775026739.583974
-Tiempo del servidor (Cs):               1775026739.584519
-Tiempo de recepcion (t1):               1775026741.584483
------------------------------------------------------------------
-RTT Tiempo de viaje total (t1 - t0):    2.000508 segundos
-Desfase calculado (RTT/2):              1.000254 segundos
------------------------------------------------------------------
-Reloj actual del cliente:               1775026741.584483
-NUEVO RELOJ AJUSTADO (C):               1775026740.584774
-=================================================================
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{img/Cristian/Act1_2.png}
+        \caption{Salida del programa de Cristian con latencia de 2 segundos.}
+    \end{figure}
 
-    Al analizar ambas salidas, el cambio en el ajuste del reloj es evidente. En la ejecución sin latencia, el tiempo de viaje total (RTT) es de apenas unos microsegundos (0.000635 s), lo que resulta en un desfase prácticamente nulo. Por lo tanto, el nuevo reloj ajustado ($C$) es casi idéntico al reloj local actual del cliente.
 
-    Por el contrario, al introducir el retardo de 2 segundos, el RTT se dispara a $\approx$ 2.0005 segundos, y el algoritmo de Cristian asume un desfase simétrico para el viaje de regreso de $\approx$ 1.0002 segundos. Dado que el servidor guardó su tiempo ($C_s$) de forma inmediata tras recibir la petición, pero el cliente tardó 2 segundos en procesarla, el cálculo final del nuevo reloj ($C$) resulta ser un segundo menor que el tiempo local actual del cliente ($C < C_c$). 
+    Al analizar ambas salidas, el cambio en el ajuste del reloj es evidente. En la ejecución sin latencia, el tiempo de viaje total (RTT) es de apenas unos microsegundos (0.000422 s), lo que resulta en un desfase prácticamente nulo. Por lo tanto, el nuevo reloj ajustado ($C$) es casi idéntico al reloj local actual del cliente.
 
-    Específicamente, el tiempo calculado es \texttt{1775026740.58}, mientras que el reloj local ya avanzó hasta \texttt{1775026741.58}. Bajo estas condiciones, las reglas de sincronización nos dicen que el reloj se debe detener o se ralentizar gradualmente por la diferencia calculada ($C_c - C$ unidades) hasta lograr la coincidencia.
+    Por el contrario, al introducir el retardo de 2 segundos, el RTT se dispara a $\approx$ 2.0030 segundos, y el algoritmo de Cristian asume un desfase simétrico para el viaje de regreso de $\approx$ 1.0015 segundos. Dado que el servidor guardó su tiempo ($C_s$) de forma inmediata tras recibir la petición, pero el cliente tardó 2 segundos en procesarla, el cálculo final del nuevo reloj ($C$) resulta ser un segundo menor que el tiempo local actual del cliente ($C < C_c$). 
 
+    Específicamente, el tiempo calculado es \texttt{1776130771.06}, mientras que el reloj local ya avanzó hasta \texttt{1776130772.06}. Bajo estas condiciones, las reglas de sincronización nos dicen que el reloj se debe detener o se ralentizar gradualmente por la diferencia calculada ($C_c - C$ unidades) hasta lograr la coincidencia.
+    
     \subsubsection{\textcolor{red}{Actividad 2}}
     
     \textbf{\textcolor{blue}{Modificar la implementación anterior para que se pueda trabajar con varios clientes al mismo tiempo (máquinas diferentes, pueden ser físicas o virtuales y multithread) y se vea una diferencia de tiempo.}}
@@ -337,74 +319,41 @@ time.sleep(delay)
 
     Para responder a esta pregunta, se ejecutó el servidor multihilo junto con tres instancias del cliente de forma casi simultánea. 
 
+    \newpage
     \textbf{Salidas del Servidor y 3 Clientes (Caso sin atraso local):}
     
     Salida del servidor:
-    \begin{lstlisting}[style=output]
-=================================================================
-Servidor MULTIHILO de Cristian escuchando en puerto 5000...
-=================================================================
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48216)
-[-] Tiempo enviado (1775028039.400636) a ('127.0.0.1', 48216). Hilo terminado.
-
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48230)
-[-] Tiempo enviado (1775028040.8103802) a ('127.0.0.1', 48230). Hilo terminado.
-
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 48234)
-[-] Tiempo enviado (1775028042.0961967) a ('127.0.0.1', 48234). Hilo terminado.
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Cristian/Act2_1.png}
+        \caption{Salida del Servidor.}
+    \end{figure}
 
     Salida del cliente 1:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Cristian/Act2_2.png}
+        \caption{Salida del Cliente 1.}
+    \end{figure}
 
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 1
-=================================================================
-Tiempo local actual (Cc/t1): 1775028040.311921
-RTT (Tiempo de viaje total): 0.911910 segundos
-Desfase calculado (RTT/2):   0.455955 segundos
-Tiempo calculado (C):          1775028039.856591
------------------------------------------------------------------
-[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
-        -> ACCION: El reloj local NO se retrasa bruscamente.
-        -> Se debe RALENTIZAR el reloj por 0.455330 unidades.
-    \end{lstlisting}
-
+    
     Salida del cliente 2:
-
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 2
-=================================================================
-Tiempo local actual (Cc/t1): 1775028043.593453
-RTT (Tiempo de viaje total): 2.783776 segundos
-Desfase calculado (RTT/2):   1.391888 segundos
-Tiempo calculado (C):          1775028042.202268
------------------------------------------------------------------
-[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
-        -> ACCION: El reloj local NO se retrasa bruscamente.
-        -> Se debe RALENTIZAR el reloj por 1.391185 unidades.
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act2_3.png}
+        \caption{Salida del Cliente 2.}
+    \end{figure}
 
     Salida del cliente 3:
-
-    \begin{lstlisting}[style=output]
-    =================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 3
-=================================================================
-Tiempo local actual (Cc/t1): 1775028044.711709
-RTT (Tiempo de viaje total): 2.616132 segundos
-Desfase calculado (RTT/2):   1.308066 segundos
-Tiempo calculado (C):          1775028043.404263
------------------------------------------------------------------
-[ALERTA] C < Cc (El tiempo calculado es MENOR al local)
-        -> ACCION: El reloj local NO se retrasa bruscamente.
-        -> Se debe RALENTIZAR el reloj por 1.307447 unidades.
-    \end{lstlisting}
-
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act2_4.png}
+        \caption{Salida del Cliente 3.}
+    \end{figure}
+    
     Al analizar las salidas, es evidente que \textbf{no, ninguno de los clientes obtuvo el mismo ajuste}. 
     
-    Esto sucede porque el algoritmo de Cristian depende en su totalidad del RTT (tiempo de viaje de los mensajes). Al haber introducido una latencia aleatoria para simular diferentes condiciones de red en cada cliente, el RTT varió (0.91s, 2.78s y 2.61s respectivamente). Por lo tanto, el desfase calculado ($RTT/2$) fue distinto para cada nodo, obligando a que cada cliente se ralentice por una cantidad de unidades diferente e independiente de los demás.
+    Esto sucede porque el algoritmo de Cristian depende en su totalidad del RTT (tiempo de viaje de los mensajes). Al haber introducido una latencia aleatoria para simular diferentes condiciones de red en cada cliente, el RTT varió (0.797s, 1.83s y 1.511s respectivamente). Por lo tanto, el desfase calculado ($RTT/2$) fue distinto para cada nodo, obligando a que cada cliente se ralentice por una cantidad de unidades diferente e independiente de los demás.
 
     \vspace{0.3cm}
     \textbf{\textcolor{blue}{Agregar al código lo necesario para considerar cuando C > Cc o C < Cc.}}
@@ -449,68 +398,33 @@ Cc = time.time() - atraso_falso # Caso con atraso simulado
     \textbf{Salidas del Servidor y 3 Clientes (Caso con reloj atrasado simulado):}
     
     Salida del servidor:
-    
-    \begin{lstlisting}[style=output]
-=================================================================
-Servidor MULTIHILO de Cristian escuchando en puerto 5000...
-=================================================================
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 33688)
-[-] Tiempo enviado (1775028149.109033) a ('127.0.0.1', 33688). Hilo terminado.
-
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 33702)
-[-] Tiempo enviado (1775028150.400608) a ('127.0.0.1', 33702). Hilo terminado.
-
-[+] Hilo iniciado para conexion desde: ('127.0.0.1', 57254)
-[-] Tiempo enviado (1775028151.4355612) a ('127.0.0.1', 57254). Hilo terminado.
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_5.png}
+        \caption{Salida del Servidor.}
+    \end{figure}
 
     Salida del cliente 1:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cristian/Act2_6.png}
+        \caption{Salida del Cliente 1.}
+    \end{figure}
 
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 1
-=================================================================
-Tiempo local actual (Cc/t1): 1775028140.150724
-RTT (Tiempo de viaje total): 1.042983 segundos
-Desfase calculado (RTT/2):   0.521491 segundos
-Tiempo calculado (C):          1775028149.630525
------------------------------------------------------------------
-[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
-        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
-        -> El salto hacia adelante es de 9.479800 segundos.
-    \end{lstlisting}
-
+    
     Salida del cliente 2:
-
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 2
-=================================================================
-Tiempo local actual (Cc/t1): 1775028141.977979
-RTT (Tiempo de viaje total): 1.577898 segundos
-Desfase calculado (RTT/2):   0.788949 segundos
-Tiempo calculado (C):          1775028151.189557
------------------------------------------------------------------
-[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
-        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
-        -> El salto hacia adelante es de 9.211578 segundos.
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_7.png}
+        \caption{Salida del Cliente 2.}
+    \end{figure}
 
     Salida del cliente 3:
-
-    \begin{lstlisting}[style=output]
-=================================================================
-    RESULTADOS DE SINCRONIZACION (CRISTIAN V2) - CLIENTE 3
-=================================================================
-Tiempo local actual (Cc/t1): 1775028142.441949
-RTT (Tiempo de viaje total): 1.006896 segundos
-Desfase calculado (RTT/2):   0.503448 segundos
-Tiempo calculado (C):          1775028151.939009
------------------------------------------------------------------
-[ALERTA] C > Cc (El tiempo calculado es MAYOR al local)
-        -> ACCION: Se ADELANTA el reloj local a la nueva hora.
-        -> El salto hacia adelante es de 9.497060 segundos.
-    \end{lstlisting}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_8.png}
+        \caption{Salida del Cliente 3.}
+    \end{figure}
 
 
 
@@ -523,28 +437,27 @@ Tiempo calculado (C):          1775028151.939009
         \item Cada cliente inicia con un reloj distinto
         \item El servidor calcula un promedio
         \item Todos convergen a un mismo tiempo
-        \item Ejecutar el programa y responder:
-        \begin{enumerate}
-            \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
-
-            Los tiempos iniciales de cada cliente fueron:
-            \begin{itemize}
-                \item Cliente 1: 1776087876.551237 
-                \item Cliente 2: 1776087876.277657 
-                \item Cliente 3: 1776087877.5864637 
-            \end{itemize}
-            Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema. Con estos valores, el promedio entre los tres clientes es aproximadamente \textbf{1776087876.8051193}.
-
-            \item \textbf{¿Cuál fue el promedio?}
-
-            El tiempo promedio calculado por el servidor en esta ejecución se ubicó alrededor de \textbf{1776087876.8051193}, es decir, un valor muy cercano al promedio de los tiempos reportados por los clientes. Esto ocurre porque los tres relojes iniciales están muy próximos entre sí y el algoritmo de Berkeley toma el tiempo del servidor como un valor más dentro del cálculo global.
-
-            \item \textbf{¿A qué tiempo convergen?}
-
-            Todos los clientes convergen al mismo valor promedio calculado por el servidor, que en esta corrida queda aproximadamente en \textbf{1776087876.8051193}. 
-        \end{enumerate}
-
+        \item Ejecutar el programa y responder las siguiente preguntas:
     \end{itemize}
+    \begin{enumerate}
+        \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
+
+        Los tiempos iniciales de cada cliente fueron:
+        \begin{itemize}
+            \item Cliente 1: 1776087876.551237 
+            \item Cliente 2: 1776087876.277657 
+            \item Cliente 3: 1776087877.5864637 
+        \end{itemize}
+        Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema. Con estos valores, el promedio entre los tres clientes es aproximadamente \textbf{1776087876.8051193}.
+
+        \item \textbf{¿Cuál fue el promedio?}
+
+        El tiempo promedio calculado por el servidor en esta ejecución se ubicó alrededor de \textbf{1776087876.8051193}, es decir, un valor muy cercano al promedio de los tiempos reportados por los clientes. Esto ocurre porque los tres relojes iniciales están muy próximos entre sí y el algoritmo de Berkeley toma el tiempo del servidor como un valor más dentro del cálculo global.
+
+        \item \textbf{¿A qué tiempo convergen?}
+
+        Todos los clientes convergen al mismo valor promedio calculado por el servidor, que en esta corrida queda aproximadamente en \textbf{1776087876.8051193}. 
+    \end{enumerate}
 
     \newpage
 
@@ -552,12 +465,12 @@ Tiempo calculado (C):          1775028151.939009
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.9\textwidth]{img/Berkeley/Notas/image1.jpg}
+        \includegraphics[width=1\textwidth]{img/Berkeley/Notas/image1.jpg}
         \caption{Salida del programa de Berkeley con 3 clientes.}
     \end{figure}
 
     
-    \subsubsection{Actividad 3}
+    \subsubsection{\textcolor{red}{Actividad 3}}
 
     Para esta actividad se modificó el programa original para soportar un número variable de clientes. 
     
@@ -731,36 +644,37 @@ Tiempo calculado (C):          1775028151.939009
     Modificar el programa para trabajar con:
     \begin{itemize}
         \item 5, 10 y 20 clientes
-        \item Respondera las preguntas:
-        \begin{enumerate}
-            \item \textbf{¿Cómo cambia el tiempo promedio?}
-
-            El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
-
-            \item \textbf{¿El sistema sigue siendo estable?}
-
-            Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
-        \end{enumerate}
+        \item Respondera las siguientes preguntas:
     \end{itemize}
+
+    \begin{enumerate}
+        \item \textbf{¿Cómo cambia el tiempo promedio?}
+
+        El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
+
+        \item \textbf{¿El sistema sigue siendo estable?}
+
+        Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
+    \end{enumerate}
 
     \textbf{Salidas del programa:}
 
     \textbf{Salida para 5 clientes:}
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_1.png}
+        \includegraphics[width=0.67\textwidth]{img/Berkeley/Actividad3/image1_1.png}
         \caption{Salida del programa de Berkeley con 5 clientes. Parte 1-3.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_2.png}
+        \includegraphics[width=0.67\textwidth]{img/Berkeley/Actividad3/image1_2.png}
         \caption{Salida del programa de Berkeley con 5 clientes. Parte 2-3.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image1_3.png}
+        \includegraphics[width=0.65\textwidth]{img/Berkeley/Actividad3/image1_3.png}
         \caption{Salida del programa de Berkeley con 5 clientes. Parte 3-3.}
     \end{figure}
 
@@ -768,25 +682,25 @@ Tiempo calculado (C):          1775028151.939009
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_1.png}
+        \includegraphics[width=0.55\textwidth]{img/Berkeley/Actividad3/image2_1.png}
         \caption{Salida del programa de Berkeley con 10 clientes. Parte 1-4.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_2.png}
+        \includegraphics[width=0.55\textwidth]{img/Berkeley/Actividad3/image2_2.png}
         \caption{Salida del programa de Berkeley con 10 clientes. Parte 2-4.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_3.png}
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image2_3.png}
         \caption{Salida del programa de Berkeley con 10 clientes. Parte 3-4.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image2_4.png}
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image2_4.png}
         \caption{Salida del programa de Berkeley con 10 clientes. Parte 4-4.}
     \end{figure}
 
@@ -794,47 +708,47 @@ Tiempo calculado (C):          1775028151.939009
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_1.png}
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image3_1.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 1-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_2.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_2.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 2-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_3.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_3.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 3-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_4.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_4.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 4-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_5.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_5.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 5-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_6.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_6.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 6-7.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\textwidth]{img/Berkeley/Actividad3/image3_7.png}
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_7.png}
         \caption{Salida del programa de Berkeley con 20 clientes. Parte 7-7.}
     \end{figure}
 
-    \subsubsection{Actividad 4}
+    \subsubsection{\textcolor{red}{Actividad 4}}
 
     Para simular la latencia de red, se agregó un retraso aleatorio en la función \texttt{ClienteBerkeley} usando \texttt{time.sleep(random.uniform(0, 3))}. Este retraso se aplica en dos momentos: (1) antes de enviar el tiempo local al servidor (simulando latencia de envío), y (2) antes de recibir el ajuste del servidor (simulando latencia de recepción). De esta manera, cada cliente puede experimentar una latencia total de 0 a 6 segundos, representando condiciones variables de red.
 
@@ -895,12 +809,12 @@ Tiempo calculado (C):          1775028151.939009
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad4/image1.jpg}
+        \includegraphics[width=1\textwidth]{img/Berkeley/Actividad4/image1.jpg}
         \caption{Salida del programa de Berkeley con latencia simulada.}
     \end{figure}
 
     \newpage
-    \subsubsection{Actividad 5}
+    \subsubsection{\textcolor{red}{Actividad 5}}
 
     Modificar la implementación anterior para ejecutar, servidor y clientes en máquinas diferentes.
 
@@ -1032,23 +946,23 @@ Tiempo calculado (C):          1775028151.939009
 
     \end{lstlisting}
 
-    \textbf{Imagenes de los resultados:}
+    \textbf{Imágenes de los resultados:}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.7\textwidth]{img/Berkeley/Actividad5/image2.png}
+        \includegraphics[width=0.75\textwidth]{img/Berkeley/Actividad5/image2.png}
         \caption{Salida del programa de Berkeley con Cliente 1.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.7\textwidth]{img/Berkeley/Actividad5/image3.png}
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image3.png}
         \caption{Salida del programa de Berkeley con Cliente 2.}
     \end{figure}
 
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/Berkeley/Actividad5/image1_1.png}
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image1_1.png}
         \caption{Salida del programa de Berkeley con Cliente 3.}
     \end{figure}
 
@@ -1061,13 +975,14 @@ Tiempo calculado (C):          1775028151.939009
 
     La Ultima captura es de la consola del servidor, alojado en Linux, el cual registra las conexiones entrantes de tres nodos distintos, consolida los tiempos locales, calcula el promedio del clúster y determina los deltas de ajuste precisos para cada conexión. Por su parte, la primera y segunda imagen documentan el comportamiento de los nodos cliente ejecutándose de manera remota desde máquinas independientes con sistema operativo Windows. En estas terminales periféricas se observa el ciclo completo de sincronización: los clientes establecen el enlace mediante la dirección IP del servidor, reportan su tiempo local afectado por la variación aleatoria, reciben su valor de compensación individual calculado por el coordinador (por ejemplo, los ajustes de 0.43 y 1.14 segundos mostrados en pantalla) y finalmente aplican dicha corrección.
 
+    \newpage
     \subsection{Algoritmo de Lamport:}
     Para la implementación del algoritmo de relojes
     lógicos de Lamport se proporciona un programa en Python que
     utiliza el módulo multiprocessing para la generación de procesos
     locales.
 
-    \subsubsection{Actividad 6}
+    \subsubsection{\textcolor{red}{Actividad 6}}
 
     \begin{itemize}
         \item El programa es de acuerdo a un ambiente de eventos establecido de cada proceso.
@@ -1149,7 +1064,6 @@ El siguiente código implementa el ambiente propuesto de 7 procesos utilizando l
 from multiprocessing import Process, Pipe
 from os import getpid
 from datetime import datetime
-
 # ==========================================
 # CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
 # ==========================================
@@ -1292,7 +1206,6 @@ La comunicación entre procesos se logra mediante objetos \texttt{Pipe()}, que a
 
 Este diseño refleja fielmente las flechas trazadas en el diagrama de ambiente propuesto, forzando a los procesos a respetar la relación ``sucedió antes que'' ($\rightarrow$) diseñada para esta topología de 7 nodos y validando el correcto funcionamiento de los relojes lógicos.
 
-\newpage
 
 \textbf{Funcionamiento del código}
 
@@ -1309,9 +1222,9 @@ Lo más importante que observamos es que el reloj lógico del proceso final (\te
 
 
 
-\newpage
-
-    \subsubsection{Actividad 7}
+    \newpage
+    \subsection{Algoritmo Vectorial:}
+    \subsubsection{\textcolor{red}{Actividad 7}}
 
     
     Con la idea anterior implementar una solución al algoritmo de

@@ -3,11 +3,12 @@
 \contentsline {subsection}{\numberline {1.1}Algoritmo de Cristian:}{1}{subsection.1.1}%
 \contentsline {subsubsection}{\numberline {1.1.1}\textcolor {red}{Actividad 1}}{1}{subsubsection.1.1.1}%
 \contentsline {subsubsection}{\numberline {1.1.2}\textcolor {red}{Actividad 2}}{3}{subsubsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.2}Algoritmo de Berkeley:}{9}{subsection.1.2}%
-\contentsline {subsubsection}{\numberline {1.2.1}Notas:}{9}{subsubsection.1.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2}Actividad 3}{10}{subsubsection.1.2.2}%
-\contentsline {subsubsection}{\numberline {1.2.3}Actividad 4}{18}{subsubsection.1.2.3}%
-\contentsline {subsubsection}{\numberline {1.2.4}Actividad 5}{21}{subsubsection.1.2.4}%
-\contentsline {subsection}{\numberline {1.3}Algoritmo de Lamport:}{25}{subsection.1.3}%
-\contentsline {subsubsection}{\numberline {1.3.1}Actividad 6}{25}{subsubsection.1.3.1}%
-\contentsline {subsubsection}{\numberline {1.3.2}Actividad 7}{32}{subsubsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.2}Algoritmo de Berkeley:}{10}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Notas:}{10}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}\textcolor {red}{Actividad 3}}{11}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}\textcolor {red}{Actividad 4}}{20}{subsubsection.1.2.3}%
+\contentsline {subsubsection}{\numberline {1.2.4}\textcolor {red}{Actividad 5}}{22}{subsubsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.3}Algoritmo de Lamport:}{27}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}\textcolor {red}{Actividad 6}}{27}{subsubsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.4}Algoritmo Vectorial:}{33}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}\textcolor {red}{Actividad 7}}{33}{subsubsection.1.4.1}%
