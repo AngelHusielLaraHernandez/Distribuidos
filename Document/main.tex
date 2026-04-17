@@ -1440,7 +1440,24 @@ Tras su evento local final, P4 concluye con el vector \texttt{[03, 02, 02, 02, 0
         \label{fig:vectorial}
     \end{figure}
 
+    \newpage
+
+    \section{Conclusion}
+
+    En conclusión, el desarrollo de esta práctica nos permitió comprobar el comportamiento de los 
+    principales algoritmos de sincronización en los sistemas distribuidos, abarcando tanto enfoques físicos como lógicos. 
+    Realizando las simulaciones de Cristian y Berkeley, pudimos ver cómo la latencia de red afecta la precisión del ajuste 
+    temporal local y cómo se mantiene la estabilidad del sistema al aumentar el número de los nodos, 
+    incluso trabajando en máquinas físicamente distintas. 
+    
+    Por otro lado, la implementación de los 
+    algoritmos de Lamport y relojes vectoriales observamos como matemáticamente establecimos un ordenamiento lógico que seguia
+    la relación de "sucedió antes que" entre varios procesos con sus respectivos eventos interconectados, y dentro de esto una parte importante fue cómo el enfoque vectorial 
+    supera la limitación del escalar de Lamport al guardar el historial completo de concurrencia sin pérdida de información. 
+    Con estas actividades terminamos de comprendre y poner en práctica nuestros conocimientos sobre cómo los sistemas distribuidos logran una relación temporal y
+    ordenamiento de procesos frente asimetrías y retrasos de una red real.
+
     % Impresión Referencias
-    %\nocite{*}
-    %\printbibliography[heading=bibintoc, title={Referencias}]
+    \nocite{*}
+    \printbibliography[heading=bibintoc, title={Referencias}]
 \end{document}
