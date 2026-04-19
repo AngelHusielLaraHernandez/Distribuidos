@@ -1,0 +1,1463 @@
+\documentclass[letterpaper,11pt]{article}
+
+% --- PAQUETES DE IDIOMA
+\usepackage[spanish,mexico]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{iftex}
+
+\ifPDFTeX
+\usepackage[T1]{fontenc}
+\usepackage{newtxtext,newtxmath}
+\else
+\usepackage{fontspec}
+\setmainfont{Georgia}
+\usepackage{amssymb}
+\fi
+
+% --- PAQUETES MATEMÁTICOS --
+\usepackage{amsmath}
+\usepackage{cancel}
+\usepackage{mathrsfs}
+
+% --- PAQUETES GRÁFICOS Y DE DISEÑO ---
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{makecell}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage[table]{xcolor}
+\usetikzlibrary{shapes.geometric, shapes.multipart, positioning, arrows.meta, calc, shadows, decorations.pathreplacing,babel}
+
+% --- LISTAS ---
+\usepackage{enumitem}
+
+% --- PAQUETES DE CÓDIGO ---
+\usepackage{listings}
+% Configuración del estilo de listings
+\definecolor{codebg}{rgb}{0.95,0.95,0.95}   
+\definecolor{keyword}{rgb}{0.0,0.2,0.6}     
+\definecolor{comment}{rgb}{0.25,0.5,0.35}   
+\definecolor{string}{rgb}{0.6,0.0,0.0}      
+\definecolor{number}{rgb}{0.5,0.0,0.5}      
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+\lstset{
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{black},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false,
+  literate={á}{{\'a}}1
+           {é}{{\'e}}1
+           {í}{{\'i}}1
+           {ó}{{\'o}}1
+           {ú}{{\'u}}1
+           {Á}{{\'A}}1
+           {É}{{\'E}}1
+           {Í}{{\'I}}1
+           {Ó}{{\'O}}1
+           {Ú}{{\'U}}1
+           {ñ}{{\~n}}1
+           {Ñ}{{\~N}}1
+           {¿}{{\textquestiondown}}1
+           {¡}{{\textexclamdown}}1
+}
+
+% Estilo para código en C
+\lstdefinestyle{cstyle}{
+  language=C,
+  backgroundcolor=\color{backcolour},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+    keywordstyle=[2]\color{yellow!70!orange}\bfseries,
+    morekeywords=[2]{MPI_Init,MPI_Comm_size,MPI_Comm_rank,MPI_Send,MPI_Recv,MPI_Scatter,MPI_Gather,MPI_Bcast,MPI_Reduce,MPI_Finalize},
+    emph={printf},
+    emphstyle=\color{blue}\bfseries,
+  stringstyle=\color{codepurple},
+  commentstyle=\color{codegray}\itshape,
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  frame=single,
+  rulecolor=\color{black},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false
+}
+
+% Definición del lenguaje Python para listings
+\lstdefinelanguage[LAB]{Python}{
+    morekeywords={False, None, True, and, as, assert, async, await, break,
+                                class, continue, def, del, elif, else, except, finally,
+                                for, from, global, if, import, in, is, lambda, nonlocal,
+                                not, or, pass, raise, return, try, while, with, yield,
+                                machine, Pin, PWM, ADC, Timer, sleep_ms, sleep_us},
+    morecomment=[l]{\#},
+    morestring=[b]",
+    morestring=[b]',
+    sensitive=true
+}
+
+% Estilo para salidas de consola/terminal
+\lstdefinestyle{output}{
+  backgroundcolor=\color{black!5},
+  basicstyle=\ttfamily\footnotesize,
+  numbers=none,
+  frame=single,
+  rulecolor=\color{black!30},
+  breaklines=true,
+  tabsize=4,
+  showstringspaces=false,
+  xleftmargin=0.5cm,
+  xrightmargin=0.5cm
+}
+
+% --- ESTILOS PARA DIAGRAMAS DE FLUJO (TIKZ) ---
+\tikzset{
+  startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30},
+  process/.style={rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30},
+  decision/.style={diamond, aspect=2, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30},
+  io/.style={trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30},
+  arrow/.style={thick,->,>=stealth}
+}
+
+
+\definecolor{azulresultado}{HTML}{0072C6}
+\definecolor{rojoacarreo}{HTML}{FF0000}
+
+% --- RUTAS DE IMÁGENES ---
+\graphicspath{{img/}{portada_img/}}
+
+\definecolor{armblue}{RGB}{0, 113, 188}
+
+% --- ÍNDICE CON PUNTOS ---
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% --- CONFIGURACIÓN DE PÁGINA (GEOMETRÍA) ---
+\usepackage[
+    left=25mm, 
+    right=25mm,
+    top=35mm,
+    bottom=30mm,
+    headheight=77pt, 
+    papersize={21.59cm,27.94cm}
+]{geometry}
+
+% --- FORMATO DE TEXTO ---
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip} 
+\usepackage{lipsum}  
+
+% --- VARIABLES GLOBALES ---
+\newcommand{\materia}{}
+
+% --- ENCABEZADOS Y PIES DE PÁGINA ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} 
+\fancyhead[L]{\includegraphics[height=1.5cm]{portada_img/der.png}}
+\fancyhead[R]{\includegraphics[height=1.5cm]{portada_img/izq.png}}
+\fancyfoot[C]{\thepage} 
+\renewcommand{\headrulewidth}{0.4pt} 
+\renewcommand{\footrulewidth}{0pt}  
+
+% --- BIBLIOGRAFÍA ---
+\usepackage[backend=biber, style=apa, sortcites, url=true]{biblatex}
+\addbibresource{referencias.bib}
+
+% --- HIPERVÍNCULOS ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan
+}
+
+\begin{document}
+
+    \input{portada.tex}
+
+    \newpage
+    {\hypersetup{linkcolor=black}\tableofcontents}
+    
+    \newpage
+
+    \setcounter{page}{1}
+
+    \section{Desarrollo:}
+
+    \subsection{Algoritmo de Cristian:}
+
+    \subsubsection{\textcolor{red}{Actividad 1}}
+
+    Antes de comenzar con la simulación de latencia, se modificaron ligeramente los códigos originales del cliente para mejorar la presentación de los resultados en la consola. Específicamente, se actualizó el bloque de impresiones (\texttt{print}) al final del script para tabular los datos, limitar la salida a 6 decimales (\texttt{:.6f}) y mostrar claramente cada una de las variables matemáticas que son parte del algoritmo ($t_0, C_s, t_1$, RTT y RTT/2). 
+    
+    El fragmento modificado para la salida en consola es el siguiente:
+
+    \begin{lstlisting}[language=Python]
+# --- Salida en consola ---
+print("\n" + "="*65)
+print("   RESULTADOS DE SINCRONIZACION (CRISTIAN)")
+print("="*65)
+print(f"Tiempo de envio (t0):                   {t0:.6f}")
+print(f"Tiempo del servidor (Cs):               {tiempoServi:.6f}")
+print(f"Tiempo de recepcion (t1):               {t1:.6f}")
+print("-" * 65)
+print(f"RTT Tiempo de viaje total (t1 - t0):    {RTT:.6f} segundos")
+print(f"Desfase calculado (RTT/2):              {RTT/2:.6f} segundos")
+print("-" * 65)
+print(f"Reloj actual del cliente:               {t1:.6f}")
+print(f"NUEVO RELOJ AJUSTADO (C):               {C:.6f}")
+print("="*65 + "\n")
+    \end{lstlisting}
+
+    \textbf{\textcolor{blue}{Simular latencia en red agregando}}
+    \begin{verbatim}
+        delay = 2 # segundos
+        time.sleep(delay)
+    \end{verbatim}
+    \vspace{-0.5cm}
+
+    Este fragmento se implementó en el script del cliente en la siguiente ubicación exacta:
+
+    \begin{lstlisting}[language=Python]
+# 2. Registrar el tiempo exacto antes de enviar la solicitud (t0)
+t0 = time.time()
+# Actividad 1: Simular latencia en red de 2 segundos
+delay = 2 # segundos
+time.sleep(delay)
+# 3. Recibir el tiempo del servidor (Cs) y convertirlo a float
+tiempoServi = float(client.recv(1024).decode())
+    \end{lstlisting}
+
+    La ubicación de este retardo (\texttt{time.sleep(2)}) se implementó en esa parte para que la simulación funcione correctamente. Al colocarlo justo después de haber guardado el tiempo de envío local ($t_0$) y antes de procesar la respuesta del servidor ($C_s$), se obliga al cliente a pausar su ejecución durante 2 segundos y con esto simulamos el comportamiento de una red con alta latencia donde el mensaje tarda más tiempo en viajar, lo que incrementará directamente el RTT (Round-Trip Time) calculado posteriormente.
+
+    \textbf{\textcolor{blue}{¿Como cambia el ajuste del reloj?}}
+
+    Antes de responder a la pregunta debemos observar el comportamiento de la simulación mediante las salidas en consola, tanto en una ejecución normal (sin latencia) como en la simulación con latencia, como se muestra a continuación:
+
+    \textbf{Salida en consola sin latencia:}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act1_1.png}
+        \caption{Salida del programa de Cristian sin latencia.}
+    \end{figure}
+
+    \newpage
+    \textbf{Salida en consola con latencia simulada (2 segundos):}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{img/Cristian/Act1_2.png}
+        \caption{Salida del programa de Cristian con latencia de 2 segundos.}
+    \end{figure}
+
+
+    Al analizar ambas salidas, el cambio en el ajuste del reloj es evidente. En la ejecución sin latencia, el tiempo de viaje total (RTT) es de apenas unos microsegundos (0.000422 s), lo que resulta en un desfase prácticamente nulo. Por lo tanto, el nuevo reloj ajustado ($C$) es casi idéntico al reloj local actual del cliente.
+
+    Por el contrario, al introducir el retardo de 2 segundos, el RTT se dispara a $\approx$ 2.0030 segundos, y el algoritmo de Cristian asume un desfase simétrico para el viaje de regreso de $\approx$ 1.0015 segundos. Dado que el servidor guardó su tiempo ($C_s$) de forma inmediata tras recibir la petición, pero el cliente tardó 2 segundos en procesarla, el cálculo final del nuevo reloj ($C$) resulta ser un segundo menor que el tiempo local actual del cliente ($C < C_c$). 
+
+    Específicamente, el tiempo calculado es \texttt{1776130771.06}, mientras que el reloj local ya avanzó hasta \texttt{1776130772.06}. Bajo estas condiciones, las reglas de sincronización nos dicen que el reloj se debe detener o se ralentizar gradualmente por la diferencia calculada ($C_c - C$ unidades) hasta lograr la coincidencia.
+    
+    \subsubsection{\textcolor{red}{Actividad 2}}
+    
+    \textbf{\textcolor{blue}{Modificar la implementación anterior para que se pueda trabajar con varios clientes al mismo tiempo (máquinas diferentes, pueden ser físicas o virtuales y multithread) y se vea una diferencia de tiempo.}}
+
+    Para lograr que el servidor atienda a múltiples clientes de manera simultánea, se modificó el script original incorporando la librería \texttt{threading}. En lugar de procesar cada conexión de manera secuencial y bloqueante, se definió una función \texttt{manejar\_cliente} y se instanció un nuevo hilo por cada conexión entrante en el ciclo principal.
+
+    \textbf{Fragmento modificado en el Servidor (Multithread):}
+    \begin{lstlisting}[language=Python]
+import socket
+import time
+import threading # Libreria agregada para soporte multihilo
+
+# Funcion que maneja la peticion de cada cliente de forma independiente
+def manejar_cliente(conn, addr):
+    print(f"[+] Hilo iniciado para conexion desde: {addr}")
+    Cs = time.time()
+    conn.send(str(Cs).encode())
+    conn.close()
+    print(f"[-] Tiempo enviado ({Cs}) a {addr}. Hilo terminado.\n")
+
+# ... (Configuracion del socket) ...
+server.listen(10) # Se permite una cola de hasta 10 conexiones simultaneas
+
+while True:
+    conn, addr = server.accept()
+    # Se crea y arranca un nuevo hilo por cada cliente conectado
+    hilo = threading.Thread(target=manejar_cliente, args=(conn, addr))
+    hilo.start()
+    \end{lstlisting}
+
+    Por el lado del cliente, para generar una diferencia de tiempo visible entre cada ejecución, se sustituyó el retardo fijo de 2 segundos por un retardo dinámico utilizando la librería \texttt{random}.
+
+    \textbf{Fragmento modificado en el Cliente (Latencia aleatoria):}
+    \begin{lstlisting}[language=Python]
+import random
+
+# Simulamos una latencia aleatoria para cada cliente (entre 0.1 y 2.5 segundos)
+delay = random.uniform(0.1, 2.5)
+time.sleep(delay)
+    \end{lstlisting}
+
+    \vspace{0.3cm}
+    \textbf{\textcolor{blue}{¿Todos obtienen el mismo ajuste? ¿Por qué?}}
+
+    Para responder a esta pregunta, se ejecutó el servidor multihilo junto con tres instancias del cliente de forma casi simultánea. 
+
+    \newpage
+    \textbf{Salidas del Servidor y 3 Clientes (Caso sin atraso local):}
+    
+    Salida del servidor:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Cristian/Act2_1.png}
+        \caption{Salida del Servidor.}
+    \end{figure}
+
+    Salida del cliente 1:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Cristian/Act2_2.png}
+        \caption{Salida del Cliente 1.}
+    \end{figure}
+
+    
+    Salida del cliente 2:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act2_3.png}
+        \caption{Salida del Cliente 2.}
+    \end{figure}
+
+    Salida del cliente 3:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Cristian/Act2_4.png}
+        \caption{Salida del Cliente 3.}
+    \end{figure}
+    
+    Al analizar las salidas, es evidente que \textbf{no, ninguno de los clientes obtuvo el mismo ajuste}. 
+    
+    Esto sucede porque el algoritmo de Cristian depende en su totalidad del RTT (tiempo de viaje de los mensajes). Al haber introducido una latencia aleatoria para simular diferentes condiciones de red en cada cliente, el RTT varió (0.797s, 1.83s y 1.511s respectivamente). Por lo tanto, el desfase calculado ($RTT/2$) fue distinto para cada nodo, obligando a que cada cliente se ralentice por una cantidad de unidades diferente e independiente de los demás.
+
+    \vspace{0.3cm}
+    \textbf{\textcolor{blue}{Agregar al código lo necesario para considerar cuando C > Cc o C < Cc.}}
+
+    Para cumplir con este punto, se agregó un bloque lógico \texttt{if / elif} al final del script del cliente. Este bloque evalúa la relación entre el nuevo tiempo calculado ($C$) y el tiempo local actual del cliente ($C_c$), calculando las diferencias exactas y determina la acción correcta según las reglas de sincronización.
+
+    \textbf{Fragmento modificado en el Cliente (Lógica de evaluación):}
+    \begin{lstlisting}[language=Python]
+# --- LOGICA DE AJUSTE ---
+if C > Cc:
+    diferencia = C - Cc
+    print("[ATENCION] C > Cc (El tiempo calculado es MAYOR al local)")
+    print("         -> ACCION: Se ADELANTA el reloj local a la nueva hora.")
+    print(f"        -> El salto hacia adelante es de {diferencia:.6f} segundos.")
+elif C < Cc:
+    diferencia = Cc - C
+    print("[ATENCION] C < Cc (El tiempo calculado es MENOR al local)")
+    print(f"         -> ACCION: El reloj local se debe ralentizar gradualmente.")
+    print(f"         -> Se debe RALENTIZAR el reloj por {diferencia:.6f} unidades.")
+else:
+    print("[LISTO] C == Cc (El reloj ya esta sincronizado).")
+    \end{lstlisting}
+
+    Como se vio en la prueba anterior, si los relojes locales ya están en hora con el servidor pero hay latencia de red, siempre se da el caso de $C < C_c$. Para demostrar que el código también considera y evalúa correctamente el caso opuesto ($C > C_c$), se implementó un mecanismo para simular que el cliente tiene su reloj interno atrasado 10 segundos respecto a la realidad. 
+    
+    Para simular el caso normal sin retraso, se utilizaron las siguientes líneas:
+    \begin{lstlisting}[language=Python]
+t0 = time.time()
+Cc = time.time() # Caso sin atraso
+    \end{lstlisting}
+
+    Para forzar el escenario $C > C_c$, se comentaron las líneas anteriores y se descomentaron las siguientes:
+    \begin{lstlisting}[language=Python]
+# Caso: Simulamos un reloj atrasado
+atraso_falso = 10 # El cliente cree que son 10 segundos antes
+t0 = time.time() - atraso_falso
+Cc = time.time() - atraso_falso # Caso con atraso simulado
+    \end{lstlisting}
+
+    Con este atraso simulado, el bloque condicional detecta que el tiempo calculado es mayor al local, ejecutando la acción de ``Adelantar el reloj". A continuación se muestran las salidas de este segundo caso:
+
+    \textbf{Salidas del Servidor y 3 Clientes (Caso con reloj atrasado simulado):}
+    
+    Salida del servidor:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_5.png}
+        \caption{Salida del Servidor.}
+    \end{figure}
+
+    Salida del cliente 1:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.7\textwidth]{img/Cristian/Act2_6.png}
+        \caption{Salida del Cliente 1.}
+    \end{figure}
+
+    
+    Salida del cliente 2:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_7.png}
+        \caption{Salida del Cliente 2.}
+    \end{figure}
+
+    Salida del cliente 3:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/Cristian/Act2_8.png}
+        \caption{Salida del Cliente 3.}
+    \end{figure}
+
+
+
+
+
+    \newpage
+    \subsection{Algoritmo de Berkeley:}
+    \subsubsection{Notas:}
+    \begin{itemize}
+        \item Cada cliente inicia con un reloj distinto
+        \item El servidor calcula un promedio
+        \item Todos convergen a un mismo tiempo
+        \item Ejecutar el programa y responder las siguiente preguntas:
+    \end{itemize}
+    \begin{enumerate}
+        \item \textbf{¿Cuál era el tiempo inicial de cada cliente?}
+
+        Los tiempos iniciales de cada cliente fueron:
+        \begin{itemize}
+            \item Cliente 1: 1776087876.551237 
+            \item Cliente 2: 1776087876.277657 
+            \item Cliente 3: 1776087877.5864637 
+        \end{itemize}
+        Cada cliente simula una variación aleatoria de $\pm$5 segundos respecto al tiempo real del sistema. Con estos valores, el promedio entre los tres clientes es aproximadamente \textbf{1776087876.8051193}.
+
+        \item \textbf{¿Cuál fue el promedio?}
+
+        El tiempo promedio calculado por el servidor en esta ejecución se ubicó alrededor de \textbf{1776087876.8051193}, es decir, un valor muy cercano al promedio de los tiempos reportados por los clientes. Esto ocurre porque los tres relojes iniciales están muy próximos entre sí y el algoritmo de Berkeley toma el tiempo del servidor como un valor más dentro del cálculo global.
+
+        \item \textbf{¿A qué tiempo convergen?}
+
+        Todos los clientes convergen al mismo valor promedio calculado por el servidor, que en esta corrida queda aproximadamente en \textbf{1776087876.8051193}. 
+    \end{enumerate}
+
+    \newpage
+
+    \textbf{Salida del programa:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Berkeley/Notas/image1.jpg}
+        \caption{Salida del programa de Berkeley con 3 clientes.}
+    \end{figure}
+
+    
+    \subsubsection{\textcolor{red}{Actividad 3}}
+
+    Para esta actividad se modificó el programa original para soportar un número variable de clientes. 
+    
+    Los cambios principales fueron: 
+    
+    \begin{enumerate}
+        \item Se cambio la función \texttt{servidorBerkeley} y \texttt{ejecutaCliente} para recibir el número de clientes como argumento, esto para hacer variables la ejecuciones de un solo golpe.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion del cliente}, basicstyle=\ttfamily\scriptsize]
+            def ClienteBerkeley(client_id, port=60001):
+            sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockClient.connect(('localhost', port))
+
+            # Simular variación en el tiempo local
+            variacion = random.uniform(-5, 5)
+            local_time = time.time() + variacion
+
+            print(f"    [CLIENTE {client_id:02d}] Conectado al servidor")
+            print(f"    [CLIENTE {client_id:02d}] Variación simulada: {variacion:+.4f} seg")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo local: {local_time:.6f}")
+
+            data = sockClient.recv(1024)
+            if data == b'TIME_REQUEST':
+                sockClient.send(struct.pack('d', local_time))
+                print(f"    [CLIENTE {client_id:02d}] Tiempo enviado al servidor")
+
+            adjustment = struct.unpack('f', sockClient.recv(4))[0]
+            new_time = local_time + adjustment
+
+            
+            print(f"    [CLIENTE {client_id:02d}] Ajuste recibido: {adjustment:+.6f} seg")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo anterior: {local_time:.6f}")
+            print(f"    [CLIENTE {client_id:02d}] Tiempo ajustado: {new_time:.6f}")
+
+            sockClient.close()
+
+        def ejecutaCliente(num_clients=3, port=60001):
+            processes = []
+            for i in range(num_clients):
+                p = Process(target=ClienteBerkeley, args=(i+1, port))
+                processes.append(p)
+                p.start()
+                time.sleep(0.3)  # Pequeño retraso entre conexiones
+            for p in processes:
+                p.join()
+        \end{lstlisting}
+
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del servidor}, basicstyle=\ttfamily\scriptsize]
+        def servidorBerkeley(port=60001, num_clients=3):
+            sockServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            sockServer.bind(('localhost', port))
+            sockServer.listen(num_clients)
+
+            print(f"\n{'='*60}")
+            print(f"{'SERVIDOR BERKELEY':^60}")
+            print(f"{'='*60}")
+            print(f"| Número de clientes esperados: {num_clients}")
+            print(f"| Puerto: {port}")
+            print(f"{'='*60}")
+            print(f"\n[SERVIDOR] Esperando conexiones...")
+
+            connections = []
+            client_addresses = []
+            times = []
+
+            for i in range(num_clients):
+                conn, addr = sockServer.accept()
+                print(f"[SERVIDOR] Cliente {i+1:02d} conectado desde {addr}")
+                connections.append(conn)
+                client_addresses.append(addr)
+
+            print(f"[SERVIDOR] Todos los {num_clients} clientes conectados")
+            print(f"[SERVIDOR] Solicitando tiempos a los clientes...")
+             
+            for conn in connections:
+                conn.send(b'TIME_REQUEST')
+
+            print(f"\n[SERVIDOR] Tiempos recibidos de clientes:")
+             
+            for i, conn in enumerate(connections):
+                client_time = struct.unpack('d', conn.recv(8))[0]
+                print(f"[SERVIDOR]   Cliente {i+1:02d}: {client_time:.6f}")
+                times.append(client_time)
+
+            server_time = time.time()
+             
+            print(f"[SERVIDOR]   Servidor:   {server_time:.6f}")
+
+            all_times = times + [server_time]
+            average_time = sum(all_times) / len(all_times)
+              
+            print(f"[SERVIDOR] CÁLCULO DEL TIEMPO PROMEDIO")
+             
+            print(f"[SERVIDOR]   Tiempo promedio: {average_time:.6f}")
+
+            adjusted_times = [average_time - t for t in times]
+            server_adjustment = average_time - server_time
+ 
+            print(f"[SERVIDOR] AJUSTES CALCULADOS")
+             
+            for i, adj in enumerate(adjusted_times):
+                signo = "+" if adj >= 0 else ""
+                print(f"[SERVIDOR]   Cliente {i+1:02d}: {signo}{adj:.6f} segundos")
+            signo_srv = "+" if server_adjustment >= 0 else ""
+            print(f"[SERVIDOR]   Servidor:   {signo_srv}{server_adjustment:.6f} segundos")
+
+            print(f"\n[SERVIDOR] Enviando ajustes a clientes...")
+            for i, (conn, adj) in enumerate(zip(connections, adjusted_times)):
+                conn.send(struct.pack('f', adj))
+                print(f"[SERVIDOR]  Ajuste enviado a Cliente {i+1:02d}")
+
+            for conn in connections:
+                conn.close()
+            sockServer.close()
+
+            print(f"\n[SERVIDOR] {'='*50}")
+            print(f"[SERVIDOR] SINCRONIZACIÓN COMPLETADA")
+            print(f"[SERVIDOR] {'='*50}\n")
+        \end{lstlisting}
+
+        
+        \item Agregar la opción \texttt{SO\_REUSEADDR} al socket para evitar errores de ``address already in use'' entre ejecuciones.
+        \item Usar puertos diferentes para cada prueba (60001, 60002, 60003) evitando conflictos.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion principal donde se ve el cambio de puertos}, basicstyle=\ttfamily\scriptsize]
+        if __name__ == "__main__":
+            print("\n" + "="*60)
+            print("ALGORITMO DE BERKELEY - ACTIVIDAD 3")
+            print("Pruebas con 5, 10 y 20 clientes")
+            print("="*60)
+
+        
+            configuraciones = [5, 10, 20]
+
+            for i, num_clients in enumerate(configuraciones):
+                puerto = 60001 + i  
+                ejecutarPrueba(num_clients, puerto)
+
+            print("\n" + "="*60)
+            print("TODAS LAS PRUEBAS COMPLETADAS")
+            print("="*60 + "\n")
+        \end{lstlisting}
+
+        \item Crear una función \texttt{ejecutarPrueba} que encapsula la ejecución completa de servidor y clientes para cada configuración.
+        
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion ejecutarPrueba}, basicstyle=\ttfamily\scriptsize]
+            def ejecutarPrueba(num_clients, port):
+            """Ejecuta una prueba completa con el número especificado de clientes"""
+            print(f"\n{'#'*60}")
+            print(f"{'#'*60}")
+            print(f"##  PRUEBA CON {num_clients} CLIENTES")
+            print(f"{'#'*60}")
+            print(f"{'#'*60}")
+
+            p_servidor = Process(target=servidorBerkeley, args=(port, num_clients))
+            p_servidor.start()
+            time.sleep(1)
+
+            ejecutaCliente(num_clients=num_clients, port=port)
+            p_servidor.join()
+
+            
+            print(f"Prueba con {num_clients} clientes finalizada")
+            
+            time.sleep(2)  # Pausa entre pruebas
+        \end{lstlisting}
+    \end{enumerate}
+    
+
+    Modificar el programa para trabajar con:
+    \begin{itemize}
+        \item 5, 10 y 20 clientes
+        \item Respondera las siguientes preguntas:
+    \end{itemize}
+
+    \begin{enumerate}
+        \item \textbf{¿Cómo cambia el tiempo promedio?}
+
+        El tiempo promedio se vuelve más representativo del estado global del sistema conforme aumenta el número de clientes. Con 3 clientes, el promedio se ve más influenciado por valores extremos (outliers), mientras que con 10 o 20 clientes, el efecto de un reloj muy adelantado o atrasado se diluye. En las pruebas realizadas, el promedio tiende a acercarse más al tiempo real del servidor cuando hay más participantes, ya que las variaciones aleatorias ($\pm$5 segundos) tienden a cancelarse estadísticamente.
+
+        \item \textbf{¿El sistema sigue siendo estable?}
+
+        Sí, el sistema permanece estable con 5, 10 y 20 clientes. El algoritmo de Berkeley es inherentemente escalable porque: (1) el cálculo del promedio es una operación O(n) simple, (2) cada cliente solo requiere una conexión TCP al servidor, y (3) el intercambio de mensajes es mínimo (solicitud de tiempo, envío de tiempo, recepción de ajuste). En todas las pruebas, todos los clientes convergieron exitosamente al tiempo promedio calculado. La única consideración es el tiempo de espera del servidor para recibir todos los tiempos, que aumenta proporcionalmente con el número de clientes.
+    \end{enumerate}
+
+    \textbf{Salidas del programa:}
+
+    \textbf{Salida para 5 clientes:}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.67\textwidth]{img/Berkeley/Actividad3/image1_1.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 1-3.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.67\textwidth]{img/Berkeley/Actividad3/image1_2.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 2-3.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.65\textwidth]{img/Berkeley/Actividad3/image1_3.png}
+        \caption{Salida del programa de Berkeley con 5 clientes. Parte 3-3.}
+    \end{figure}
+
+    \textbf{Salida para 10 clientes:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.55\textwidth]{img/Berkeley/Actividad3/image2_1.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 1-4.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.55\textwidth]{img/Berkeley/Actividad3/image2_2.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 2-4.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image2_3.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 3-4.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image2_4.png}
+        \caption{Salida del programa de Berkeley con 10 clientes. Parte 4-4.}
+    \end{figure}
+
+    \textbf{Salida para 20 clientes:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.57\textwidth]{img/Berkeley/Actividad3/image3_1.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 1-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_2.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 2-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_3.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 3-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_4.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 4-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_5.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 5-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_6.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 6-7.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\textwidth]{img/Berkeley/Actividad3/image3_7.png}
+        \caption{Salida del programa de Berkeley con 20 clientes. Parte 7-7.}
+    \end{figure}
+
+    \subsubsection{\textcolor{red}{Actividad 4}}
+
+    Para simular la latencia de red, se agregó un retraso aleatorio en la función \texttt{ClienteBerkeley} usando \texttt{time.sleep(random.uniform(0, 3))}. Este retraso se aplica en dos momentos: (1) antes de enviar el tiempo local al servidor (simulando latencia de envío), y (2) antes de recibir el ajuste del servidor (simulando latencia de recepción). De esta manera, cada cliente puede experimentar una latencia total de 0 a 6 segundos, representando condiciones variables de red.
+
+    \begin{itemize}
+        \item Agrega un retraso aleatorio en los clientes:
+        \begin{itemize}
+            \item time.sleep(random.uniform(0, 3))
+        \end{itemize}
+
+        \begin{lstlisting}[language={[LAB]Python}, caption={Codigo de la funcion del cliente actulizado con el nuevo tiempo random}, basicstyle=\ttfamily\scriptsize]
+        def ClienteBerkeley(client_id, port=60001):
+            time.sleep(random.uniform(0, 3))
+
+            
+            sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sockClient.connect(('localhost', port))
+            
+            local_time = time.time() + random.uniform(-5, 5)  
+            print(f"Cliente {client_id} - tiempo local antes del ajuste: {local_time}")
+        
+            data = sockClient.recv(1024)
+            if data == b'TIME_REQUEST':
+                sockClient.send(struct.pack('d', local_time))
+                
+            adjustment_received = struct.unpack('f', sockClient.recv(4))[0]
+            print(f"Cliente {client_id} - ajuste de tiempo recibido del servidor: {adjustment_received}")
+            
+            new_time = local_time + adjustment_received
+            print(f"Cliente {client_id} - nuevo tiempo después del ajuste: {new_time}")
+            
+            sockClient.close()
+        \end{lstlisting}
+        \item Responder a las preguntas:
+        \begin{enumerate}
+            \item \textbf{¿La latencia afecta el resultado final?}
+
+            No, la latencia \textbf{no afecta el resultado final} de la sincronización en términos de convergencia. Como se puede observar en la salida, a pesar de que cada cliente experimentó diferentes latencias (desde 0.232 hasta 2.674 segundos), todos convergieron al mismo tiempo promedio (1774828782.641636). Esto se debe a que el algoritmo de Berkeley trabaja con los \textit{valores de tiempo reportados} por cada cliente, no con el momento exacto en que esos valores llegan al servidor.
+
+            Sin embargo, la latencia sí afecta la \textbf{precisión} del resultado. Si un cliente tiene alta latencia, el tiempo que reporta ya estará ``desactualizado'' cuando llegue al servidor, introduciendo un error sistemático. En nuestra implementación, el cliente captura su tiempo local \textit{antes} de la latencia, por lo que el ajuste calculado es correcto para ese instante, pero cuando el cliente finalmente aplica el ajuste, su reloj real ya avanzó.
+
+            \item \textbf{¿Por qué el algoritmo de Berkeley es sensible o no a este factor?}
+
+            El algoritmo de Berkeley es \textbf{parcialmente sensible} a la latencia por las siguientes razones:
+
+            \textbf{Insensibilidad:} El algoritmo no depende de una fuente de tiempo externa (como NTP), sino que calcula un promedio democrático de todos los participantes. La latencia no impide que el algoritmo calcule y distribuya los ajustes correctamente.
+
+            \textbf{Sensibilidad:} En redes con alta latencia o latencia asimétrica, el algoritmo puede introducir errores porque:
+            \begin{itemize}
+                \item El tiempo que tarda un mensaje en llegar no se compensa (a diferencia del algoritmo de Cristian que usa RTT/2).
+                \item Si la latencia varía significativamente entre clientes, algunos recibirán sus ajustes más tarde, acumulando desfase adicional.
+            \end{itemize}
+
+            Para mitigar esto, implementaciones robustas de Berkeley incorporan estimación de RTT (Round-Trip Time) y compensan la latencia al calcular los ajustes.
+        \end{enumerate}
+    \end{itemize}
+
+    \textbf{Salida del programa con latencia simulada:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/Berkeley/Actividad4/image1.jpg}
+        \caption{Salida del programa de Berkeley con latencia simulada.}
+    \end{figure}
+
+    \newpage
+    \subsubsection{\textcolor{red}{Actividad 5}}
+
+    Modificar la implementación anterior para ejecutar, servidor y clientes en máquinas diferentes.
+
+    \textbf{Explicacion:}
+
+    La arquitectura original se modificó para que el servidor escuche activamente en la red local, mientras que los scripts de los clientes fueron ajustados para recibir por línea de comandos la dirección IP del servidor al que deben conectarse. Además, se utilizó el módulo \texttt{struct} para garantizar que las marcas de tiempo (datos de punto flotante) se empaqueten y transmitan correctamente a través de la red sin pérdida de precisión. Como resultado de la ejecución, las pruebas demuestran que el servidor recolecta con éxito los tiempos locales de tres nodos distintos, calcula el promedio del sistema y distribuye los valores de ajuste precisos.
+    \textbf{Codigo de los clientes:}
+
+    \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del cliente actualizado para correr en maquinas diferentes}, basicstyle=\ttfamily\scriptsize]
+    import socket
+    import time
+    import struct
+    import sys
+    import random
+
+    def clienteBerkeley(server_ip, port=60001):
+        sockClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        print(f"Conectando al servidor {server_ip}:{port}...")
+        sockClient.connect((server_ip, port))
+        print("Conexión establecida.")
+
+        # Simular variación en el tiempo local
+        local_time = time.time() + random.uniform(-5, 5)
+        print(f"Tiempo local del cliente antes del ajuste: {local_time:.2f}")
+
+        data = sockClient.recv(1024)
+        if data == b'TIME_REQUEST':
+            print("Solicitud de tiempo recibida. Enviando tiempo local...")
+            sockClient.send(struct.pack('d', local_time))
+
+        adjustment = struct.unpack('f', sockClient.recv(4))[0]
+        print(f"Ajuste de tiempo recibido del servidor: {adjustment}")
+
+        new_time = local_time + adjustment
+        print(f"Nuevo tiempo del cliente después del ajuste: {new_time}")
+
+        sockClient.close()
+        print("Conexión cerrada.")
+
+    if __name__ == "__main__":
+        
+        if len(sys.argv) < 2:
+            print("Uso: python berkeley_cliente.py <ip_servidor> [puerto]")
+            print("Ejemplo: python berkeley_cliente.py 192.168.1.100 60001")
+            sys.exit(1)
+
+        server_ip = sys.argv[1]
+        port = int(sys.argv[2]) if len(sys.argv) > 2 else 60001
+
+        print("=" * 50)
+        print("CLIENTE BERKELEY - Sincronización de Relojes")
+        print("=" * 50)
+        clienteBerkeley(server_ip, port)
+
+    \end{lstlisting}
+
+    \begin{lstlisting}[language={[LAB]Python}, caption={Codigo del servidor actualizado para correr en maquinas diferentes}, basicstyle=\ttfamily\scriptsize]
+       
+    import socket
+    import time
+    import struct
+    import sys
+
+    def servidorBerkeley(port=60001, num_clients=3):
+        sockServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sockServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+        # Usar '0.0.0.0' para aceptar conexiones de cualquier IP
+        sockServer.bind(('0.0.0.0', port))
+        sockServer.listen(num_clients)
+
+        # Obtener la IP local para mostrar al usuario
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        print(f"Servidor de Berkeley escuchando en {local_ip}:{port}")
+        print(f"Esperando {num_clients} clientes...")
+
+        connections = []
+        times = []
+
+        for i in range(num_clients):
+            conn, addr = sockServer.accept()
+            print(f"Conexión {i+1}/{num_clients} establecida con: {addr}")
+            connections.append(conn)
+
+        print("\nTodos los clientes conectados. Solicitando tiempos...")
+
+        for conn in connections:
+            conn.send(b'TIME_REQUEST')
+
+        for conn in connections:
+            client_time = struct.unpack('d', conn.recv(8))[0]
+            print(f"Tiempo recibido del cliente: {client_time:.2f}")
+            times.append(client_time)
+
+        server_time = time.time()
+        print(f"Tiempo del servidor: {server_time:.2f}")
+
+        all_times = times + [server_time]
+        average_time = sum(all_times) / len(all_times)
+        print(f"Tiempo promedio calculado: {average_time:.2f}")
+
+        adjusted_times = [average_time - t for t in times]
+        
+        # Para imprimir una lista con 2 decimales, usamos esta técnica de comprensión de listas:
+        ajustes_formateados = [f"{adj:.2f}" for adj in adjusted_times]
+        print(f"Ajustes a enviar: {ajustes_formateados}")
+
+        for conn, adjustment in zip(connections, adjusted_times):
+            # Aquí SÍ podemos usar :.2f directamente porque adjustment es un número individual
+            print(f"Enviando ajuste de tiempo: {adjustment:.2f}")
+            conn.send(struct.pack('f', adjustment))
+
+        for conn in connections:
+            conn.close()
+
+        sockServer.close()
+        print("\nSincronización completada. Servidor cerrado.")
+
+    if __name__ == "__main__":
+        port = int(sys.argv[1]) if len(sys.argv) > 1 else 60001
+        num_clients = int(sys.argv[2]) if len(sys.argv) > 2 else 3
+
+        print("=" * 50)
+        print("SERVIDOR BERKELEY - Sincronización de Relojes")
+        print("=" * 50)
+        servidorBerkeley(port, num_clients)
+
+    \end{lstlisting}
+
+    \textbf{Imágenes de los resultados:}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{img/Berkeley/Actividad5/image2.png}
+        \caption{Salida del programa de Berkeley con Cliente 1.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image3.png}
+        \caption{Salida del programa de Berkeley con Cliente 2.}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image1_1.png}
+        \caption{Salida del programa de Berkeley con Cliente 3.}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.9\textwidth]{img/Berkeley/Actividad5/image1.png}
+        \caption{Salida del programa de Berkeley con Servidor.}
+    \end{figure}
+
+    La Ultima captura es de la consola del servidor, alojado en Linux, el cual registra las conexiones entrantes de tres nodos distintos, consolida los tiempos locales, calcula el promedio del clúster y determina los deltas de ajuste precisos para cada conexión. Por su parte, la primera y segunda imagen documentan el comportamiento de los nodos cliente ejecutándose de manera remota desde máquinas independientes con sistema operativo Windows. En estas terminales periféricas se observa el ciclo completo de sincronización: los clientes establecen el enlace mediante la dirección IP del servidor, reportan su tiempo local afectado por la variación aleatoria, reciben su valor de compensación individual calculado por el coordinador (por ejemplo, los ajustes de 0.43 y 1.14 segundos mostrados en pantalla) y finalmente aplican dicha corrección.
+
+    \newpage
+    \subsection{Algoritmo de Lamport:}
+    Para la implementación del algoritmo de relojes
+    lógicos de Lamport se proporciona un programa en Python que
+    utiliza el módulo multiprocessing para la generación de procesos
+    locales.
+
+    \subsubsection{\textcolor{red}{Actividad 6}}
+
+    \begin{itemize}
+        \item El programa es de acuerdo a un ambiente de eventos establecido de cada proceso.
+        \item Se pide probarlo y entenderlo para poder plantear en equipo un ambiente sugerido con 7 procesos.
+        \item Entregar diagrama de ambiente propuesto
+    \end{itemize}
+
+    Para la implementación del algoritmo de relojes lógicos de Lamport, se analizó inicialmente un programa base en Python que utiliza el módulo \texttt{multiprocessing} para la generación de procesos locales de forma concurrente, usando tuberías (\texttt{Pipe}) para la comunicación entre ellos.
+
+    El objetivo principal de esta actividad fue probar y comprender el funcionamiento de este mecanismo de sincronización basado en el paso de mensajes y eventos locales, para posteriormente plantear, diseñar e implementar un \textbf{ambiente sugerido por 7 procesos}. Dado que se requiere que cada ambiente sea diferente y original, se diseñó una topología en cascada con ramificaciones y convergencia.
+
+
+    El ambiente diseñado para esta simulación tiene siete procesos (P0 a P6) que interactúan de la siguiente manera, asegurando que el reloj de Lamport siga funcionando bien cuando el sistema crece, incluso si las conexiones entre los nodos no son simples o en línea recta.
+
+\begin{itemize}
+    \item \textbf{P0:} Inicia la cascada ejecutando un evento local y enviando un mensaje a P1.
+    \item \textbf{P1:} Recibe el mensaje de P0, procesa un evento local, y envía mensajes hacia dos procesos distintos: P2 y P3.
+    \item \textbf{P2 y P3:} Reciben los mensajes de P1 de manera paralela. P2 envía su mensaje a P4, mientras que P3 envía su mensaje a P5.
+    \item \textbf{P4 y P5:} Reciben la información de sus respectivos emisores y la reenvían hacia el nodo final, P6.
+    \item \textbf{P6:} Actúa como nodo colector. Recibe los mensajes tanto de P4 como de P5, actualizando su reloj de Lamport según las estampas de tiempo recibidas, y finaliza con un evento local.
+\end{itemize}
+
+\textbf{Diagrama del Ambiente Propuesto}
+
+A continuación, se presenta el diagrama propuesto que modela el intercambio de mensajes y la secuencia de eventos del ambiente propuesto.
+
+\begin{center}
+\begin{tikzpicture}[x=1.2cm, y=-1cm, >=stealth, thick]
+    % Líneas de los procesos
+    \foreach \i in {0,...,6} {
+        \node[left, font=\bfseries] at (0, \i) {P\i};
+        \draw[->, color=gray] (0, \i) -- (11, \i);
+    }
+
+    % Nodos y eventos P0
+    \filldraw[blue] (1, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[blue] (2, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P1};
+    
+    % Nodos y eventos P1
+    \filldraw[red] (3, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (2, 0) -- (3, 1);
+    \filldraw[red] (4, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[red] (5, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P2, P3};
+
+    % Nodos P2 y P3
+    \filldraw[orange] (6, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (5, 1) -- (6, 2);
+    \filldraw[magenta] (6, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (5, 1) -- (6, 3);
+    
+    \filldraw[orange] (7, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+    \filldraw[magenta] (7, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P5};
+
+    % Nodos P4 y P5
+    \filldraw[cyan] (8, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (7, 2) -- (8, 4);
+    \filldraw[teal] (8, 5) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (7, 3) -- (8, 5);
+    
+    \filldraw[cyan] (9, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P6};
+    \filldraw[teal] (9, 5) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P6};
+
+    % Nodos P6
+    \filldraw[violet] (10, 6) circle (2pt) node[above=2pt, font=\scriptsize] {Recep. P4};
+    \draw[->, dashed] (9, 4) -- (10, 6);
+    \filldraw[violet] (10.5, 6) circle (2pt) node[below=2pt, font=\scriptsize] {Recep. P5};
+    \draw[->, dashed] (9, 5) -- (10.5, 6);
+    
+    \filldraw[violet] (11.5, 6) circle (2pt) node[above=2pt, font=\scriptsize] {Evento Final};
+    \draw[->, color=gray] (11, 6) -- (12, 6); % Extender la línea de P6 un poco más
+\end{tikzpicture}
+\end{center}
+
+\textbf{Implementación del Código}
+
+El siguiente código implementa el ambiente propuesto de 7 procesos utilizando la regla de actualización de relojes de Lamport: $C_j = \max(C_j, C_m) + 1$. Para mejorar la depuración, se incluyó código de color ANSI en la salida estándar, lo que permite diferenciar visualmente la naturaleza de cada acción.
+
+\begin{lstlisting}[language=Python, caption=Implementación de Lamport con 7 Procesos]
+from multiprocessing import Process, Pipe
+from os import getpid
+from datetime import datetime
+# ==========================================
+# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
+# ==========================================
+RESET = "\033[0m"
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m"  
+C_RECV  = "\033[96m"  
+C_TIME  = "\033[90m"  
+
+def local_time(counter):
+    time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+    return f'{C_TIME}[ Reloj Lamport: {counter:02d} | Hora: {time_str} ]{RESET}'
+
+def calc_recv_timestamp(recv_time_stamp, counter):
+    return max(recv_time_stamp, counter) + 1
+
+def event(pid, counter, p_num):
+    counter += 1
+    accion = f'{C_EVENT}[P{p_num}] EVENTO LOCAL   (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def send_message(pipe, pid, counter, p_num, dest_num):
+    counter += 1
+    pipe.send(('Mensaje', counter))
+    accion = f'{C_SEND}[P{p_num}] ENVÍA a P{dest_num}    (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def recv_message(pipe, pid, counter, p_num, src_num):
+    message, timestamp = pipe.recv()
+    counter = calc_recv_timestamp(timestamp, counter)
+    accion = f'{C_RECV}[P{p_num}] RECIBE de P{src_num}  (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+# ==========================================
+# DEFINICIÓN DE LOS 7 PROCESOS
+# ==========================================
+def p0(pipe01):
+    pid = getpid()
+    counter = 0
+    counter = event(pid, counter, 0)
+    counter = send_message(pipe01, pid, counter, 0, 1)
+
+def p1(pipe10, pipe12, pipe13):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe10, pid, counter, 1, 0)
+    counter = event(pid, counter, 1)
+    counter = send_message(pipe12, pid, counter, 1, 2)
+    counter = send_message(pipe13, pid, counter, 1, 3)
+
+def p2(pipe21, pipe24):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe21, pid, counter, 2, 1)
+    counter = send_message(pipe24, pid, counter, 2, 4)
+
+def p3(pipe31, pipe35):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe31, pid, counter, 3, 1)
+    counter = send_message(pipe35, pid, counter, 3, 5)
+
+def p4(pipe42, pipe46):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe42, pid, counter, 4, 2)
+    counter = send_message(pipe46, pid, counter, 4, 6)
+
+def p5(pipe53, pipe56):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe53, pid, counter, 5, 3)
+    counter = send_message(pipe56, pid, counter, 5, 6)
+
+def p6(pipe64, pipe65):
+    pid = getpid()
+    counter = 0
+    counter = recv_message(pipe64, pid, counter, 6, 4)
+    counter = recv_message(pipe65, pid, counter, 6, 5)
+    counter = event(pid, counter, 6)
+
+if __name__ == '__main__':
+    print("\n" + "="*70)
+    print(" INICIANDO SIMULACIÓN DE RELOJES DE LAMPORT (7 PROCESOS) ".center(70, "="))
+    print("="*70 + "\n")
+
+    # Creación de tuberías para comunicación
+    pipe01, pipe10 = Pipe()
+    pipe12, pipe21 = Pipe()
+    pipe13, pipe31 = Pipe()
+    pipe24, pipe42 = Pipe()
+    pipe35, pipe53 = Pipe()
+    pipe46, pipe64 = Pipe()
+    pipe56, pipe65 = Pipe()
+
+    # Inicialización
+    procesos = [
+        Process(target=p0, args=(pipe01,)),
+        Process(target=p1, args=(pipe10, pipe12, pipe13)),
+        Process(target=p2, args=(pipe21, pipe24)),
+        Process(target=p3, args=(pipe31, pipe35)),
+        Process(target=p4, args=(pipe42, pipe46)),
+        Process(target=p5, args=(pipe53, pipe56)),
+        Process(target=p6, args=(pipe64, pipe65))
+    ]
+
+    for p in procesos:
+        p.start()
+    for p in procesos:
+        p.join()
+        
+    print("\n" + "="*70)
+    print(" SIMULACIÓN FINALIZADA ".center(70, "="))
+    print("="*70 + "\n")
+\end{lstlisting}
+
+El código implementa el algoritmo de sincronización de Lamport usando la librería \texttt{multiprocessing} de Python, la cual permite ejecutar los 7 procesos de manera verdaderamente concurrente, cada uno con su propio espacio de memoria y su propio Identificador de Proceso (PID).
+
+\textbf {1. Reglas Lógicas del Reloj de Lamport}
+
+El núcleo del algoritmo se divide en tres funciones fundamentales que alteran la variable \texttt{counter} (el reloj lógico local de cada proceso):
+\begin{itemize}
+    \item \textbf{Eventos Locales (\texttt{event}):} Simplemente incrementan el reloj local en 1 unidad ($C_i = C_i + 1$).
+    \item \textbf{Envío de Mensajes (\texttt{send\_message}):} Antes de enviar, el proceso incrementa su reloj local en 1 ($C_i = C_i + 1$) y luego adjunta ese valor actualizado (estampa de tiempo) dentro de la tubería junto con el mensaje mediante \texttt{pipe.send(('Mensaje', counter))}.
+    \item \textbf{Recepción de Mensajes (\texttt{recv\_message}):} Cuando un proceso extrae un mensaje de la tubería mediante \texttt{pipe.recv()}, lee la estampa de tiempo adjunta. Es aquí donde se aplica la regla de convergencia principal de Lamport implementada en la función \texttt{calc\_recv\_timestamp}: el nuevo tiempo del proceso receptor será el valor máximo entre su propio reloj local y la estampa de tiempo recibida del mensaje, más uno ($C_j = \max(C_j, C_m) + 1$).
+\end{itemize}
+
+\textbf{2. Cumplimeiento del ambiente propuesto}
+
+La comunicación entre procesos se logra mediante objetos \texttt{Pipe()}, que actúan como canales bidireccionales. Para garantizar que el programa se comporte exactamente como el diagrama porpuesto, las conexiones y llamadas a las funciones se estructuraron de la siguiente forma:
+\begin{itemize}
+    \item \textbf{El Inicio (P0):} La función \texttt{p0} arranca el sistema ejecutando un \texttt{event()} seguido de un \texttt{send\_message()} usando \texttt{pipe01}. Esto coincide con el origen de la cascada.
+    \item \textbf{La Ramificación (P1):} La función \texttt{p1} está diseñada para bloquearse hasta recibir el mensaje de P0 mediante \texttt{recv\_message(pipe10)}. Una vez que el reloj se actualiza, P1 ejecuta un evento local y luego se divide, llamando a \texttt{send\_message} dos veces: una hacia P2 (\texttt{pipe12}) y otra hacia P3 (\texttt{pipe13}). 
+    \item \textbf{El Paralelismo (P2, P3, P4, P5):} Las funciones \texttt{p2} y \texttt{p3} funcionan como intermediarios en paralelo. Al recibir el mensaje de P1, envían su propio mensaje hacia P4 y P5 respectivamente. A su vez, \texttt{p4} y \texttt{p5} reciben esos mensajes y los retransmiten hacia el colector final. Esto asegura que la estampa de tiempo siga arrastrando la historia causal de los eventos previos de manera paralela.
+    \item \textbf{La Convergencia (P6):} La función \texttt{p6} consolida la información de las dos ramas. Realiza dos llamadas a \texttt{recv\_message}, extrayendo los mensajes de \texttt{pipe64} y \texttt{pipe65}. La función \texttt{calc\_recv\_timestamp} internamente se asegurará de que el reloj de P6 absorba el tiempo más grande que le llegue de ambas ramas. Finalmente, realiza un último \texttt{event()} para marcar la conclusión del flujo. 
+\end{itemize}
+
+Este diseño refleja fielmente las flechas trazadas en el diagrama de ambiente propuesto, forzando a los procesos a respetar la relación ``sucedió antes que'' ($\rightarrow$) diseñada para esta topología de 7 nodos y validando el correcto funcionamiento de los relojes lógicos.
+
+
+\textbf{Funcionamiento del código}
+
+Al ejecutar el programa, pudimos comprobar que los relojes de Lamport funcionan correctamente. Notamos que, aunque los mensajes se impriman en distinto orden en la consola (ya que la computadora ejecuta los procesos al mismo tiempo), los tiempos lógicos siempre se mantienen organizados. 
+
+Lo más importante que observamos es que el reloj lógico del proceso final (\texttt{P6}) siempre termina con un valor mayor al de todos los procesos que le enviaron información. Esto demuestra que el sistema cumple a la perfección con la regla de ``sucedió antes que'' (\textit{happened-before}) de Leslie Lamport: si un evento ocurre antes que otro, su marca de tiempo siempre será menor.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{img/Lamport/actividad6.png}
+    \caption{Simulación de relojes de Lamport con 7 procesos}
+    \label{fig:lamport}
+\end{figure}
+
+
+
+    \newpage
+    \subsection{Algoritmo Vectorial:}
+    \subsubsection{\textcolor{red}{Actividad 7}}
+
+    
+    Con la idea anterior implementar una solución al algoritmo de
+    relojes vectoriales, plantear un ambiente con 5 procesos.
+    Entregar la figura con el ambiente sugerido que se programará.
+
+
+    Para esta actividad, se adaptó la arquitectura concurrente basada en \texttt{multiprocessing} y \texttt{Pipe} de la Actividad 6. La diferencia principal es que, en lugar de usar un único contador entero (Lamport), cada proceso mantiene un arreglo (vector) con el registro del tiempo lógico de todos los participantes del sistema. Al ser 5 procesos, el reloj de cada uno es una lista de 5 posiciones: \texttt{[P0, P1, P2, P3, P4]}.
+
+   El objetivo fue crear un sistema con 5 procesos donde la información se divide en varios caminos y luego se vuelve a juntar, para ver cómo cada proceso va guardando y combinando la información de lo que pasó en los distintos caminos.
+
+El ambiente diseñado interactúa de la siguiente manera:
+\begin{itemize}
+    \item \textbf{P0:} Inicia la ejecución con un evento local. Posteriormente, envía un mensaje a P1 y luego otro mensaje a P2.
+    \item \textbf{P1:} Recibe el mensaje de P0, actualiza su vector y envía un mensaje a P3.
+    \item \textbf{P2:} Recibe el mensaje de P0 de forma paralela a P1, actualiza su vector y envía un mensaje a P4.
+    \item \textbf{P3:} Recibe el mensaje de P1, procesa la información y reenvía su mensaje a P4.
+    \item \textbf{P4:} Actúa como el nodo de convergencia. Primero recibe el mensaje de P2, luego recibe el mensaje de P3 (uniendo ambas ramas), y finaliza su ejecución con un evento local.
+\end{itemize}
+
+\newpage
+\textbf{Diagrama del Ambiente Propuesto}
+
+A continuación, se presenta el diagrama propuesto que modela el intercambio de mensajes y eventos para el ambiente de 5 procesos.
+
+\begin{center}
+\begin{tikzpicture}[x=1.3cm, y=-1.2cm, >=stealth, thick]
+    % Líneas de los procesos
+    \foreach \i in {0,...,4} {
+        \node[left, font=\bfseries] at (0, \i) {P\i};
+        \draw[->, color=gray] (0, \i) -- (10, \i);
+    }
+
+    % P0
+    \filldraw[blue] (1, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Evento};
+    \filldraw[blue] (2, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P1};
+    \filldraw[blue] (3, 0) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P2};
+    
+    % P1
+    \filldraw[red] (3, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (2, 0) -- (3, 1);
+    \filldraw[red] (4, 1) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P3};
+
+    % P2
+    \filldraw[orange] (4, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (3, 0) -- (4, 2);
+    \filldraw[orange] (5, 2) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+    
+    % P3
+    \filldraw[magenta] (5, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Recepción};
+    \draw[->, dashed] (4, 1) -- (5, 3);
+    \filldraw[magenta] (6, 3) circle (2pt) node[above=2pt, font=\scriptsize] {Envío P4};
+
+    % P4
+    \filldraw[violet] (7, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Recep. P2};
+    \draw[->, dashed] (5, 2) -- (7, 4);
+    \filldraw[violet] (8, 4) circle (2pt) node[below=2pt, font=\scriptsize] {Recep. P3};
+    \draw[->, dashed] (6, 3) -- (8, 4);
+    \filldraw[violet] (9, 4) circle (2pt) node[above=2pt, font=\scriptsize] {Evento Final};
+    
+\end{tikzpicture}
+\end{center}
+
+\textbf{Implementación del Código}
+
+El siguiente código implementa el algoritmo de relojes vectoriales para los 5 procesos. La regla de actualización principal al recibir un mensaje toma el máximo valor posición por posición entre el reloj local y el recibido.
+
+\begin{lstlisting}[language=Python, caption=Implementación de Relojes Vectoriales con 5 Procesos]
+from multiprocessing import Process, Pipe
+from os import getpid
+from datetime import datetime
+
+# ==========================================
+# CÓDIGOS DE COLOR ANSI PARA LA TERMINAL
+# ==========================================
+RESET = "\033[0m"
+C_EVENT = "\033[93m"  
+C_SEND  = "\033[92m"  
+C_RECV  = "\033[96m"  
+C_TIME  = "\033[90m"  
+
+def local_time(counter):
+    time_str = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+    vector_str = f"[{', '.join(f'{x:02d}' for x in counter)}]"
+    return f'{C_TIME}[ Reloj Vectorial: {vector_str} | Hora: {time_str} ]{RESET}'
+
+def calc_recv_timestamp(recv_time_stamp, counter):
+    return [max(r, c) for r, c in zip(recv_time_stamp, counter)]
+
+def event(pid, p_index, counter):
+    counter[p_index] += 1
+    accion = f'{C_EVENT}[P{p_index}] EVENTO LOCAL   (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def send_message(pipe, pid, p_index, counter, dest_num):
+    counter[p_index] += 1
+    pipe.send(('Mensaje', counter))
+    accion = f'{C_SEND}[P{p_index}] ENVÍA a P{dest_num}    (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+def recv_message(pipe, pid, p_index, counter, src_num):
+    message, timestamp = pipe.recv()
+    counter = calc_recv_timestamp(timestamp, counter)
+    counter[p_index] += 1
+    accion = f'{C_RECV}[P{p_index}] RECIBE de P{src_num}  (PID:{pid}){RESET}'.ljust(52)
+    print(f'{accion} {local_time(counter)}')
+    return counter
+
+# ==========================================
+# DEFINICIÓN DE LOS 5 PROCESOS
+# ==========================================
+def p0(pipe01, pipe02):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = event(pid, 0, counter)
+    counter = send_message(pipe01, pid, 0, counter, 1)
+    counter = send_message(pipe02, pid, 0, counter, 2)
+
+def p1(pipe10, pipe13):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe10, pid, 1, counter, 0)
+    counter = send_message(pipe13, pid, 1, counter, 3)
+
+def p2(pipe20, pipe24):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe20, pid, 2, counter, 0)
+    counter = send_message(pipe24, pid, 2, counter, 4)
+
+def p3(pipe31, pipe34):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe31, pid, 3, counter, 1)
+    counter = send_message(pipe34, pid, 3, counter, 4)
+
+def p4(pipe42, pipe43):
+    pid = getpid()
+    counter = [0, 0, 0, 0, 0]
+    counter = recv_message(pipe42, pid, 4, counter, 2)
+    counter = recv_message(pipe43, pid, 4, counter, 3)
+    counter = event(pid, 4, counter)
+
+if __name__ == '__main__':
+    print("\n" + "="*80)
+    print(" INICIANDO SIMULACIÓN DE RELOJES VECTORIALES (5 PROCESOS) ".center(80, "="))
+    print("="*80 + "\n")
+
+    pipe01, pipe10 = Pipe()
+    pipe02, pipe20 = Pipe()
+    pipe13, pipe31 = Pipe()
+    pipe24, pipe42 = Pipe()
+    pipe34, pipe43 = Pipe()
+
+    procesos = [
+        Process(target=p0, args=(pipe01, pipe02)),
+        Process(target=p1, args=(pipe10, pipe13)),
+        Process(target=p2, args=(pipe20, pipe24)),
+        Process(target=p3, args=(pipe31, pipe34)),
+        Process(target=p4, args=(pipe42, pipe43))
+    ]
+
+    for p in procesos:
+        p.start()
+    for p in procesos:
+        p.join()
+        
+    print("\n" + "="*80)
+    print(" SIMULACIÓN FINALIZADA ".center(80, "="))
+    print("="*80 + "\n")
+\end{lstlisting}
+
+Al igual que en el algoritmo anterior, usamos \texttt{multiprocessing} para garantizar la ejecución concurrente, pero el manejo del tiempo cambia significativamente.
+
+\textbf{1. Reglas Lógicas del Reloj Vectorial}
+
+Cada proceso inicia con un arreglo de ceros: \texttt{[0, 0, 0, 0, 0]}. La posición \texttt{i} del arreglo corresponde al conocimiento que tiene el proceso sobre el tiempo del proceso \texttt{i}.
+\begin{itemize}
+    \item \textbf{Eventos Locales y Envíos:} Cada vez que un proceso \texttt{Pi} hace un evento o envía un mensaje, incrementa únicamente su propia posición en el vector (\texttt{counter[i] += 1}). En el caso de envío, manda el arreglo completo por la tubería.
+    \item \textbf{Recepción de Mensajes:} Cuando \texttt{Pi} recibe un mensaje, compara su vector actual con el vector recibido. Usa la función \texttt{max()} \textbf{posición por posición} para quedarse con el valor más grande de cada índice. Finalmente, incrementa su propio índice para registrar el evento de recepción.
+\end{itemize}
+
+\textbf{2. Cumplimiento del ambiente propuesto}
+
+La estructura de las tuberías (\texttt{Pipe}) sigue fielmente el diagrama diseñado:
+\begin{itemize}
+    \item \textbf{P0} tiene su vector inicial y tras sus tres acciones (un evento local y dos envíos) su índice 0 avanza, propagando esos valores a P1 y P2.
+    \item \textbf{P1 y P2} reciben la historia de P0. Al actualizar sus vectores, adoptan el valor del índice 0 que traía P0, y luego incrementan sus respectivos índices (1 y 2) para retransmitirlos a los siguientes procesos.
+    \item \textbf{P3} actúa como puente, absorbiendo la historia de P1 (que ya incluía a P0) y enviándola a P4.
+    \item \textbf{P4 (Convergencia):} Es el punto clave de la simulación. Al recibir información de P2 y de P3, su función \texttt{calc\_recv\_timestamp} combina ambas historias usando los máximos. Esto le permite a P4 tener una ``fotografía'' completa de cuántos eventos ocurrieron en cada uno de los procesos anteriores.
+\end{itemize}
+
+\newpage
+
+\textbf{Funcionamiento del código}
+
+Al analizar los resultados de la consola , podemos comprobar paso a paso cómo los relojes vectoriales preservan toda la historia causal. A diferencia de Lamport, que solo daba un número general, aquí podemos ver exactamente qué sabe cada proceso sobre el resto del sistema.
+
+Observando la ejecución, el proceso \textbf{P0} inicia la cascada: tras su primer evento local y sus envíos a P1 y P2, vemos cómo únicamente incrementa su propia posición (la posición 0 del arreglo), llegando hasta el vector \texttt{[03, 00, 00, 00, 00]}. 
+
+Cuando los demás procesos reciben mensajes, podemos notar cómo absorben esta historia. Por ejemplo, cuando \textbf{P1} recibe el mensaje de P0, compara el vector recibido con el suyo y actualiza su reloj a \texttt{[02, 01, 00, 00, 00]}, adoptando la información de los 2 eventos que llevaba P0 en ese instante y sumando el suyo propio. De igual forma, cuando \textbf{P2} recibe su mensaje, su vector se actualiza a \texttt{[03, 00, 01, 00, 00]}.
+
+La ventaja principal de este algoritmo se demuestra en el nodo de convergencia, \textbf{P4}. En la imagen, vemos que P4 recibe primero el mensaje de P2, actualizando su vector a \texttt{[03, 00, 02, 00, 01]}. Inmediatamente después, recibe el mensaje de P3 (el cual trae un vector de \texttt{[02, 02, 00, 02, 00]}). Al aplicar la regla de tomar el valor máximo posición por posición entre ambos vectores, P4 fusiona exitosamente ambas ramas. 
+
+Tras su evento local final, P4 concluye con el vector \texttt{[03, 02, 02, 02, 03]}. Este arreglo final nos dice con exactitud que, antes de que P4 terminara, ocurrieron 3 eventos en P0, 2 en P1, 2 en P2 y 2 en P3. Esto demuestra que la topología funcionó perfectamente y que no hubo ninguna pérdida de información en todo el sistema.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=1.0\linewidth]{img/Vectorial/actividad7.png}
+        \caption{Simulación de relojes Vectoriales con 5 procesos}
+        \label{fig:vectorial}
+    \end{figure}
+
+    \newpage
+
+    \section{Conclusion}
+
+    En conclusión, el desarrollo de esta práctica nos permitió comprobar el comportamiento de los 
+    principales algoritmos de sincronización en los sistemas distribuidos, abarcando tanto enfoques físicos como lógicos. 
+    Realizando las simulaciones de Cristian y Berkeley, pudimos ver cómo la latencia de red afecta la precisión del ajuste 
+    temporal local y cómo se mantiene la estabilidad del sistema al aumentar el número de los nodos, 
+    incluso trabajando en máquinas físicamente distintas. 
+    
+    Por otro lado, la implementación de los 
+    algoritmos de Lamport y relojes vectoriales observamos como matemáticamente establecimos un ordenamiento lógico que seguia
+    la relación de "sucedió antes que" entre varios procesos con sus respectivos eventos interconectados, y dentro de esto una parte importante fue cómo el enfoque vectorial 
+    supera la limitación del escalar de Lamport al guardar el historial completo de concurrencia sin pérdida de información. 
+    Con estas actividades terminamos de comprendre y poner en práctica nuestros conocimientos sobre cómo los sistemas distribuidos logran una relación temporal y
+    ordenamiento de procesos frente asimetrías y retrasos de una red real.
+
+    % Impresión Referencias
+    \nocite{*}
+    \printbibliography[heading=bibintoc, title={Referencias}]
+\end{document}
