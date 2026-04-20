@@ -199,7 +199,7 @@
 
     \setcounter{page}{1}
 
-    \section{Objetivos:}
+    \section{Objetivos}
     \begin{itemize}
         \item Comprender el uso del IDL de Sun-RPC (XDR), el funcionamiento del compilador de
             interfaces (rpcgen) y el desarrollo de clientes y servidores que hagan uso de las llamadas remotas.
@@ -207,22 +207,145 @@
             con Protocol Buffers (.proto)
     \end{itemize}
 
-    \section{Investigacion:}
+    \section{Investigación Previa}
 
-    \subsection{Que es IDL, XDR, y Protocol Buffers}
+    \subsection{Que és IDL, XDR, y Protocol Buffers}
+
+    \subsubsection*{IDL (Lenguaje de Definición de Interfaces)}
+    Un Lenguaje de Definición de Interfaces (IDL) es más que un simple formato de texto, es como un contrato entre diferentes sistemas informáticos. En los sistemas distribuidos donde un programa en Python en una computadora necesita pedirle datos a un servidor en C++ en otra computadora, ambos sistemas hablan idiomas diferentes en la memoria. El IDL sirve como un puente universal que describe qué funciones están disponibles para llamarse a través de la red y qué forma exacta tienen los datos que van a viajar.
+
+    El verdadero de un IDL esta en su flujo de trabajo automatizado, el cual consta de dos fases principales:
+    \begin{enumerate}
+      \item \textbf{Definición:} El programador escribe un archivo abstracto (por ejemplo, myspec.idl) donde define únicamente las firmas de las funciones (nombre, parámetros y tipo de retorno), sin escribir nada de lógica interna.
+      \item \textbf{Compilación:} Este archivo se pasa por un "Compilador de IDL". El compilador lee el archivo neutro y genera automáticamente código fuente en los lenguajes de programación de destino.
+    \end{enumerate}
+    
+    Este código generado se divide en dos piezas clave para la arquitectura de Llamada a Procedimiento Remoto (RPC):
+
+    \begin{itemize}
+      \item \textbf{El Client Stub (Representante del Cliente):} Es un código que se integra en la aplicación del usuario. Actúa como un proxy local; cuando el cliente llama a una función, el stub intercepta la llamada, empaqueta los datos (proceso de marshaling) y los envía por la red.
+      \item \textbf{El Server Skeleton (Esqueleto del Servidor):} Es el código que se integra en el servidor. Su trabajo es escuchar la red, recibir el paquete, desempaquetarlo (proceso de unmarshaling) y pasárselo a la función real que el desarrollador escribió en el servidor.
+      
+      \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.85\textwidth]{img/InvPrevia/1_1.png}
+        \caption{Flujo completo del mecanismo de Llamada a Procedimiento Remoto (RPC), mostrando el empaquetado (marshalling) en el cliente, la transmisión a través del RPC runtime y la ejecución en el servidor mediante el server skeleton.}
+        \label{fig:rpc_flujo}
+      \end{figure}
+
+    \end{itemize}
+
+    \subsubsection*{XDR (Representación Externa de Datos)}
+    La Representación Externa de Datos (XDR) es un estándar de serialización de datos puro y duro. Fue concebido en la década de 1980 por Sun Microsystems y fue la tecnología que hizo posible el famoso sistema de archivos en red NFS (Network File System). Hoy en día está estandarizado bajo el RFC 4506 de la IETF.
+
+    El propósito de XDR es resolver el problema de la variedad del hardware, diferentes procesadores almacenan los números en distinto orden (conocido como endianness, como little-endian de Intel vs big-endian de Motorola) y alinean la memoria de formas distintas. Si enviáramos la memoria cruda de una computadora a otra, la segunda interpretaría basura, para solucionarlo, XDR pone unas reglas rígidas sobre cómo convertir cualquier tipo de dato a un formato universal de bytes que pueda ser entendido por cualquier máquina, sin importar su arquitectura:
+
+    \begin{itemize}
+        \item \textbf{Tipado Implícito:} A diferencia de JSON o XML que son formatos de ``tipado explícito" que envían el nombre de la variable junto con el dato, ej: ``edad": 25, XDR es de ``tipado implícito". En XDR, no viajan metadatos ni etiquetas por el cable, si no que viajan puros ceros y unos. Esto ahorra ancho de banda y tiempo de procesamiento, pero obliga a que tanto el cliente como el servidor tengan exactamente el mismo mapa mental (el archivo .x) para saber cómo leer el flujo de bytes ciego que llega.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.9\textwidth]{img/InvPrevia/1_2.png}
+            \caption{Comparación entre tipado explícito e implícito en serialización de datos.}
+            \label{fig:xdr_tipado}
+        \end{figure}
+
+        \item \textbf{La Regla de Oro de los 4 Bytes:} XDR exige que la unidad básica de todo dato transmitido sea un bloque múltiplo de 4 bytes (32 bits). Los ingenieros eligieron 4 bytes debido a que 2 bytes causaban problemas de alineación en computadoras de la época, y 8 bytes desperdiciaban demasiado espacio.
+        
+        \item \textbf{Relleno (Padding):} Si se quiere enviar un tipo de dato pequeño como un simple carácter de 1 byte, XDR no lo envía solo. Forzosamente le inyecta 3 bytes adicionales llenos de ceros (padding) al final para completar el bloque de 4 bytes. Esto garantiza que los datos se alineen perfectamente en la memoria de casi cualquier procesador del mundo, permitiendo que las lecturas sean extremadamente rápidas, aunque sacrifique un poco de espacio en la red.
+    \end{itemize}
+
+    \subsubsection*{Protocol Buffers (Protobuf)}
+    Protocol Buffers es el estándar moderno de facto para microservicios. Fue creado por Google para uso interno y luego liberado al público. Protobuf funciona como un IDL (a través de sus archivos .proto) y también es el propio algoritmo de serialización binaria. Es el motor principal detrás de gRPC, el framework de comunicación de alto rendimiento de Google.
+
+    Mientras XDR se basa en bloques rígidos de tamaño fijo y posiciones exactas, Protobuf fue diseñado para ser compacto, asimétrico y elástico. Google necesitaba enviar miles de millones de mensajes entre sus servidores usando el menor ancho de banda posible, y al mismo tiempo, poder actualizar los programas añadiendo o quitando campos en los mensajes sin que los servidores viejos colapsaran al no entender los nuevos campos y lo logró mediante dos innovaciones:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/InvPrevia/1_4.png}
+        \caption{Proceso de compilación en Protocol Buffers, donde un archivo \texttt{.proto} es procesado por el compilador \texttt{protoc} para generar clases en distintos lenguajes de programación como Python, Java, C++ y Go.}
+        \label{fig:protobuf_compilacion}
+    \end{figure}
+
+    
+    \begin{enumerate}
+        \item \textbf{Esquema Tag-Length-Value (TLV):} En lugar de depender de que las variables lleguen en un orden estricto (como XDR), Protobuf anticipa cada variable con una pequeña ``Etiqueta'' (Tag). Esta etiqueta le dice al receptor: ``El siguiente dato es la variable número 1, y es de tipo entero". Si un servidor viejo recibe un mensaje con la etiqueta ``variable número 5" que aún no conoce, simplemente lee la longitud del dato, lo salta sin fallar, y sigue leyendo el resto.
+        
+        \item \textbf{Compresión de Enteros Dinámicos (Varints):} En lugar de desperdiciar 4 bytes estáticos para enviar el número 1 como hace XDR obligatoriamente, Protobuf utiliza enteros de longitud variable (Varints). El sistema manipula los bits de tal forma que los números pequeños ocupan solo 1 byte en la red, mientras que números inmensos pueden llegar a ocupar hasta 10 bytes. Para lograrlo, el bit más significativo de cada byte se usa como un semáforo. Si es 1, significa ``el número continúa en el siguiente byte" y si es 0, significa ``el número termina aquí".
+    \end{enumerate}
+
+    \subsection{Tipos de datos a usar en XDR y Protocol Buffers}
+
+    \subsubsection*{En XDR (RFC 4506)}
+
+    El lenguaje de XDR se asemeja bastante a C y define los siguientes tipos para su transmisión:
+
+    \begin{itemize}
+        \item \textbf{Numéricos:} Enteros de 32 bits con y sin signo (\texttt{int}, \texttt{unsigned int}), enteros largos de 64 bits (\texttt{hyper}, \texttt{unsigned hyper}), y valores de punto flotante de precisión simple y doble (\texttt{float}, \texttt{double}).
+        
+        \item \textbf{Lógicos:} El tipo booleano (\texttt{bool}), el cual también se transmite ocupando un bloque de 32 bits.
+        
+        \item \textbf{Estructurados y Compuestos:}
+        \begin{itemize}
+            \item Cadenas de caracteres (\texttt{string}).
+            \item Datos binarios sin procesar (\texttt{opaque}), ya sea de longitud fija o variable.
+            \item Colecciones (\texttt{arrays} de longitud fija o variable) y estructuras (\texttt{struct}).
+            \item Uniones discriminadas (\texttt{union}): A diferencia de las uniones en C, estas asocian directamente un indicador inicial (un número entero o enumeración) llamado ``discriminante'' que indica qué tipo de estructura se transmitirá a continuación dentro de la unión.
+            \item Vacío (\texttt{void}): Una cantidad de cero bytes, útil para cuando no hay entrada o salida.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection*{En Protocol Buffers (proto3)}
+
+    El catálogo de tipos está diseñado para maximizar la eficiencia binaria:
+
+    \begin{itemize}
+        \item \textbf{Estándares de longitud variable:} \texttt{int32}, \texttt{int64}, \texttt{uint32}, \texttt{uint64}. El tamaño en bytes que ocupan en red depende de la magnitud del número (varints).
+        
+        \item \textbf{Optimizados para signos negativos:} \texttt{sint32} y \texttt{sint64}. Emplean la codificación ``ZigZag'' que hace que los números negativos ocupen muchísimo menos espacio que si se enviaran usando el \texttt{int32} regular.
+        
+        \item \textbf{De tamaño fijo:} \texttt{fixed32}, \texttt{fixed64}, \texttt{sfixed32}, \texttt{sfixed64}. Siempre ocupan 4 u 8 bytes exactos. Resultan más eficientes que los varints solo si se transmiten rutinariamente números increíblemente grandes (superiores a $2^{28}$).
+        
+        \item \textbf{Otros:} Valores de punto flotante (\texttt{float}, \texttt{double}), booleanos (\texttt{bool}), cadenas de texto (obligatoriamente \texttt{string} codificado en UTF-8 o ASCII), y arreglos binarios arbitrarios (\texttt{bytes}).
+    \end{itemize}
+
+    \subsection{Significado de los números en archivos .x y .proto}
+
+    A pesar de que ambos utilizan números, el propósito arquitectónico de dichos dígitos es muy diferente en cada ecosistema.
+
+    \subsubsection*{Números en el archivo .x (XDR / ONC RPC)}
+
+    En el lenguaje RPCL utilizado en XDR, las solicitudes de red hacia procedimientos remotos se enrutan e identifican inequívocamente gracias a una tupla de tres números: (número de programa, número de versión, número de procedimiento).
+
+    \begin{enumerate}
+        \item \textbf{Número de Programa:} Identifica una agrupación de funciones remotas afines (la aplicación en general). Existen rangos de asignación oficiales regulados por la IANA para evitar colisiones en la red (por ejemplo, el rango hexadecimal \texttt{20000000} a \texttt{3fffffff} está destinado a ser definido libremente por el usuario).
+        
+        \item \textbf{Número de Versión:} Permite que un mismo programa tenga múltiples versiones conviviendo en el mismo servidor de forma simultánea. Esto ayuda a no romper la compatibilidad con clientes antiguos cuando los desarrolladores añaden nuevos procedimientos.
+        
+        \item \textbf{Número de Procedimiento:} Señala puntualmente la función o método individual que se va a ejecutar en el servidor remoto. Como convención del estándar, el procedimiento \texttt{0} suele ser un procedimiento nulo (NULL) que no recibe ni envía datos, usado simplemente para hacer ``ping'' y probar si el servidor está en línea.
+    \end{enumerate}
+
+    \subsubsection*{Números en el archivo .proto (Protocol Buffers)}
+
+    En Protobuf, a cada variable declarada dentro de un mensaje se le debe asignar estrictamente un Número de Campo.
+
+    \begin{enumerate}
+        \item \textbf{Reemplazo del nombre del campo:} A diferencia de JSON o XML, que repiten el nombre de la variable en el archivo (``nombre'', ``edad'', etc.), Protobuf nunca envía el nombre de la variable en la red. En su lugar, envía únicamente el número de campo para que el receptor sepa en qué ranura encajar el dato, ahorrando enormes cantidades de ancho de banda.
+        
+        \item \textbf{Economía de espacio:} Los números de campo del 1 al 15 ocupan solamente un byte de almacenamiento al serializarse. Por regla de optimización, estos números de oro deben reservarse exclusivamente para las variables que más se usan en una aplicación. Los números del 16 al 2047 pasan a costar dos bytes.
+        
+        \item \textbf{Reglas estrictas de inmutabilidad y exclusión del 0:} Los números de campo deben ser enteros positivos. El número \texttt{0} está prohibido. Además, una vez que un número ha sido asignado a un campo y el sistema está en producción, ese número no se puede cambiar ni se debe reutilizar en caso de que el campo sea borrado. Reutilizar un número generaría ambigüedad en el descifrado, corrompiendo datos, provocando fallos en el análisis, y exponiendo potencialmente información confidencial entre sistemas que usan distintas versiones del archivo.
+    \end{enumerate}
 
 
-    \subsection{Tipos en datos a usar en XDR y protocol Buffers}
 
 
-    \subsection{Investigar el signiﬁcado de los números que aparecen en un archivo .x y archivo .proto}
 
-    \section{Desarrollo:}
+    \section{Desarrollo}
 
-    \section{Actividad 1:}
+    \section{Actividad 1}
 
 
-    \section{Actividad 2:}
+    \section{Actividad 2}
 
     % Impresión Referencias
     \nocite{*}
