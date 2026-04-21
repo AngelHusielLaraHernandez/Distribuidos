@@ -345,7 +345,8 @@
     \section{Actividad 1}
 
     \subsection{Diseño y Justificación de la Interfaz (IDL)}
-    El contrato principal de la aplicación distribuida se definió mediante el archivo de especificación \texttt{alumnos.x}. Este archivo establece las estructuras de datos y los procedimientos remotos que el servidor expone hacia el programa cliente.
+    El archivo inicial es un .x, donde es llamado \texttt{alumnos.x},
+    este archivo establece la estructura de datos y los procedimientos remotos del servidor.
 
     \begin{lstlisting}[style=cstyle]
     struct alumno {
@@ -387,14 +388,29 @@
     } = 0x20000001;
     \end{lstlisting}
 
-    En la estructura \texttt{alumno}, los campos de texto correspondientes al nombre, apellido y curso se definieron como \texttt{string<>}. Esta sintaxis indica que son cadenas de longitud variable, lo cual optimiza la transmisión de datos porque XDR solo empaqueta los bytes reales de la cadena más su longitud, en lugar de reservar arreglos estáticos grandes que desperdiciarían ancho de banda con espacios vacíos. La estructura \texttt{busqueda} se diseñó con menos campos para permitir consultas flexibles, agrupando únicamente el identificador, el nombre y el curso.
+    En la estructura \texttt{alumno}, los campos son el nombre, apellido y curso se 
+    definieron como \texttt{string<>}. 
+    Esta parte es por que indica que son cadenas de longitud variable,
+    lo cual como se vio en la investigacion previa, este metodo y forma de usar lo strings de forma variable
+    optimiza la transmisión de datos porque XDR solo empaqueta los bytes reales de la cadena más su longitud,
+    en lugar de reservar arreglos estáticos grandes que desperdiciarían memoria.
+    
+    La estructura \texttt{busqueda} se baso solo en los campos que se asignaron en la actividad,
+    agrupando únicamente el id, el nombre y el curso.
 
-    Para el manejo de respuestas complejas, se implementó la estructura condicional \texttt{union resultado\_busqueda}. Esta unión utiliza una variable entera de estado (status) como discriminante. Cuando la búsqueda es exitosa y el estado es 0, la unión transporta los datos completos del alumno encontrado. Para cualquier otro estado, como una búsqueda fallida, la unión no transporta nada (\texttt{void}), ahorrando recursos en la red.
+    Para la parte del manejo de respuestas, se implementó la estructura condicional \texttt{union resultado\_busqueda}. 
+    Esta parte utiliza una variable de estado (status) como discriminante.
+    Cuando la búsqueda es exitosa, y por consiguiente el estado es 0, 
+    la unión pasa los datos completos del alumno encontrado. 
+    Para cualquier otro estado, entonces se pasa un vacio, un (\texttt{void}).
 
-    Debido a que Sun-RPC no soporta nativamente la transmisión de listas dinámicas en C como retornos directos, se definió de manera explícita un nodo de lista enlazada llamado \texttt{alumno\_nodo}. Este nodo contiene la estructura del alumno y un puntero \texttt{sig} al siguiente elemento. Al asignarle el alias \texttt{lista\_alumnos}, el compilador rpcgen entiende que debe generar funciones de serialización recursivas que recorran la lista enlazada nodo por nodo hasta encontrar un puntero nulo, permitiendo transmitir la totalidad de los registros al cliente.
+    Debido a que Sun-RPC no soporta originalmente la parte de listas dinámicas en C como retornos directos,
+    se definió un nodo de lista enlazada llamado \texttt{alumno\_nodo}. 
+    Este nodo contiene la estructura del alumno y un puntero \texttt{sig}, que es el que apunta al siguiente nodo del sigueinte alumno. 
 
-    Finalmente, el bloque \texttt{program} define la agrupación de todas estas llamadas. Se le asignó el número hexadecimal \texttt{0x20000001}. Este valor específico fue seleccionado porque se encuentra dentro del rango reservado por Sun-RPC para aplicaciones definidas por el usuario, evitando conflictos con servicios estándar del sistema operativo. La versión del servicio se fijó en 1, con cada procedimiento remoto enumerado secuencialmente.
+    Por ultimo, el bloque \texttt{program} define la agrupación de todas estas llamadas. Se le asignó el número hexadecimal \texttt{0x20000001}, esto en referencia a la estructura propuesta originalmente en el documento asignado. 
 
+    \textbf{Seccion para el readme.md:}
     \subsection{Generación, Compilación y Ejecución del Proyecto}
 
     El compilador de protocolos nativo procesa el archivo de interfaz para generar los esqueletos en lenguaje C. 
@@ -421,9 +437,12 @@
     ./cliente 127.0.0.1
     \end{lstlisting}
 
-    \subsection{Desarrollo del Servidor}
+    \subsection{Explicacion del codigo del servidor}
 
-    El servidor se desarrolló para mantener un control estricto sobre las peticiones y los datos persistentes. Para mejorar la información mostrada al iniciarse el servicio, se modificó el archivo base \texttt{alumnos\_svc.c} agregando rutinas de red de la API POSIX.
+    El servidor se tuvieron que modificar unos archivos, en los cuales,
+    para mantener un control sobre las peticiones del cliente, 
+    para mejorar lo que se muestra al iniciarse el servicio, se modificó el archivo de \texttt{alumnos\_svc.c} 
+    agregando rutinas de red de la API POSIX.
 
     \begin{lstlisting}[style=cstyle]
     if (gethostname(host, sizeof(host)) == 0 &&
@@ -437,13 +456,18 @@
     fflush(stdout);
     \end{lstlisting}
 
-    El proceso obtiene primero el nombre del equipo anfitrión a través de la función \texttt{gethostname}. Con este nombre, se invoca a \texttt{getaddrinfo} pasándole una estructura \texttt{hints} previamente configurada para buscar direcciones IPv4 (\texttt{AF\_INET}) aptas para recibir conexiones entrantes (\texttt{SOCK\_STREAM} y \texttt{AI\_PASSIVE}). Si la resolución fue exitosa, se utiliza \texttt{getnameinfo} sobre la estructura resultante para traducir esa configuración a un nombre numérico válido, es decir, la dirección IP textual, la cual se almacena en la variable \texttt{ip}. Finalmente, se imprimen estos datos en la consola para confirmar al administrador que el servicio está activo y disponible en la red local, utilizando \texttt{fflush} para vaciar de inmediato el búfer de salida.
+    Esto fue algo sencillo, solamente para que al momento de prender el servidor, el servidor en su terminal muestre un mensaje desde donde nos esta escuchando, esto para evitar poner el comando \texttt{hostname -I}.
 
-    Para llevar un registro estadístico de los clientes, se implementó una función transversal \texttt{log\_peticion} en \texttt{alumnos\_server.c}.
+    Para esto el proceso obtiene primero el nombre del server,
+    a través de la función \texttt{gethostname}. Con este nombre, 
+    para esto despues de hacer las comprobaciones de obtener la ip, para despies,
+    se imprimen estos datos en la consola para confirmar al administrador que el servicio está activo y disponible en la red local, utilizando \texttt{fflush} para vaciar de inmediato el búfer de salida.
+
+    Para llevar un registro de los clientes, 
+    se implementó una función \texttt{log\_peticion} en \texttt{alumnos\_server.c}.
 
     \begin{lstlisting}[style=cstyle]
-    static void log_peticion(struct svc_req *rqstp, const char *operacion)
-    {
+    static void log_peticion(struct svc_req *rqstp, const char *operacion){
         char ip[NI_MAXHOST] = "desconocida";
         char puerto[NI_MAXSERV] = "0";
 
@@ -473,58 +497,71 @@
     }
     \end{lstlisting}
 
-    Esta función extrae los metadatos de la estructura de la solicitud entrante \texttt{rqstp}. Valida que existan los punteros asociados a la capa de transporte y copia los bytes sin procesar contenidos en \texttt{xp\_rtaddr} hacia una estructura \texttt{sockaddr\_storage} de la máquina local. Con la dirección ya tipada localmente, la función de resolución extrae el host numérico y el puerto de origen exactos de quien realizó la llamada remota, permitiendo dejar un registro descriptivo en la salida estándar cada vez que un servicio es invocado.
+    Esta función pasa los datos de la estructura de la solicitud entrante \texttt{rqstp} y valida 
+    que existan los punteros asociados y copia los bytes sin procesar contenidos en \texttt{xp\_rtaddr} 
+    hacia \texttt{sockaddr\_storage} de la máquina local. 
+    Con la dirección ya detectectada localmente,
+    la función saca la informacion de el host numérico 
+    y el puerto de origen exactos de quien realizó la llamada remota, 
+    esto para dejar un registro en la salida cada vez que un servicio es invocado.
 
-    En cuanto a la lógica transaccional, el código generado automáticamente por el compilador de interfaces provee funciones de respuesta vacías para cada procedimiento definido. Por ello, fue imperativo implementar de forma manual el manejo de la persistencia operando sobre el sistema de archivos del anfitrión, específicamente sobre un archivo de texto plano estructurado.
 
-Para la operación de registro, la rutina receptora procesa primero una validación de integridad con el fin de eludir el procesamiento de datos anómalos o incompletos enviados desde el canal remoto.
+    Para la parte del registro, para la parte del receptor este procesa primero una 
+    chekeo de los datos.
 
-\begin{lstlisting}[style=cstyle]
-bool_t *
-registrar_alumno_1_svc(alumno *argp, struct svc_req *rqstp)
-{
-    static bool_t result;
-    FILE *f;
-    char linea[MAX_LINE];
-    alumno aux;
+    \begin{lstlisting}[style=cstyle]
+    bool_t *
+    registrar_alumno_1_svc(alumno *argp, struct svc_req *rqstp){
+        static bool_t result;
+        FILE *f;
+        char linea[MAX_LINE];
+        alumno aux;
 
-    log_peticion(rqstp, "registrar_alumno");
-    result = FALSE;
+        log_peticion(rqstp, "registrar_alumno");
+        result = FALSE;
 
-    if (argp == NULL || campo_vacio(argp->nombre) || campo_vacio(argp->apellido) ||
-        campo_vacio(argp->curso) || argp->edad < 0) {
+        if (argp == NULL || campo_vacio(argp->nombre) || campo_vacio(argp->apellido) ||
+            campo_vacio(argp->curso) || argp->edad < 0) {
+            return &result;
+        }
+
+        f = fopen(DB_FILE, "a+");
+        if (f != NULL) {
+            rewind(f);
+            while (fgets(linea, sizeof(linea), f) != NULL) {
+                memset(&aux, 0, sizeof(aux));
+                if (parsear_linea(linea, &aux) && aux.id == argp->id) {
+                    liberar_alumno(&aux);
+                    fclose(f);
+                    return &result;
+                }
+                liberar_alumno(&aux);
+            }
+            if (fseek(f, 0, SEEK_END) == 0 && escribir_alumno(f, argp)) {
+                result = TRUE;
+            }
+            fclose(f);
+        }
         return &result;
     }
+    \end{lstlisting}
 
-    f = fopen(DB_FILE, "a+");
-    if (f != NULL) {
-        rewind(f);
-        while (fgets(linea, sizeof(linea), f) != NULL) {
-            memset(&aux, 0, sizeof(aux));
-            if (parsear_linea(linea, &aux) && aux.id == argp->id) {
-                liberar_alumno(&aux);
-                fclose(f);
-                return &result;
-            }
-            liberar_alumno(&aux);
-        }
-        if (fseek(f, 0, SEEK_END) == 0 && escribir_alumno(f, argp)) {
-            result = TRUE;
-        }
-        fclose(f);
-    }
-    return &result;
-}
-\end{lstlisting}
+La función revisa que los atributos del paquete entrante, si detectecte punteros de cadena nulos, debido a que primero
+como result es FALSE, entonces se detecta que no hay nada aun, en caso de que el cliente ponga algo, al momento de pasar a la 
+siguiente verificacion en el if, entonces, este pasaria result ya no nos serviria, solo sirve como una bandera para indicar si es valido o es invalido el resultado de esta funcion
+en primer if se detecta que al menos algo este lleno, entonces en caso de qeu no se entre al if se procede a abrir el origen de 
+datos en modo de editar. 
+Antes a ordenar, el algoritmo rebobina el puntero interno del archivo mediante \texttt{rewind} 
+para lograr un escaneo inicial desde el byte base. 
 
-La función evalúa los atributos esenciales del paquete entrante; si detecta punteros de cadena nulos, cadenas sin contenido útil o edades con valores nominalmente imposibles, la ejecución repudia directamente la solicitud manteniendo la variable estática de retorno en un estado falso. En caso de cumplir con los parámetros iniciales, se procede a abrir el origen de datos en modo multifuncional de adición y revisión. Previo a ordenar un salto físico sobre la memoria magnética, el algoritmo rebobina el puntero interno del archivo mediante la directiva \texttt{rewind} para lograr un escaneo inicial desde el byte base. Si dentro de esta iteración secuencial se decodifica un registro cuya clave numérica converge exactamente con el identificador propuesto en la orden entrante, la función dictamina la colisión e invalidación de registro para prevenir duplicados lógicos. Solamente si el recorrido total concluye limplio, el mecanismo posiciona la cabeza del lector hasta la frontera final depositando la estructura en su variante física sobre el disco.
+Si dentro de esta iteración se detecta un registro donde la clave numérica es la misma exactamente 
+con el identificador propuesto en la orden nueva a agregar del cliente, 
+la función directamente dice que no es posible por que ya se encuentra uno igual. 
 
-Esta iteración de recorrido sirvió además como bloque fundador para desarrollar la operación de consulta remota, expandiendo la validación simple hacia búsquedas con perfiles flexibles.
 
 \begin{lstlisting}[style=cstyle]
 resultado_busqueda *
-buscar_alumno_1_svc(busqueda *argp, struct svc_req *rqstp)
-{
+buscar_alumno_1_svc(busqueda *argp, struct svc_req *rqstp){
     static resultado_busqueda result;
     /* Variables locales ... */
     
