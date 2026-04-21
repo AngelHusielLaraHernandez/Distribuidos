@@ -9,6 +9,6 @@
 \contentsline {subsection}{\numberline {4.1}Diseño y Justificación de la Interfaz (IDL)}{7}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Generación, Compilación y Ejecución del Proyecto}{8}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Desarrollo del Servidor}{9}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Desarrollo del Cliente}{11}{subsection.4.4}%
-\contentsline {section}{\numberline {5}Actividad 2}{12}{section.5}%
-\contentsline {section}{Referencias}{12}{section*.11}%
+\contentsline {subsection}{\numberline {4.4}Desarrollo del Cliente}{15}{subsection.4.4}%
+\contentsline {section}{\numberline {5}Actividad 2}{16}{section.5}%
+\contentsline {section}{Referencias}{16}{section*.11}%

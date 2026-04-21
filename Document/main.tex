@@ -475,7 +475,132 @@
 
     Esta función extrae los metadatos de la estructura de la solicitud entrante \texttt{rqstp}. Valida que existan los punteros asociados a la capa de transporte y copia los bytes sin procesar contenidos en \texttt{xp\_rtaddr} hacia una estructura \texttt{sockaddr\_storage} de la máquina local. Con la dirección ya tipada localmente, la función de resolución extrae el host numérico y el puerto de origen exactos de quien realizó la llamada remota, permitiendo dejar un registro descriptivo en la salida estándar cada vez que un servicio es invocado.
 
-    En cuanto al almacenamiento, las funciones de persistencia abren iterativamente el archivo de texto plano \texttt{alumnos\_db.txt}. Leen cada línea entera usando \texttt{fgets} y delegan a una subrutina la tokenización del texto mediante la función \texttt{strtok\_r}, la cual divide cada cadena detectando el carácter separador \texttt{|}. En los casos de eliminación o actualización parcial, el archivo se lee secuencialmente al mismo tiempo que los datos válidos u omitidos se reescriben de inmediato sobre un archivo temporal. Una vez finalizada la revisión total de las entradas, el proceso invoca las llamadas al sistema necesarias para desvincular el archivo viejo y renombrar el temporal como oficial, asegurando la atomicidad de los cambios.
+    En cuanto a la lógica transaccional, el código generado automáticamente por el compilador de interfaces provee funciones de respuesta vacías para cada procedimiento definido. Por ello, fue imperativo implementar de forma manual el manejo de la persistencia operando sobre el sistema de archivos del anfitrión, específicamente sobre un archivo de texto plano estructurado.
+
+Para la operación de registro, la rutina receptora procesa primero una validación de integridad con el fin de eludir el procesamiento de datos anómalos o incompletos enviados desde el canal remoto.
+
+\begin{lstlisting}[style=cstyle]
+bool_t *
+registrar_alumno_1_svc(alumno *argp, struct svc_req *rqstp)
+{
+    static bool_t result;
+    FILE *f;
+    char linea[MAX_LINE];
+    alumno aux;
+
+    log_peticion(rqstp, "registrar_alumno");
+    result = FALSE;
+
+    if (argp == NULL || campo_vacio(argp->nombre) || campo_vacio(argp->apellido) ||
+        campo_vacio(argp->curso) || argp->edad < 0) {
+        return &result;
+    }
+
+    f = fopen(DB_FILE, "a+");
+    if (f != NULL) {
+        rewind(f);
+        while (fgets(linea, sizeof(linea), f) != NULL) {
+            memset(&aux, 0, sizeof(aux));
+            if (parsear_linea(linea, &aux) && aux.id == argp->id) {
+                liberar_alumno(&aux);
+                fclose(f);
+                return &result;
+            }
+            liberar_alumno(&aux);
+        }
+        if (fseek(f, 0, SEEK_END) == 0 && escribir_alumno(f, argp)) {
+            result = TRUE;
+        }
+        fclose(f);
+    }
+    return &result;
+}
+\end{lstlisting}
+
+La función evalúa los atributos esenciales del paquete entrante; si detecta punteros de cadena nulos, cadenas sin contenido útil o edades con valores nominalmente imposibles, la ejecución repudia directamente la solicitud manteniendo la variable estática de retorno en un estado falso. En caso de cumplir con los parámetros iniciales, se procede a abrir el origen de datos en modo multifuncional de adición y revisión. Previo a ordenar un salto físico sobre la memoria magnética, el algoritmo rebobina el puntero interno del archivo mediante la directiva \texttt{rewind} para lograr un escaneo inicial desde el byte base. Si dentro de esta iteración secuencial se decodifica un registro cuya clave numérica converge exactamente con el identificador propuesto en la orden entrante, la función dictamina la colisión e invalidación de registro para prevenir duplicados lógicos. Solamente si el recorrido total concluye limplio, el mecanismo posiciona la cabeza del lector hasta la frontera final depositando la estructura en su variante física sobre el disco.
+
+Esta iteración de recorrido sirvió además como bloque fundador para desarrollar la operación de consulta remota, expandiendo la validación simple hacia búsquedas con perfiles flexibles.
+
+\begin{lstlisting}[style=cstyle]
+resultado_busqueda *
+buscar_alumno_1_svc(busqueda *argp, struct svc_req *rqstp)
+{
+    static resultado_busqueda result;
+    /* Variables locales ... */
+    
+    f = fopen(DB_FILE, "r");
+    if (f != NULL) {
+        int buscar_por_id = (argp->id > 0);
+        while (fgets(linea, sizeof(linea), f) != NULL) {
+            memset(&aux, 0, sizeof(aux));
+            if (!parsear_linea(linea, &aux)) continue;
+
+            int coincide = 0;
+            if (buscar_por_id) {
+                if (aux.id == argp->id) coincide = 1;
+            } else {
+                int match_nom = campo_vacio(argp->nombre) || (strcasecmp(aux.nombre, argp->nombre) == 0);
+                int match_cur = campo_vacio(argp->curso) || (strcasecmp(aux.curso, argp->curso) == 0);
+                if (match_nom && match_cur) coincide = 1;
+            }
+
+            if (coincide) {
+                result.status = 0;
+                result.resultado_busqueda_u.al = aux;
+                fclose(f);
+                return &result;
+            }
+            liberar_alumno(&aux);
+        }
+        fclose(f);
+    }
+    return &result;
+}
+\end{lstlisting}
+
+Al recibir el bloque representativo de consulta, el método clasifica tempranamente la táctica de rastreo activada determinando si se emitió una clave de id contundente (valor estrictamente superior al referencial cero). A lo largo de la iteración de cadenas decodificadas extraídas de origen de persistencia, se acopla una bifurcación selectiva; si la prioridad dicta cotejo por identificador central, la revisión matemática es rígida e intransferible. En contraparte cruzada, bajo la falta explícita de este número se aplican evaluaciones interseccionales ignorando mayúsculas y minúsculas apoyadas en resoluciones binarias (\texttt{strcasecmp}). Esto faculta la coincidencia al encontrar equivalencias parciales si las variables provistas aciertan positivamente la comprobación simultánea validada intrínsecamente como verdaderos operacionales. Un resultado victorioso engrana la respuesta envolviéndola con una etiqueta métrica libre de fallos (\texttt{status} en 0) posibilitando que el servidor recargue a la entidad completa extraída dentro de la macroestructura que volvará los datos a través del zócalo perimetral.
+
+Atendiendo las modificaciones integrales de registros para las eliminaciones o depuraciones, el diseño reescribrió directamente la rutina operativa del lenguaje para instituir modificaciones de forma atómica en el tejido subyacente empleando memorias temporales.
+
+\begin{lstlisting}[style=cstyle]
+bool_t *
+actualizar_alumno_1_svc(alumno *argp, struct svc_req *rqstp)
+{
+    static bool_t result;
+    FILE *f, *ftmp;
+    /* ... */
+    
+    f = fopen(DB_FILE, "r");
+    ftmp = fopen(TMP_DB_FILE, "w");
+
+    while (fgets(linea, sizeof(linea), f) != NULL) {
+        memset(&aux, 0, sizeof(aux));
+        parsear_linea(linea, &aux);
+
+        if (aux.id == argp->id) {
+            if (!campo_vacio(argp->nombre)) { free(aux.nombre); aux.nombre = strdup(argp->nombre); }
+            if (!campo_vacio(argp->apellido)) { free(aux.apellido); aux.apellido = strdup(argp->apellido); }
+            if (!campo_vacio(argp->curso)) { free(aux.curso); aux.curso = strdup(argp->curso); }
+            if (argp->edad >= 0) { aux.edad = argp->edad; }
+            result = TRUE;
+        }
+        escribir_alumno(ftmp, &aux);
+        liberar_alumno(&aux);
+    }
+    fclose(f);
+    fclose(ftmp);
+
+    if (result) {
+        remove(DB_FILE);
+        rename(TMP_DB_FILE, DB_FILE);
+    } else {
+        remove(TMP_DB_FILE);
+    }
+    return &result;
+}
+\end{lstlisting}
+
+En la mutación operativa, dos descriptores resguardan canales diferenciados; uno asume exclusivamente las tareas de inspección iterativa mientras que el descriptor recíproco recibe las emisiones de transcripción dirigidas sobre una ramificación temporal alterna (\texttt{alumnos\_db.tmp}). En tanto convergen secuencialmente los datos evaluados, el identificador deseado interrumpe su trayectoria natural en la transposición perimetral y detona la depuración interna posibilitando empates modulares. Por medio de comparaciones estructurales en donde el nuevo nodo se inspecciona ante la presencia fáctica de información de interés, la memoria dinámica preexistente liberada intercepte los atributos proveídos para superponerlos. De este modo, si la inserción denota cadenas o magnitudes operativas nulas/centinelas, el control avanza desocupado dejando inofensivo al segmento matriz del cliente subyacente originario. Transpapelado por completo sobre el nuevo conducto auxiliar, el servicio concluye suprimiendo con irrevocabilidad el bloque original para enrocar los descriptores numéricos de metadatos dotando de canonización legal al vector efímero generado. Esta suplantación salvaguarda la disponibilidad ininterrumpida frente a catástrofes estructurales imprevistas que pudieran suscitarse mediando transferencias magnéticas de alta vulnerabilidad.
 
     \subsection{Desarrollo del Cliente}
 
