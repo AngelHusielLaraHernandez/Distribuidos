@@ -1,0 +1,7 @@
+-Documentar el .x
+-Documentar los archivos alumnos_cliente.c
+
+**alumnos_svc.c +++/+/+/+/+ pendiente
+  alumnos_server.c
+  alumnos_client.c
+  alumnos_svc.c **

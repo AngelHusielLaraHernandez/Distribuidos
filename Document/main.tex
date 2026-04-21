@@ -344,6 +344,161 @@
 
     \section{Actividad 1}
 
+    \subsection{Diseño y Justificación de la Interfaz (IDL)}
+    El contrato principal de la aplicación distribuida se definió mediante el archivo de especificación \texttt{alumnos.x}. Este archivo establece las estructuras de datos y los procedimientos remotos que el servidor expone hacia el programa cliente.
+
+    \begin{lstlisting}[style=cstyle]
+    struct alumno {
+        int id;
+        string nombre<>;
+        string apellido<>;
+        int edad;
+        string curso<>;
+    };
+
+    struct busqueda {
+        int id;
+        string nombre<>;
+        string curso<>;
+    };
+
+    union resultado_busqueda switch (int status) {
+        case 0:
+            alumno al;
+        default:
+            void;
+    };
+
+    struct alumno_nodo {
+        alumno al;
+        alumno_nodo *sig;
+    };
+
+    typedef alumno_nodo *lista_alumnos;
+
+    program REGISTROALUMNOS {
+        version REGISTROALUMNOS_V1 {
+            bool registrar_alumno(alumno) = 1;
+            resultado_busqueda buscar_alumno(busqueda) = 2;
+            bool actualizar_alumno(alumno) = 3;
+            bool eliminar_alumno(int) = 4;
+            lista_alumnos listar_alumnos(void) = 5;
+        } = 1;
+    } = 0x20000001;
+    \end{lstlisting}
+
+    En la estructura \texttt{alumno}, los campos de texto correspondientes al nombre, apellido y curso se definieron como \texttt{string<>}. Esta sintaxis indica que son cadenas de longitud variable, lo cual optimiza la transmisión de datos porque XDR solo empaqueta los bytes reales de la cadena más su longitud, en lugar de reservar arreglos estáticos grandes que desperdiciarían ancho de banda con espacios vacíos. La estructura \texttt{busqueda} se diseñó con menos campos para permitir consultas flexibles, agrupando únicamente el identificador, el nombre y el curso.
+
+    Para el manejo de respuestas complejas, se implementó la estructura condicional \texttt{union resultado\_busqueda}. Esta unión utiliza una variable entera de estado (status) como discriminante. Cuando la búsqueda es exitosa y el estado es 0, la unión transporta los datos completos del alumno encontrado. Para cualquier otro estado, como una búsqueda fallida, la unión no transporta nada (\texttt{void}), ahorrando recursos en la red.
+
+    Debido a que Sun-RPC no soporta nativamente la transmisión de listas dinámicas en C como retornos directos, se definió de manera explícita un nodo de lista enlazada llamado \texttt{alumno\_nodo}. Este nodo contiene la estructura del alumno y un puntero \texttt{sig} al siguiente elemento. Al asignarle el alias \texttt{lista\_alumnos}, el compilador rpcgen entiende que debe generar funciones de serialización recursivas que recorran la lista enlazada nodo por nodo hasta encontrar un puntero nulo, permitiendo transmitir la totalidad de los registros al cliente.
+
+    Finalmente, el bloque \texttt{program} define la agrupación de todas estas llamadas. Se le asignó el número hexadecimal \texttt{0x20000001}. Este valor específico fue seleccionado porque se encuentra dentro del rango reservado por Sun-RPC para aplicaciones definidas por el usuario, evitando conflictos con servicios estándar del sistema operativo. La versión del servicio se fijó en 1, con cada procedimiento remoto enumerado secuencialmente.
+
+    \subsection{Generación, Compilación y Ejecución del Proyecto}
+
+    El compilador de protocolos nativo procesa el archivo de interfaz para generar los esqueletos en lenguaje C. 
+
+    \begin{lstlisting}[language=bash]
+    rpcgen -a -C alumnos.x
+    \end{lstlisting}
+
+    La bandera \texttt{-a} le indica al compilador que debe generar todos los archivos auxiliares posibles, incluyendo plantillas para el cliente, servidor y un archivo Makefile. La bandera \texttt{-C} asegura que el código generado cumpla con el estándar ANSI C moderno.
+
+    Debido a que en las distribuciones actuales de Linux las rutinas de RPC fueron extraídas de la biblioteca estándar, es obligatorio utilizar la biblioteca \texttt{libtirpc} (Transport Independent RPC). Por esto, el proceso de compilación requiere vincular explícitamente estas dependencias.
+
+    \begin{lstlisting}[language=bash]
+    gcc -c alumnos_client.c -I/usr/include/tirpc
+    gcc -c alumnos_server.c -I/usr/include/tirpc
+    gcc alumnos_client.o alumnos_clnt.o alumnos_xdr.o -o cliente -ltirpc
+    gcc alumnos_server.o alumnos_svc.o alumnos_xdr.o -o servidor -ltirpc
+    \end{lstlisting}
+
+    Durante la compilación de los códigos fuente, se utiliza la directiva \texttt{-I/usr/include/tirpc} para que el compilador encuentre los archivos de cabecera correctos. Durante el enlazado final, la instrucción \texttt{-ltirpc} incluye los binarios de la biblioteca para resolver las funciones de red. Para ejecutar el sistema, primero se lanza el servidor en segundo plano o en su propia terminal. Posteriormente, se inicia el cliente pasándole como argumento la dirección IP del equipo donde reside el servidor, utilizando \texttt{127.0.0.1} para pruebas locales.
+
+    \begin{lstlisting}[language=bash]
+    ./servidor
+    ./cliente 127.0.0.1
+    \end{lstlisting}
+
+    \subsection{Desarrollo del Servidor}
+
+    El servidor se desarrolló para mantener un control estricto sobre las peticiones y los datos persistentes. Para mejorar la información mostrada al iniciarse el servicio, se modificó el archivo base \texttt{alumnos\_svc.c} agregando rutinas de red de la API POSIX.
+
+    \begin{lstlisting}[style=cstyle]
+    if (gethostname(host, sizeof(host)) == 0 &&
+        getaddrinfo(host, NULL, &hints, &res) == 0 && res != NULL) {
+        (void)getnameinfo(res->ai_addr, res->ai_addrlen, ip, sizeof(ip), NULL, 0,
+            NI_NUMERICHOST);
+        freeaddrinfo(res);
+    }
+
+    printf("[SISTEMA] Servidor RPC iniciado correctamente. Escuchando peticiones en IP %s (Puerto asignado por rpcbind)\n", ip);
+    fflush(stdout);
+    \end{lstlisting}
+
+    El proceso obtiene primero el nombre del equipo anfitrión a través de la función \texttt{gethostname}. Con este nombre, se invoca a \texttt{getaddrinfo} pasándole una estructura \texttt{hints} previamente configurada para buscar direcciones IPv4 (\texttt{AF\_INET}) aptas para recibir conexiones entrantes (\texttt{SOCK\_STREAM} y \texttt{AI\_PASSIVE}). Si la resolución fue exitosa, se utiliza \texttt{getnameinfo} sobre la estructura resultante para traducir esa configuración a un nombre numérico válido, es decir, la dirección IP textual, la cual se almacena en la variable \texttt{ip}. Finalmente, se imprimen estos datos en la consola para confirmar al administrador que el servicio está activo y disponible en la red local, utilizando \texttt{fflush} para vaciar de inmediato el búfer de salida.
+
+    Para llevar un registro estadístico de los clientes, se implementó una función transversal \texttt{log\_peticion} en \texttt{alumnos\_server.c}.
+
+    \begin{lstlisting}[style=cstyle]
+    static void log_peticion(struct svc_req *rqstp, const char *operacion)
+    {
+        char ip[NI_MAXHOST] = "desconocida";
+        char puerto[NI_MAXSERV] = "0";
+
+        if (rqstp != NULL && rqstp->rq_xprt != NULL) {
+            struct netbuf *caller = &rqstp->rq_xprt->xp_rtaddr;
+            if (caller->buf != NULL && caller->len > 0) {
+                struct sockaddr_storage ss;
+                socklen_t salen;
+                size_t copiar;
+
+                memset(&ss, 0, sizeof(ss));
+                copiar = caller->len < sizeof(ss) ? caller->len : sizeof(ss);
+                memcpy(&ss, caller->buf, copiar);
+                salen = (socklen_t)copiar;
+
+                if (getnameinfo((struct sockaddr *)&ss, salen, ip, sizeof(ip), puerto,
+                    sizeof(puerto), NI_NUMERICHOST | NI_NUMERICSERV) != 0) {
+                    strcpy(ip, "desconocida");
+                    strcpy(puerto, "0");
+                }
+            }
+        }
+
+        printf("[RECEPCION] Peticion de %s:%s para la operacion %s\n", ip, puerto,
+            operacion != NULL ? operacion : "desconocida");
+        fflush(stdout);
+    }
+    \end{lstlisting}
+
+    Esta función extrae los metadatos de la estructura de la solicitud entrante \texttt{rqstp}. Valida que existan los punteros asociados a la capa de transporte y copia los bytes sin procesar contenidos en \texttt{xp\_rtaddr} hacia una estructura \texttt{sockaddr\_storage} de la máquina local. Con la dirección ya tipada localmente, la función de resolución extrae el host numérico y el puerto de origen exactos de quien realizó la llamada remota, permitiendo dejar un registro descriptivo en la salida estándar cada vez que un servicio es invocado.
+
+    En cuanto al almacenamiento, las funciones de persistencia abren iterativamente el archivo de texto plano \texttt{alumnos\_db.txt}. Leen cada línea entera usando \texttt{fgets} y delegan a una subrutina la tokenización del texto mediante la función \texttt{strtok\_r}, la cual divide cada cadena detectando el carácter separador \texttt{|}. En los casos de eliminación o actualización parcial, el archivo se lee secuencialmente al mismo tiempo que los datos válidos u omitidos se reescriben de inmediato sobre un archivo temporal. Una vez finalizada la revisión total de las entradas, el proceso invoca las llamadas al sistema necesarias para desvincular el archivo viejo y renombrar el temporal como oficial, asegurando la atomicidad de los cambios.
+
+    \subsection{Desarrollo del Cliente}
+
+    En el código principal del cliente (\texttt{alumnos\_client.c}), la ejecución arranca verificando la disponibilidad de conexión lógica mediante el método \texttt{clnt\_create}, al cual se le proporciona la IP enviada por la consola, el nombre del programa, la versión y el protocolo de red subyacente TCP. Una vez establecido el canal, inicia el ciclo eterno que dibuja el sistema de captura de entradas guiadas.
+
+    Para prevenir búsquedas, actualizaciones o eliminaciones que lógicamente no tienen sentido realizar sin información existente en el servidor, se forzó la llamada estricta a \texttt{listar\_todos} en los casos respectivos del menú principal.
+
+    \begin{lstlisting}[style=cstyle]
+    case 3:
+        if (listar_todos(clnt) <= 0) {
+            break;
+        }
+        printf("\nDeja un campo vacio y presiona Enter para conservar su valor actual.\n");
+        al.id = leer_entero("ID del alumno a actualizar: ");
+        leer_linea("Nuevo nombre: ", nombre, sizeof(nombre));
+        leer_linea("Nuevo apellido: ", apellido, sizeof(apellido));
+        al.edad = leer_entero_opcional("Nueva edad (Enter para conservar): ", -1);
+    \end{lstlisting}
+
+    La función de listado solicita incondicionalmente todos los registros a través de XDR y retorna un código numérico. Al validar el resultado, si el código determina que no hay alumnos (por listar un apuntador nulo), el condicional invoca la instrucción \texttt{break} forzando el abandono inmediato de la opción actual. El resultado retorna al usuario nuevamente el menú, bloqueando el avance y previniendo que la aplicación exija repetitivamente datos si la base se encuentra en blanco.
+
+    Si la lista de valores sí contiene información, se prosigue con un bloque interactivo inteligente. La lectura de argumentos en consola se hace con funciones delegadas diseñadas a medida como \texttt{leer\_linea} o \texttt{leer\_entero\_opcional}. Si el usuario entra directamente un retorno de carro (presionando \texttt{Enter} de inmediato) al solicitar el parámetro o el bloque de texto en cuestión, la cadena provista se registra vacía o bien el analizador entero lo intercambia por un número preconfigurado que actúa como bandera centinela, comúnmente posicionado en \texttt{-1}. Este conjunto es transmitido de idéntica manera al servidor en el paquete de la solicitud. En el ciclo homólogo de actualización en el servidor, este repasa minuciosamente cada variable integrante. Si capta el marcador \texttt{-1} o la ausencia de caracteres exactos en los apuntadores serializados de cadena, salta asíncronamente su actualización particular y opta estrictamente por retener en el registro definitivo la información precedente extraída del flujo local de persistencia.
+
 
     \section{Actividad 2}
 
