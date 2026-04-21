@@ -1,0 +1,18 @@
+{
+    "77aa599c": {
+        "id": "77aa599c",
+        "nombre": "Adolfo",
+        "apellido": "Garcia",
+        "edad": 21,
+        "curso": "Distribuidos",
+        "direccion": "Iztapalapa"
+    },
+    "b99eb83d": {
+        "id": "b99eb83d",
+        "nombre": "Paula ",
+        "apellido": "Garcia",
+        "edad": 21,
+        "curso": "Online",
+        "direccion": "Iztapalapa"
+    }
+}
