@@ -688,8 +688,13 @@
     el condicional invoca la instrucción \texttt{break} forzando el cierre.
     El resultado retorna al usuario nuevamente el menú, bloqueando el avance.
     
-    Si la lista de valores sí contiene información, se prosigue con un bloque interactivo inteligente. La lectura de argumentos en consola se hace con funciones delegadas diseñadas a medida como \texttt{leer\_linea} o \texttt{leer\_entero\_opcional}. Si el usuario entra directamente un retorno de carro (presionando \texttt{Enter} de inmediato) al solicitar el parámetro o el bloque de texto en cuestión, la cadena provista se registra vacía o bien el analizador entero lo intercambia por un número preconfigurado que actúa como bandera centinela, comúnmente posicionado en \texttt{-1}. Este conjunto es transmitido de idéntica manera al servidor en el paquete de la solicitud. En el ciclo homólogo de actualización en el servidor, este repasa minuciosamente cada variable integrante. Si capta el marcador \texttt{-1} o la ausencia de caracteres exactos en los apuntadores serializados de cadena, salta asíncronamente su actualización particular y opta estrictamente por retener en el registro definitivo la información precedente extraída del flujo local de persistencia.
-
+    Si la lista de valores sí contiene información, se sigue con un bloque de repeticion, donde la lectura
+    de argumentos que se ponen desde consola se hizo con funciones diseñadas como lo son las de \texttt{leer\_linea} 
+    o \texttt{leer\_entero\_opcional}. Si el nosotros le emtemos directamente un \texttt{Enter}
+    al solicitar el texto, la cadena pasa de se registra vacía, lo cambiamos por un número preconfigurado
+    que este mismo actua como bandera, donde lo ponemos posicionado en \texttt{-1}.  
+    Si cacha el marcador \texttt{-1} o de caracteres en los apuntadores serializados de cadena, 
+    salta asíncronamente su actualización y pasa por retener en el registro la información que se obtuvo.
 
     \section{Actividad 2}
 
