@@ -546,104 +546,130 @@
     }
     \end{lstlisting}
 
-La función revisa que los atributos del paquete entrante, si detectecte punteros de cadena nulos, debido a que primero
-como result es FALSE, entonces se detecta que no hay nada aun, en caso de que el cliente ponga algo, al momento de pasar a la 
-siguiente verificacion en el if, entonces, este pasaria result ya no nos serviria, solo sirve como una bandera para indicar si es valido o es invalido el resultado de esta funcion
-en primer if se detecta que al menos algo este lleno, entonces en caso de qeu no se entre al if se procede a abrir el origen de 
-datos en modo de editar. 
-Antes a ordenar, el algoritmo rebobina el puntero interno del archivo mediante \texttt{rewind} 
-para lograr un escaneo inicial desde el byte base. 
+    La función revisa que los atributos del paquete entrante, si detectecte punteros de cadena nulos, debido a que primero
+    como result es FALSE, entonces se detecta que no hay nada aun, en caso de que el cliente ponga algo, al momento de pasar a la 
+    siguiente verificacion en el if, entonces, este pasaria result ya no nos serviria, solo sirve como una bandera para indicar si es valido o es invalido el resultado de esta funcion
+    en primer if se detecta que al menos algo este lleno, entonces en caso de qeu no se entre al if se procede a abrir el origen de 
+    datos en modo de editar. 
+    Antes a ordenar, el algoritmo rebobina el puntero interno del archivo mediante \texttt{rewind} 
+    para lograr un escaneo inicial desde el byte base. 
 
-Si dentro de esta iteración se detecta un registro donde la clave numérica es la misma exactamente 
-con el identificador propuesto en la orden nueva a agregar del cliente, 
-la función directamente dice que no es posible por que ya se encuentra uno igual. 
+    Si dentro de esta iteración se detecta un registro donde la clave numérica es la misma exactamente 
+    con el identificador propuesto en la orden nueva a agregar del cliente, 
+    la función directamente dice que no es posible por que ya se encuentra uno igual. 
 
 
-\begin{lstlisting}[style=cstyle]
-resultado_busqueda *
-buscar_alumno_1_svc(busqueda *argp, struct svc_req *rqstp){
-    static resultado_busqueda result;
-    /* Variables locales ... */
-    
-    f = fopen(DB_FILE, "r");
-    if (f != NULL) {
-        int buscar_por_id = (argp->id > 0);
+    \begin{lstlisting}[style=cstyle]
+    resultado_busqueda *
+    buscar_alumno_1_svc(busqueda *argp, struct svc_req *rqstp){
+        static resultado_busqueda result;
+        /* Variables locales ... */
+        
+        f = fopen(DB_FILE, "r");
+        if (f != NULL) {
+            int buscar_por_id = (argp->id > 0);
+            while (fgets(linea, sizeof(linea), f) != NULL) {
+                memset(&aux, 0, sizeof(aux));
+                if (!parsear_linea(linea, &aux)) continue;
+
+                int coincide = 0;
+                if (buscar_por_id) {
+                    if (aux.id == argp->id) coincide = 1;
+                } else {
+                    int match_nom = campo_vacio(argp->nombre) || (strcasecmp(aux.nombre, argp->nombre) == 0);
+                    int match_cur = campo_vacio(argp->curso) || (strcasecmp(aux.curso, argp->curso) == 0);
+                    if (match_nom && match_cur) coincide = 1;
+                }
+
+                if (coincide) {
+                    result.status = 0;
+                    result.resultado_busqueda_u.al = aux;
+                    fclose(f);
+                    return &result;
+                }
+                liberar_alumno(&aux);
+            }
+            fclose(f);
+        }
+        return &result;
+    }
+    \end{lstlisting}
+
+    Al recibir la parte de las estructuras, se crea la funcion, donde con un valor estatico 
+    llamado \texttt{resultado_busqueda}, esta funcion con la ayuda de la lectura del archivo, que lo abre en modo 
+    de lectura, el método clasifica el rastreo de la clave determinando si se puso
+    una clave de id que sea superior a 0, para esto, a lo largo del while, este cadenas extrae las cadenas extraídas de origen del mismo archivo, ahora bien, en la parte de la condicional
+    en el if, se hace uso del parseo de la linea, donde esta vez se utilizan las direcciones de memoria
+    despues de esto, para hacer una busqueda mejor, se revisa el id, revisan que sean los mismos, para esto accedemos al campo id de el tipo de estructura de estudiante, junto  con la variable auxiliar
+    esto para levantar la bandera llamda coincide, no obstante, en caso de de cumplir esto, llegamos a la parte del else,
+    donde en contraparte, bajo la falta explícita de este número se aplican evaluaciones ignorando mayúsculas y minúsculas con ayuda de la funcion llamada (\texttt{strcasecmp}).
+    Esto hace que al encontrar equivalencias parciales si las variables anteriroes son correctas 
+    entonces, la comprobación simultánea es validada como verdaderos, por lo que con esto ya levantamos la bandera.
+
+    Ahora la ultima parte tenemos la ultima condicional, donde lo hacemos para estar libre de fallos, utilizamos la variable
+    (\texttt{status} en 0) esto hace que el servidor recargue a la variable completa
+    extraída dentro del .txt, asi de igual forma se libera la memoria para que no siga consumiendo.
+
+    En la siguientes modificaciones fue en la parte de registros para las eliminaciones, 
+    el diseño que se nos genero por el .x, se reescribrió esto para hacer modificaciones de forma atómica en los registros de memoria.
+
+    \begin{lstlisting}[style=cstyle]
+    bool_t *
+    actualizar_alumno_1_svc(alumno *argp, struct svc_req *rqstp){
+        
+        static bool_t result;
+        FILE *f, *ftmp;
+        /* ... */
+        
+        f = fopen(DB_FILE, "r");
+        ftmp = fopen(TMP_DB_FILE, "w");
+
         while (fgets(linea, sizeof(linea), f) != NULL) {
             memset(&aux, 0, sizeof(aux));
-            if (!parsear_linea(linea, &aux)) continue;
+            parsear_linea(linea, &aux);
 
-            int coincide = 0;
-            if (buscar_por_id) {
-                if (aux.id == argp->id) coincide = 1;
-            } else {
-                int match_nom = campo_vacio(argp->nombre) || (strcasecmp(aux.nombre, argp->nombre) == 0);
-                int match_cur = campo_vacio(argp->curso) || (strcasecmp(aux.curso, argp->curso) == 0);
-                if (match_nom && match_cur) coincide = 1;
+            if (aux.id == argp->id) {
+                if (!campo_vacio(argp->nombre)) { free(aux.nombre); aux.nombre = strdup(argp->nombre); }
+                if (!campo_vacio(argp->apellido)) { free(aux.apellido); aux.apellido = strdup(argp->apellido); }
+                if (!campo_vacio(argp->curso)) { free(aux.curso); aux.curso = strdup(argp->curso); }
+                if (argp->edad >= 0) { aux.edad = argp->edad; }
+                result = TRUE;
             }
-
-            if (coincide) {
-                result.status = 0;
-                result.resultado_busqueda_u.al = aux;
-                fclose(f);
-                return &result;
-            }
+            escribir_alumno(ftmp, &aux);
             liberar_alumno(&aux);
         }
         fclose(f);
-    }
-    return &result;
-}
-\end{lstlisting}
+        fclose(ftmp);
 
-Al recibir el bloque representativo de consulta, el método clasifica tempranamente la táctica de rastreo activada determinando si se emitió una clave de id contundente (valor estrictamente superior al referencial cero). A lo largo de la iteración de cadenas decodificadas extraídas de origen de persistencia, se acopla una bifurcación selectiva; si la prioridad dicta cotejo por identificador central, la revisión matemática es rígida e intransferible. En contraparte cruzada, bajo la falta explícita de este número se aplican evaluaciones interseccionales ignorando mayúsculas y minúsculas apoyadas en resoluciones binarias (\texttt{strcasecmp}). Esto faculta la coincidencia al encontrar equivalencias parciales si las variables provistas aciertan positivamente la comprobación simultánea validada intrínsecamente como verdaderos operacionales. Un resultado victorioso engrana la respuesta envolviéndola con una etiqueta métrica libre de fallos (\texttt{status} en 0) posibilitando que el servidor recargue a la entidad completa extraída dentro de la macroestructura que volvará los datos a través del zócalo perimetral.
-
-Atendiendo las modificaciones integrales de registros para las eliminaciones o depuraciones, el diseño reescribrió directamente la rutina operativa del lenguaje para instituir modificaciones de forma atómica en el tejido subyacente empleando memorias temporales.
-
-\begin{lstlisting}[style=cstyle]
-bool_t *
-actualizar_alumno_1_svc(alumno *argp, struct svc_req *rqstp)
-{
-    static bool_t result;
-    FILE *f, *ftmp;
-    /* ... */
-    
-    f = fopen(DB_FILE, "r");
-    ftmp = fopen(TMP_DB_FILE, "w");
-
-    while (fgets(linea, sizeof(linea), f) != NULL) {
-        memset(&aux, 0, sizeof(aux));
-        parsear_linea(linea, &aux);
-
-        if (aux.id == argp->id) {
-            if (!campo_vacio(argp->nombre)) { free(aux.nombre); aux.nombre = strdup(argp->nombre); }
-            if (!campo_vacio(argp->apellido)) { free(aux.apellido); aux.apellido = strdup(argp->apellido); }
-            if (!campo_vacio(argp->curso)) { free(aux.curso); aux.curso = strdup(argp->curso); }
-            if (argp->edad >= 0) { aux.edad = argp->edad; }
-            result = TRUE;
+        if (result) {
+            remove(DB_FILE);
+            rename(TMP_DB_FILE, DB_FILE);
+        } else {
+            remove(TMP_DB_FILE);
         }
-        escribir_alumno(ftmp, &aux);
-        liberar_alumno(&aux);
+        return &result;
     }
-    fclose(f);
-    fclose(ftmp);
+    \end{lstlisting}
 
-    if (result) {
-        remove(DB_FILE);
-        rename(TMP_DB_FILE, DB_FILE);
-    } else {
-        remove(TMP_DB_FILE);
-    }
-    return &result;
-}
-\end{lstlisting}
-
-En la mutación operativa, dos descriptores resguardan canales diferenciados; uno asume exclusivamente las tareas de inspección iterativa mientras que el descriptor recíproco recibe las emisiones de transcripción dirigidas sobre una ramificación temporal alterna (\texttt{alumnos\_db.tmp}). En tanto convergen secuencialmente los datos evaluados, el identificador deseado interrumpe su trayectoria natural en la transposición perimetral y detona la depuración interna posibilitando empates modulares. Por medio de comparaciones estructurales en donde el nuevo nodo se inspecciona ante la presencia fáctica de información de interés, la memoria dinámica preexistente liberada intercepte los atributos proveídos para superponerlos. De este modo, si la inserción denota cadenas o magnitudes operativas nulas/centinelas, el control avanza desocupado dejando inofensivo al segmento matriz del cliente subyacente originario. Transpapelado por completo sobre el nuevo conducto auxiliar, el servicio concluye suprimiendo con irrevocabilidad el bloque original para enrocar los descriptores numéricos de metadatos dotando de canonización legal al vector efímero generado. Esta suplantación salvaguarda la disponibilidad ininterrumpida frente a catástrofes estructurales imprevistas que pudieran suscitarse mediando transferencias magnéticas de alta vulnerabilidad.
+    En la parte operativa de este codigo, comenzamos con la definicion de un txt temporal
+    donde ese es el que vamos a modificar por que lo abriremos en modo de escritura, el original solo sera abierto 
+    en modo de lectura, despues de esto utiliznado fgets, volvemos a leer las lineas de los archivos, donde en seguida
+    en tanto sean iguales secuencialmente los datos evaluados, que justo esto se hace en la condicional con el id, ahora 
+    por medio de comparaciones de las estructuras en donde el nuevo nodo se inspecciona con respecto la nueva de información, 
+    la memoria dinámica que teniamos antes reservadda, ahora sera liberada. De este modo, si la comparacion de las cadenas
+    es true, el codigo avanza desocupado dejando la parte de la matriz del cliente originario. 
+    En caso de tener un resultado false, entonces el servicio elimina el bloque original para seguir los siguientes datos
+    numéricos. 
 
     \subsection{Desarrollo del Cliente}
 
-    En el código principal del cliente (\texttt{alumnos\_client.c}), la ejecución arranca verificando la disponibilidad de conexión lógica mediante el método \texttt{clnt\_create}, al cual se le proporciona la IP enviada por la consola, el nombre del programa, la versión y el protocolo de red subyacente TCP. Una vez establecido el canal, inicia el ciclo eterno que dibuja el sistema de captura de entradas guiadas.
+    En el código principal del cliente es en el codigo de (\texttt{alumnos\_client.c}), la parte inicial es 
+    verificando la disponibilidad de conexión mediante el método \texttt{clnt\_create},
+    al cual se le proporciona la IP enviada por la consola, el nombre del programa, la versión y el protocolo de red que en este caso es el de TCP.
+    Una vez establecida la comunicacion, inicia el ciclo  que inicia toda la comunicacion del mismo.
 
-    Para prevenir búsquedas, actualizaciones o eliminaciones que lógicamente no tienen sentido realizar sin información existente en el servidor, se forzó la llamada estricta a \texttt{listar\_todos} en los casos respectivos del menú principal.
+    Para prevenir búsquedas, actualizaciones o eliminaciones que no tienen sentido sin información existente en el servidor, 
+    se forzó la llamada a \texttt{listar\_todos} en los casos del menú principal, eto para tener una mejor visualizacion.
 
     \begin{lstlisting}[style=cstyle]
     case 3:
@@ -657,8 +683,11 @@ En la mutación operativa, dos descriptores resguardan canales diferenciados; un
         al.edad = leer_entero_opcional("Nueva edad (Enter para conservar): ", -1);
     \end{lstlisting}
 
-    La función de listado solicita incondicionalmente todos los registros a través de XDR y retorna un código numérico. Al validar el resultado, si el código determina que no hay alumnos (por listar un apuntador nulo), el condicional invoca la instrucción \texttt{break} forzando el abandono inmediato de la opción actual. El resultado retorna al usuario nuevamente el menú, bloqueando el avance y previniendo que la aplicación exija repetitivamente datos si la base se encuentra en blanco.
-
+    La función de listado solicita todos los registros a través de XDR y retorna un código numérico.
+    Al validar el resultado, si el código determina que no hay alumnos (por listar un apuntador nulo), 
+    el condicional invoca la instrucción \texttt{break} forzando el cierre.
+    El resultado retorna al usuario nuevamente el menú, bloqueando el avance.
+    
     Si la lista de valores sí contiene información, se prosigue con un bloque interactivo inteligente. La lectura de argumentos en consola se hace con funciones delegadas diseñadas a medida como \texttt{leer\_linea} o \texttt{leer\_entero\_opcional}. Si el usuario entra directamente un retorno de carro (presionando \texttt{Enter} de inmediato) al solicitar el parámetro o el bloque de texto en cuestión, la cadena provista se registra vacía o bien el analizador entero lo intercambia por un número preconfigurado que actúa como bandera centinela, comúnmente posicionado en \texttt{-1}. Este conjunto es transmitido de idéntica manera al servidor en el paquete de la solicitud. En el ciclo homólogo de actualización en el servidor, este repasa minuciosamente cada variable integrante. Si capta el marcador \texttt{-1} o la ausencia de caracteres exactos en los apuntadores serializados de cadena, salta asíncronamente su actualización particular y opta estrictamente por retener en el registro definitivo la información precedente extraída del flujo local de persistencia.
 
 
