@@ -936,7 +936,13 @@ def guardar_json(datos):
         with open(JSON_FILE, "w") as f:
             json.dump(datos, f, indent=4) 
 \end{lstlisting}
-\textbf{Explicación:} Se pretende evitar la "condición de carrera". Si dos clientes envían un registro al mismo milisegundo, la variable \texttt{\_lock} actúa como un semáforo. La instrucción \texttt{with \_lock:} asegura que el primer cliente termine de escribir en el archivo antes de darle paso al segundo, manteniendo la base de datos íntegra.
+
+\textbf{Explicación Detallada del Bloque:}
+\begin{itemize}
+    \item \textbf{Manejo del Archivo (\texttt{JSON\_FILE}):} Se utiliza un archivo de texto plano estandarizado para persistir la información sin requerir un motor de base de datos pesado.
+    \item \textbf{Prevención de Condición de Carrera (\texttt{threading.Lock()}):} En un entorno distribuido, múltiples clientes pueden intentar modificar datos al mismo tiempo. Si el Cliente A y el Cliente B intentan registrar un alumno en el mismo milisegundo, el archivo \texttt{alumnos.json} podría corromperse. La variable \texttt{\_lock} actúa como un semáforo (Mutex).
+    \item \textbf{Bloque de Exclusión Mutua (\texttt{with \_lock}):} Esta instrucción garantiza la seguridad en la escritura. Si un hilo (petición de un cliente) entra a este bloque, bloquea la puerta. Cualquier otra petición que intente guardar datos quedará en pausa hasta que el primer hilo termine, manteniendo la integridad absoluta de la base de datos.
+\end{itemize}
 
 \subsubsection{2. Lógica de Negocio (Clase \texttt{AlumnoServidor})}
 \begin{lstlisting}[language=Python]
@@ -964,7 +970,23 @@ class AlumnoServidor(alumno_pb2_grpc.AlumnoServiceServicer):
             if campo in alumno_data and criterio in str(alumno_data[campo]).lower():
                 yield alumno_pb2.Alumno(**alumno_data) # Retorno en flujo (Stream)
 \end{lstlisting}
-\textbf{Explicación:} La clase hereda del \textit{Servicer} generado por gRPC. En métodos unarios como \texttt{Registrar}, se procesa la petición y se guarda el estado. En métodos de streaming como \texttt{BuscarPorCriterio}, se utiliza la palabra reservada \texttt{yield}. Esto transforma la función en un generador, emitiendo resultados uno por uno a través de la red en lugar de sobrecargar la memoria del servidor.
+
+\textbf{Explicación Detallada de las Funciones:}
+La clase hereda de la plantilla \textit{Servicer} generada automáticamente por gRPC.
+\begin{itemize}
+    \item \textbf{Función \texttt{Registrar} (Petición Unaria):}
+    \begin{enumerate}
+        \item \textit{Generación de Identidad:} Utiliza la librería \texttt{uuid.uuid4()} para generar un identificador criptográficamente único, recortándolo a 8 caracteres (\texttt{[:8]}) para que sea más amigable para el usuario.
+        \item \textit{Mapeo de Datos:} Descarga la base de datos a un diccionario en memoria (\texttt{db}), crea una nueva entrada usando el ID como llave, y le asigna los datos desempaquetados de la petición del cliente (\texttt{request.nombre}, etc.).
+        \item \textit{Respuesta:} Llama a la función segura \texttt{guardar\_json()} y retorna un mensaje \texttt{RegistrarResponse} confirmando el éxito de la operación.
+    \end{enumerate}
+
+    \item \textbf{Función \texttt{BuscarPorCriterio} (Server Streaming):}
+    \begin{enumerate}
+        \item \textit{Normalización:} Convierte tanto el campo objetivo como la palabra clave a minúsculas (\texttt{.lower()}) para realizar búsquedas insensibles a mayúsculas, mejorando la experiencia del usuario.
+        \item \textit{Transmisión Continua (\texttt{yield}):} A diferencia de funciones tradicionales que usan \texttt{return} para devolver un solo bloque de datos, esta función utiliza \texttt{yield}. Esto la convierte en un \textbf{generador}. Cada vez que el ciclo \texttt{for} encuentra una coincidencia, la emite inmediatamente por el canal gRPC hacia el cliente sin cerrar la conexión. Esto evita saturar la memoria RAM del servidor al no tener que guardar listas gigantes antes de enviarlas.
+    \end{enumerate}
+\end{itemize}
 
 \subsubsection{3. Inicialización Multi-hilo}
 \begin{lstlisting}[language=Python]
@@ -978,9 +1000,13 @@ def iniciar_servidor():
     servidor.start()
     servidor.wait_for_termination()
 \end{lstlisting}
-\textbf{Explicación:} Se configura el motor de gRPC con un \textit{Thread Pool} de 10 trabajadores (\texttt{max\_workers=10}). Esto pretende brindar alta disponibilidad: el servidor no hace fila para atender peticiones, sino que atiende hasta 10 usuarios simultáneamente.
 
-\vspace{0.8cm}
+\textbf{Explicación Detallada de la Inicialización:}
+\begin{itemize}
+    \item \textbf{El Pool de Hilos (\texttt{ThreadPoolExecutor(max\_workers=10)}):} gRPC está diseñado para alta concurrencia. En lugar de procesar peticiones en una fila lenta, el servidor crea una "piscina" de 10 trabajadores independientes. Esto le otorga la capacidad de atender y resolver hasta 10 llamadas de red simultáneas en paralelo.
+    \item \textbf{El Puerto y Canal (\texttt{add\_insecure\_port("[::]:50051")}):} La directiva \texttt{[::]} le indica al servidor que escuche tráfico en todas las direcciones IPv4 e IPv6 disponibles en la máquina local. Al llamarse \textit{insecure}, indica que la conexión es de texto plano sin certificados SSL/TLS, lo cual es ideal para fases de desarrollo.
+    \item \textbf{Ciclo de Vida (\texttt{wait\_for\_termination()}):} Es una función bloqueante crítica. Si no estuviera, el script de Python pasaría por la línea \texttt{start()} e inmediatamente terminaría la ejecución, apagando el servidor en un segundo. Esta instrucción mantiene el hilo principal abierto e iterando de forma infinita hasta que se detenga el proceso manualmente (ej. mediante \texttt{Ctrl+C}).
+\end{itemize}
 
 \subsection{Desarrollo del Lado del Cliente}
 
@@ -1010,7 +1036,13 @@ def ejecutar(ip_servidor):
         stub = alumno_pb2_grpc.AlumnoServiceStub(channel)
         # ... Inicio del bucle del menu ...
 \end{lstlisting}
-\textbf{Explicación:} Se pretende que el cliente sea dinámico, recibiendo la IP como argumento. Se utiliza \texttt{grpc.insecure\_channel} para abrir la tubería de red. A partir de ella se instancia el \texttt{Stub}, que es la clase que traduce las llamadas a funciones locales en peticiones remotas binarias.
+
+\textbf{Explicación Detallada del Bloque:}
+\begin{itemize}
+    \item \textbf{Flexibilidad de Red (\texttt{ip\_servidor}):} En lugar de quemar (\textit{hardcodear}) la IP de conexión en el código, el script está diseñado para recibir la dirección del servidor como parámetro (usualmente mediante \texttt{sys.argv} al ejecutar desde la terminal). Esto permite desplegar el cliente en cualquier máquina de la red sin modificar el código fuente.
+    \item \textbf{Gestión de Conexión (\texttt{grpc.insecure\_channel}):} Se establece una tubería de red directa mediante el protocolo HTTP/2 (el estándar subyacente de gRPC). La cláusula \texttt{with} es una medida de seguridad (context manager) que asegura que, sin importar si el programa termina correctamente o falla por un error, el canal de red se cerrará de forma limpia, liberando el puerto.
+    \item \textbf{El Patrón Stub (\texttt{AlumnoServiceStub}):} El \textit{Stub} es un proxy o representante local. Para el programador del cliente, \texttt{stub} parece un objeto de Python normal con funciones normales, pero internamente, es el encargado de interceptar esas llamadas, serializar los datos a código binario y enviarlos a través del canal de red hacia el servidor real.
+\end{itemize}
 
 \subsubsection{2. Empaquetado y Robustez (Manejo de Errores)}
 \begin{lstlisting}[language=Python]
@@ -1029,7 +1061,13 @@ def ejecutar(ip_servidor):
                     # Captura de fallos de red o caidas del servidor
                     print(f"\n[!] Error de conexion: {err.details()}")
 \end{lstlisting}
-\textbf{Explicación:} Los datos ingresados en crudo por el usuario se instancian dentro de los objetos \texttt{Request} del \texttt{.proto}. Es imperativo el uso del bloque \texttt{try-except} capturando la excepción específica \texttt{grpc.RpcError}. Con esto se pretende que si el servidor se apaga repentinamente o la red se cae, se imprima un mensaje amigable y el usuario pueda seguir interactuando con el menú.
+
+\textbf{Explicación Detallada de las Peticiones:}
+\begin{itemize}
+    \item \textbf{Construcción del Mensaje (\texttt{alumno\_pb2.RegistrarRequest}):} Antes de enviar cualquier dato, este debe encapsularse estrictamente en el formato definido en el \texttt{.proto}. gRPC valida fuertemente los tipos de datos en este punto (ej. no permite enviar un \textit{string} si el proto definió un \textit{int32}).
+    \item \textbf{Invocación Síncrona (\texttt{stub.Registrar(request)}):} Al ejecutar esta línea, el hilo del cliente se bloquea temporalmente esperando la respuesta del servidor. 
+    \item \textbf{Tolerancia a Fallos (\texttt{try-except grpc.RpcError}):} Esta es quizás la sección más crítica en un sistema distribuido. Si el servidor se apaga repentinamente, si el cable de red se desconecta, o si la base de datos interna falla, la librería gRPC arrojará un error de tipo \texttt{RpcError}. Al capturarlo aquí, se evita que todo el script de Python del cliente se cierre abruptamente. En su lugar, se imprime un mensaje de error detallado (\texttt{err.details()}) y el usuario es retornado al menú principal de forma segura.
+\end{itemize}
 
 \subsubsection{3. Consumo de Streaming de Datos}
 \begin{lstlisting}[language=Python]
@@ -1043,8 +1081,12 @@ def ejecutar(ip_servidor):
                 for alumno in stub.BuscarPorCriterio(request):
                     mostrar_alumno(alumno)
 \end{lstlisting}
-\textbf{Explicación:} Para los métodos de tipo \textit{Streaming}, la llamada al \texttt{stub} no devuelve un objeto estático, sino un iterable continuo. Mediante un ciclo \texttt{for} estándar de Python, el cliente pretende extraer e imprimir en tiempo real cada estudiante que el servidor va inyectando en la tubería de red.
 
+\textbf{Explicación Detallada del Flujo:}
+\begin{itemize}
+    \item \textbf{El Paradigma de Recepción de Streams:} A diferencia de la petición unaria anterior (donde se recibe una sola respuesta estática), la llamada a \texttt{stub.BuscarPorCriterio(request)} devuelve un iterador de Python que está "conectado en vivo" al flujo del servidor.
+    \item \textbf{Desempaquetado Asíncrono (\texttt{for alumno in ...}):} Este ciclo \texttt{for} no procesa una lista que ya está en la memoria del cliente. Por el contrario, se queda "escuchando" en el canal de red. Cada vez que el servidor emite un estudiante (usando su instrucción \texttt{yield}), el cliente recibe ese paquete, lo desempaqueta, e imprime el objeto \texttt{alumno} usando la función auxiliar \texttt{mostrar\_alumno}. Esto permite visualizar grandes volúmenes de datos en tiempo real, con una latencia mínima y sin saturar la memoria RAM de la máquina cliente.
+\end{itemize}
 
 
     % Impresión Referencias
