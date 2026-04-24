@@ -244,7 +244,7 @@
         \item \textbf{Tipado Implícito:} A diferencia de JSON o XML que son formatos de ``tipado explícito" que envían el nombre de la variable junto con el dato, ej: ``edad": 25, XDR es de ``tipado implícito". En XDR, no viajan metadatos ni etiquetas por el cable, si no que viajan puros ceros y unos. Esto ahorra ancho de banda y tiempo de procesamiento, pero obliga a que tanto el cliente como el servidor tengan exactamente el mismo mapa mental (el archivo .x) para saber cómo leer el flujo de bytes ciego que llega.
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.9\textwidth]{img/InvPrevia/1_2.png}
+            \includegraphics[width=0.7\textwidth]{img/InvPrevia/1_2.png}
             \caption{Comparación entre tipado explícito e implícito en serialización de datos.}
             \label{fig:xdr_tipado}
         \end{figure}
@@ -252,20 +252,25 @@
         \item \textbf{La Regla de Oro de los 4 Bytes:} XDR exige que la unidad básica de todo dato transmitido sea un bloque múltiplo de 4 bytes (32 bits). Los ingenieros eligieron 4 bytes debido a que 2 bytes causaban problemas de alineación en computadoras de la época, y 8 bytes desperdiciaban demasiado espacio.
         
         \item \textbf{Relleno (Padding):} Si se quiere enviar un tipo de dato pequeño como un simple carácter de 1 byte, XDR no lo envía solo. Forzosamente le inyecta 3 bytes adicionales llenos de ceros (padding) al final para completar el bloque de 4 bytes. Esto garantiza que los datos se alineen perfectamente en la memoria de casi cualquier procesador del mundo, permitiendo que las lecturas sean extremadamente rápidas, aunque sacrifique un poco de espacio en la red.
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.4\textwidth]{img/InvPrevia/1_3.png}
+            \caption{Padding o relleno}
+            \label{fig:imagen_1_3}
+        \end{figure}
     \end{itemize}
 
     \subsubsection*{Protocol Buffers (Protobuf)}
     Protocol Buffers es el estándar moderno de facto para microservicios. Fue creado por Google para uso interno y luego liberado al público. Protobuf funciona como un IDL (a través de sus archivos .proto) y también es el propio algoritmo de serialización binaria. Es el motor principal detrás de gRPC, el framework de comunicación de alto rendimiento de Google.
 
-    Mientras XDR se basa en bloques rígidos de tamaño fijo y posiciones exactas, Protobuf fue diseñado para ser compacto, asimétrico y elástico. Google necesitaba enviar miles de millones de mensajes entre sus servidores usando el menor ancho de banda posible, y al mismo tiempo, poder actualizar los programas añadiendo o quitando campos en los mensajes sin que los servidores viejos colapsaran al no entender los nuevos campos y lo logró mediante dos innovaciones:
-
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{img/InvPrevia/1_4.png}
-        \caption{Proceso de compilación en Protocol Buffers, donde un archivo \texttt{.proto} es procesado por el compilador \texttt{protoc} para generar clases en distintos lenguajes de programación como Python, Java, C++ y Go.}
+        \includegraphics[width=0.72\textwidth]{img/InvPrevia/1_4.png}
+        \caption{Proceso de compilación en Protocol Buffers, un archivo \texttt{.proto} es procesado por el compilador \texttt{protoc} para generar clases en distintos lenguajes de programación como Python, Java, C++ y Go.}
         \label{fig:protobuf_compilacion}
     \end{figure}
 
+    Mientras XDR se basa en bloques rígidos de tamaño fijo y posiciones exactas, Protobuf fue diseñado para ser compacto, asimétrico y elástico. Google necesitaba enviar miles de millones de mensajes entre sus servidores usando el menor ancho de banda posible, y al mismo tiempo, poder actualizar los programas añadiendo o quitando campos en los mensajes sin que los servidores viejos colapsaran al no entender los nuevos campos y lo logró mediante dos innovaciones:
     
     \begin{enumerate}
         \item \textbf{Esquema Tag-Length-Value (TLV):} En lugar de depender de que las variables lleguen en un orden estricto (como XDR), Protobuf anticipa cada variable con una pequeña ``Etiqueta'' (Tag). Esta etiqueta le dice al receptor: ``El siguiente dato es la variable número 1, y es de tipo entero". Si un servidor viejo recibe un mensaje con la etiqueta ``variable número 5" que aún no conoce, simplemente lee la longitud del dato, lo salta sin fallar, y sigue leyendo el resto.

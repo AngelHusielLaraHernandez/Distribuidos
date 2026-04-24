@@ -2,8 +2,8 @@
 \contentsline {section}{\numberline {1}Objetivos}{1}{section.1}%
 \contentsline {section}{\numberline {2}Investigación Previa}{1}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Que és IDL, XDR, y Protocol Buffers}{1}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Tipos de datos a usar en XDR y Protocol Buffers}{4}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Significado de los números en archivos .x y .proto}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.2}Tipos de datos a usar en XDR y Protocol Buffers}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Significado de los números en archivos .x y .proto}{6}{subsection.2.3}%
 \contentsline {section}{\numberline {3}Desarrollo}{7}{section.3}%
 \contentsline {section}{\numberline {4}Actividad 1}{7}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Diseño y Justificación de la Interfaz (IDL)}{7}{subsection.4.1}%
@@ -12,7 +12,7 @@
 \contentsline {subsection}{\numberline {4.4}Desarrollo del Cliente}{14}{subsection.4.4}%
 \contentsline {section}{\numberline {5}Actividad 2}{15}{section.5}%
 \contentsline {subsection}{\numberline {5.1}Planteamiento de la Solución}{15}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Diseño y Justificación del Archivo \texttt {.proto}}{15}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.2}Diseño y Justificación del Archivo \texttt {.proto}}{16}{subsection.5.2}%
 \contentsline {subsubsection}{\numberline {5.2.1}La Estructura Principal: \texttt {Alumno} (Mensajes)}{18}{subsubsection.5.2.1}%
 \contentsline {subsubsection}{\numberline {5.2.2}Las Funciones del Servidor (Servicio y Métodos RPC)}{19}{subsubsection.5.2.2}%
 \contentsline {subsection}{\numberline {5.3}Desarrollo del Lado del Servidor}{21}{subsection.5.3}%
@@ -23,4 +23,4 @@
 \contentsline {subsubsection}{\numberline {5.4.1}1. Conexión Dinámica y Canal gRPC}{24}{subsubsection.5.4.1}%
 \contentsline {subsubsection}{\numberline {5.4.2}2. Empaquetado y Robustez (Manejo de Errores)}{25}{subsubsection.5.4.2}%
 \contentsline {subsubsection}{\numberline {5.4.3}3. Consumo de Streaming de Datos}{26}{subsubsection.5.4.3}%
-\contentsline {section}{Referencias}{26}{section*.11}%
+\contentsline {section}{Referencias}{26}{section*.12}%
