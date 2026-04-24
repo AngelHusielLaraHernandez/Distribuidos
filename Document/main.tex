@@ -596,7 +596,7 @@
     \end{lstlisting}
 
     Al recibir la parte de las estructuras, se crea la funcion, donde con un valor estatico 
-    llamado \texttt{resultado_busqueda}, esta funcion con la ayuda de la lectura del archivo, que lo abre en modo 
+    llamado \texttt{resultado\_busqueda}, esta funcion con la ayuda de la lectura del archivo, que lo abre en modo 
     de lectura, el método clasifica el rastreo de la clave determinando si se puso
     una clave de id que sea superior a 0, para esto, a lo largo del while, este cadenas extrae las cadenas extraídas de origen del mismo archivo, ahora bien, en la parte de la condicional
     en el if, se hace uso del parseo de la linea, donde esta vez se utilizan las direcciones de memoria
@@ -697,6 +697,355 @@
     salta asíncronamente su actualización y pasa por retener en el registro la información que se obtuvo.
 
     \section{Actividad 2}
+
+    \subsection{Planteamiento de la Solución}
+    La solución propuesta consiste en un sistema distribuido basado en el paradigma de \textbf{Llamada a Procedimiento Remoto (RPC)}, utilizando el framework \textbf{gRPC}. El objetivo es manejar un registro de alumnos permitiendo operaciones de creación, consulta, actualización, eliminación y listado (CRUD).
+
+    Se decidió guardar los datos en un archivo de texto usando formato \textbf{JSON}. Esto es más sencillo que usar una base de datos grande y complicada, y permite que el programa guarde y recupere la información fácilmente cada vez que se ejecuta, además de que es fácil de mover y mantener.
+
+
+    \subsection{Diseño y Justificación del Archivo \texttt{.proto}}
+
+El archivo \texttt{alumno.proto} funciona como un acuerdo claro entre el cliente y el servidor. Ahí se define qué datos se van a enviar y recibir, y qué acciones puede hacer el servidor. Lo importante es que estas reglas no dependen del lenguaje de programación, así que ambos lados pueden entenderse sin problema. A continuación se muestra el código base del protocolo:
+
+\begin{lstlisting}[language=C++]
+//Version 3
+syntax = "proto3";
+
+package alumnos;
+
+// Funciones del servidor
+service AlumnoService {
+  // Operaciones unarias (Peticion-Respuesta)
+  rpc Registrar (RegistrarRequest) returns (RegistrarResponse);
+  rpc Consultar (ConsultarRequest) returns (Alumno);
+  rpc Actualizar (ActualizarRequest) returns (Respuesta);
+  rpc Eliminar (EliminarRequest) returns (Respuesta);
+  
+  // Operaciones de Server Streaming
+  rpc BuscarPorCriterio (BuscarRequest) returns (stream Alumno);
+  rpc ListarTodos (ListarRequest) returns (stream Alumno);
+}
+
+// MENSAJES
+
+// Estructura principal de un alumno. 
+message Alumno {
+  string id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  int32 edad = 4;        
+  string curso = 5;
+  string direccion = 6;
+}
+
+message RegistrarRequest {
+  string nombre = 1;
+  string apellido = 2;
+  int32 edad = 3;
+  string curso = 4;
+  string direccion = 5;
+}
+
+message RegistrarResponse {
+  bool exito = 1;        
+  string mensaje = 2;    
+  string id = 3;         
+}
+
+message ConsultarRequest {
+  string id = 1;
+}
+
+message ActualizarRequest {
+  string id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  int32 edad = 4;
+  string curso = 5;
+  string direccion = 6;
+}
+
+message EliminarRequest {
+  string id = 1;
+}
+
+// Respuesta generica de exito/fallo
+message Respuesta {
+  bool exito = 1;
+  string mensaje = 2;
+}
+
+message BuscarRequest {
+  string campo = 1;      // Puede ser "nombre", "apellido" o "curso"
+  string criterio = 2;   // Lo que el usuario escribio para buscar
+}
+
+// Mensaje vacio para listar todos
+message ListarRequest {
+}
+\end{lstlisting}
+
+\vspace{0.5cm} % Espacio visual antes de la explicacion
+
+\textbf{Análisis y Justificación del Diseño:}
+
+El diseño de este archivo \texttt{.proto} sigue buenas prácticas para crear APIs con gRPC, pero se puede entender de forma sencilla así:
+
+\begin{itemize}
+    \item \textbf{Definición de Servicios (\texttt{AlumnoService}):} Se organizaron las funciones del servidor en dos tipos:
+    \begin{itemize}
+        \item \textit{Operaciones Unarias:} Son las más simples. El cliente hace una petición y el servidor responde una sola vez (por ejemplo: registrar, consultar, actualizar o eliminar).
+        \item \textit{Operaciones de Streaming (\texttt{stream Alumno}):} En algunos casos, el servidor no envía todo de golpe, sino que manda los datos poco a poco. Esto evita usar demasiada memoria y hace que funcione mejor cuando hay muchos registros.
+    \end{itemize}
+    
+    \item \textbf{Patrón de Mensajes Request/Response:} En lugar de usar el mismo tipo de dato para todo, se crearon mensajes específicos para cada acción (como \texttt{RegistrarRequest} o \texttt{EliminarRequest}). Esto permite que en el futuro se puedan agregar nuevos datos sin afectar lo que ya funciona.
+    
+    \item \textbf{Tipado Fuerte y Ligereza:} Se usan tipos de datos simples y definidos (como números, texto o verdadero/falso). Además, gRPC convierte esta información a un formato binario, lo que hace que los datos se envíen más rápido y ocupen menos espacio que en otras opciones como REST.
+\end{itemize}
+
+
+\vspace{0.5cm}
+
+\textbf{Análisis de la Estructura de Datos y Funciones}
+
+Para cumplir con el criterio de una definición clara del servicio, los mensajes y los métodos, a continuación se desglosa la estructura central de información y el catálogo de operaciones, complementados con sus respectivos fragmentos de código para ilustrar su funcionamiento.
+
+\subsubsection{La Estructura Principal: \texttt{Alumno} (Mensajes)}
+
+El mensaje \texttt{Alumno} es la entidad central (el modelo de datos) de todo el sistema. Define exactamente qué piezas de información conforman a un estudiante dentro de la base de datos:
+
+\begin{lstlisting}[language=C++]
+// Estructura principal de un alumno. 
+message Alumno {
+  string id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  int32 edad = 4;        
+  string curso = 5;
+  string direccion = 6;
+}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{\texttt{id} (string):} Un identificador único (generado aleatoriamente por el servidor) para distinguir a cada alumno, incluso si tienen el mismo nombre.
+    \item \textbf{\texttt{nombre} y \texttt{apellido} (string):} Cadenas de texto para la identidad del estudiante.
+    \item \textbf{\texttt{edad} (int32):} Se utiliza un entero de 32 bits, que es un tipo de dato numérico altamente optimizado en gRPC, ideal para operaciones lógicas.
+    \item \textbf{\texttt{curso} y \texttt{direccion} (string):} Cadenas de texto que almacenan información académica y de localización.
+\end{itemize}
+
+\subsubsection{Las Funciones del Servidor (Servicio y Métodos RPC)}
+
+El servicio expone 6 métodos principales, los cuales cubren el ciclo de vida completo de los datos (CRUD) y consultas avanzadas. A continuación se explica su lógica interna de lado del servidor:
+
+\textbf{1. Registrar y Consultar (Operaciones Básicas)}
+\begin{lstlisting}[language=Python]
+def Registrar(self, request, context):
+    nuevo_id = str(uuid.uuid4())[:8] # Generacion de ID unico
+    db = leer_json()
+    db[nuevo_id] = {
+        "id": nuevo_id, "nombre": request.nombre,
+        "apellido": request.apellido, "edad": request.edad,
+        "curso": request.curso, "direccion": request.direccion
+    }
+    guardar_json(db)
+    return alumno_pb2.RegistrarResponse(exito=True, mensaje="Alumno registrado.", id=nuevo_id)
+
+def Consultar(self, request, context):
+    db = leer_json()
+    if request.id in db:
+        return alumno_pb2.Alumno(**db[request.id])
+    context.set_code(grpc.StatusCode.NOT_FOUND) # Manejo de error
+    return alumno_pb2.Alumno()
+\end{lstlisting}
+\begin{itemize}
+    \item \textbf{\texttt{Registrar}:} Recibe los datos crudos del estudiante. El servidor le genera un ID único mediante la librería \texttt{uuid}, lo guarda en el diccionario de la base de datos y devuelve un mensaje de confirmación con el ID asignado.
+    \item \textbf{\texttt{Consultar}:} Recibe únicamente el ID. Si lo encuentra en el archivo JSON, devuelve la estructura \texttt{Alumno} completa. Si no, notifica al cliente con un código de error \texttt{NOT\_FOUND}.
+\end{itemize}
+
+\textbf{2. Actualizar y Eliminar (Modificación de Estado)}
+\begin{lstlisting}[language=Python]
+def Actualizar(self, request, context):
+    db = leer_json()
+    if request.id in db:
+        db[request.id] = { # Sobrescritura del registro
+            "id": request.id, "nombre": request.nombre,
+            "apellido": request.apellido, "edad": request.edad,
+            "curso": request.curso, "direccion": request.direccion
+        }
+        guardar_json(db)
+        return alumno_pb2.Respuesta(exito=True, mensaje="Alumno actualizado.")
+    return alumno_pb2.Respuesta(exito=False, mensaje="El ID no existe.")
+
+def Eliminar(self, request, context):
+    db = leer_json()
+    if request.id in db:
+        del db[request.id] # Borrado atomico de la llave en el diccionario
+        guardar_json(db)
+        return alumno_pb2.Respuesta(exito=True, mensaje="Alumno eliminado.")
+\end{lstlisting}
+\begin{itemize}
+    \item \textbf{\texttt{Actualizar}:} Recibe el ID del alumno y sus nuevos datos. Sobrescribe la información antigua directamente en la memoria y guarda los cambios en el archivo persistente.
+    \item \textbf{\texttt{Eliminar}:} Busca el ID y utiliza la instrucción \texttt{del} para remover todo el bloque de información asociado a ese estudiante en la base de datos.
+\end{itemize}
+
+\textbf{3. Buscar y Listar (Operaciones de Streaming)}
+\begin{lstlisting}[language=Python]
+def BuscarPorCriterio(self, request, context):
+    db = leer_json()
+    criterio = request.criterio.lower()
+    campo = request.campo.lower()
+    for alumno_data in db.values():
+        if campo in alumno_data and criterio in str(alumno_data[campo]).lower():
+            yield alumno_pb2.Alumno(**alumno_data) # Retorno en flujo (Stream)
+
+def ListarTodos(self, request, context):
+    db = leer_json()
+    for alumno_data in db.values():
+        yield alumno_pb2.Alumno(**alumno_data) # Retorno en flujo (Stream)
+\end{lstlisting}
+\begin{itemize}
+    \item \textbf{\texttt{BuscarPorCriterio}:} Es una función flexible que aplica un filtro ignorando mayúsculas y minúsculas (\texttt{lower()}). Utiliza la instrucción \texttt{yield} para transmitir en flujo continuo (\textit{stream}) todos los alumnos que coincidan con la búsqueda.
+    \item \textbf{\texttt{ListarTodos}:} Lee el archivo JSON completo y comienza a enviar, uno por uno y sin interrupciones, todos los registros al cliente mediante un flujo optimizado.
+\end{itemize}
+
+\subsection{Desarrollo del Lado del Servidor}
+
+\textbf{¿Qué se pretende hacer en el lado del Servidor?}
+
+El servidor tiene como propósito fundamental actuar como el núcleo (backend) del sistema. Sus objetivos principales son:
+\begin{enumerate}
+    \item \textbf{Exponer los servicios} definidos en el contrato \texttt{.proto}, escuchando peticiones en un puerto de red específico de forma ininterrumpida.
+    \item \textbf{Garantizar la integridad de los datos en entornos concurrentes}. Dado que gRPC permite conexiones simultáneas, el servidor pretende manejar múltiples clientes al mismo tiempo sin que la escritura en el archivo JSON (\texttt{alumnos.json}) sufra colisiones o se corrompa.
+\end{enumerate}
+
+Para lograr esto, la infraestructura del servidor se implementó de la siguiente manera:
+
+\subsubsection{1. Concurrencia y Persistencia Segura (I/O)}
+\begin{lstlisting}[language=Python]
+import threading
+import json
+import os
+
+JSON_FILE = "alumnos.json"
+_lock = threading.Lock() # Bloqueo para evitar colisiones
+
+def guardar_json(datos):
+    """Guarda un diccionario de Python en el archivo JSON."""
+    with _lock: # Solo un hilo a la vez puede entrar aqui
+        with open(JSON_FILE, "w") as f:
+            json.dump(datos, f, indent=4) 
+\end{lstlisting}
+\textbf{Explicación:} Se pretende evitar la "condición de carrera". Si dos clientes envían un registro al mismo milisegundo, la variable \texttt{\_lock} actúa como un semáforo. La instrucción \texttt{with \_lock:} asegura que el primer cliente termine de escribir en el archivo antes de darle paso al segundo, manteniendo la base de datos íntegra.
+
+\subsubsection{2. Lógica de Negocio (Clase \texttt{AlumnoServidor})}
+\begin{lstlisting}[language=Python]
+import uuid
+import grpc
+import alumno_pb2, alumno_pb2_grpc
+
+class AlumnoServidor(alumno_pb2_grpc.AlumnoServiceServicer):
+    def Registrar(self, request, context):
+        nuevo_id = str(uuid.uuid4())[:8] # Generacion de ID corto
+        db = leer_json()
+        db[nuevo_id] = {
+            "id": nuevo_id, "nombre": request.nombre,
+            "apellido": request.apellido, "edad": request.edad,
+            "curso": request.curso, "direccion": request.direccion
+        }
+        guardar_json(db)
+        return alumno_pb2.RegistrarResponse(exito=True, mensaje="Alumno registrado.", id=nuevo_id)
+
+    def BuscarPorCriterio(self, request, context):
+        db = leer_json()
+        criterio = request.criterio.lower()
+        campo = request.campo.lower()
+        for alumno_data in db.values():
+            if campo in alumno_data and criterio in str(alumno_data[campo]).lower():
+                yield alumno_pb2.Alumno(**alumno_data) # Retorno en flujo (Stream)
+\end{lstlisting}
+\textbf{Explicación:} La clase hereda del \textit{Servicer} generado por gRPC. En métodos unarios como \texttt{Registrar}, se procesa la petición y se guarda el estado. En métodos de streaming como \texttt{BuscarPorCriterio}, se utiliza la palabra reservada \texttt{yield}. Esto transforma la función en un generador, emitiendo resultados uno por uno a través de la red en lugar de sobrecargar la memoria del servidor.
+
+\subsubsection{3. Inicialización Multi-hilo}
+\begin{lstlisting}[language=Python]
+from concurrent import futures
+
+def iniciar_servidor():
+    # Servidor capaz de manejar 10 clientes al mismo tiempo
+    servidor = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    alumno_pb2_grpc.add_AlumnoServiceServicer_to_server(AlumnoServidor(), servidor)
+    servidor.add_insecure_port("[::]:50051")
+    servidor.start()
+    servidor.wait_for_termination()
+\end{lstlisting}
+\textbf{Explicación:} Se configura el motor de gRPC con un \textit{Thread Pool} de 10 trabajadores (\texttt{max\_workers=10}). Esto pretende brindar alta disponibilidad: el servidor no hace fila para atender peticiones, sino que atiende hasta 10 usuarios simultáneamente.
+
+\vspace{0.8cm}
+
+\subsection{Desarrollo del Lado del Cliente}
+
+\textbf{¿Qué se pretende hacer en el lado del Cliente?}
+
+El cliente es la parte que interactúa directamente con el usuario. Sus objetivos son:
+
+\begin{enumerate}
+    \item \textbf{Ocultar la complejidad de la red:} Para el usuario, todo debe sentirse como un programa normal en su computadora (con un menú en consola). El cliente se encarga de enviar las peticiones al servidor y de mostrar las respuestas sin que el usuario note lo que pasa detrás.
+    
+    \item \textbf{Manejo de errores:} Si ocurre un problema en la red o en el servidor, el cliente debe manejarlo correctamente y mostrar un mensaje claro, en lugar de cerrarse de forma inesperada.
+\end{enumerate}
+
+Para lograr esto, el cliente se estructuró de la siguiente manera:
+
+\subsubsection{1. Conexión Dinámica y Canal gRPC}
+\begin{lstlisting}[language=Python]
+import grpc
+import alumno_pb2, alumno_pb2_grpc
+import sys
+
+def ejecutar(ip_servidor):
+    direccion = f"{ip_servidor}:50051"
+    # Abrimos el canal de comunicacion hacia la IP indicada
+    with grpc.insecure_channel(direccion) as channel:
+        # El stub actua como un puente transparente hacia el servidor
+        stub = alumno_pb2_grpc.AlumnoServiceStub(channel)
+        # ... Inicio del bucle del menu ...
+\end{lstlisting}
+\textbf{Explicación:} Se pretende que el cliente sea dinámico, recibiendo la IP como argumento. Se utiliza \texttt{grpc.insecure\_channel} para abrir la tubería de red. A partir de ella se instancia el \texttt{Stub}, que es la clase que traduce las llamadas a funciones locales en peticiones remotas binarias.
+
+\subsubsection{2. Empaquetado y Robustez (Manejo de Errores)}
+\begin{lstlisting}[language=Python]
+            elif opcion == "1":
+                n = input("Nombre: ")
+                # ... (captura de datos extra omitida por brevedad) ...
+                
+                # Empaquetamos en el Request correspondiente
+                request = alumno_pb2.RegistrarRequest(nombre=n, apellido="X", edad=20, curso="Y", direccion="Z")
+                try:
+                    # Invocacion del procedimiento remoto
+                    respuesta = stub.Registrar(request)
+                    if respuesta.exito:
+                        print(f"ID GENERADO: {respuesta.id}") 
+                except grpc.RpcError as err:
+                    # Captura de fallos de red o caidas del servidor
+                    print(f"\n[!] Error de conexion: {err.details()}")
+\end{lstlisting}
+\textbf{Explicación:} Los datos ingresados en crudo por el usuario se instancian dentro de los objetos \texttt{Request} del \texttt{.proto}. Es imperativo el uso del bloque \texttt{try-except} capturando la excepción específica \texttt{grpc.RpcError}. Con esto se pretende que si el servidor se apaga repentinamente o la red se cae, se imprima un mensaje amigable y el usuario pueda seguir interactuando con el menú.
+
+\subsubsection{3. Consumo de Streaming de Datos}
+\begin{lstlisting}[language=Python]
+            elif opcion == "5":
+                campo = input("Campo a buscar: ")
+                criterio = input("Que deseas buscar?: ")
+                request = alumno_pb2.BuscarRequest(campo=campo, criterio=criterio)
+                
+                print("\n--- Resultados ---")
+                # Iteracion sobre el stream de datos proveniente del servidor
+                for alumno in stub.BuscarPorCriterio(request):
+                    mostrar_alumno(alumno)
+\end{lstlisting}
+\textbf{Explicación:} Para los métodos de tipo \textit{Streaming}, la llamada al \texttt{stub} no devuelve un objeto estático, sino un iterable continuo. Mediante un ciclo \texttt{for} estándar de Python, el cliente pretende extraer e imprimir en tiempo real cada estudiante que el servidor va inyectando en la tubería de red.
+
+
 
     % Impresión Referencias
     \nocite{*}
