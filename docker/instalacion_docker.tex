@@ -1,0 +1,119 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{verbatim}
+\geometry{margin=2.5cm}
+
+\title{Instalaci\'on de Docker en Ubuntu 20.04 LTS}
+\author{Gu\'ia basada en la configuraci\'on real de esta m\'aquina}
+\date{25 de abril de 2026}
+
+\begin{document}
+\maketitle
+
+\section*{1. Instalar dependencias base}
+Se actualizaron los índices y se instalaron las utilidades necesarias para agregar el repositorio oficial de Docker.
+
+\begin{verbatim}
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl gnupg lsb-release
+\end{verbatim}
+
+Estas herramientas permiten descargar la clave GPG del repositorio oficial y registrar el origen de paquetes de Docker de forma segura.
+
+\section*{2. Agregar la clave GPG de Docker}
+Para que \texttt{apt} confíe en el repositorio oficial, se creó el directorio de llaves y se instaló la clave de firma de Docker.
+
+\begin{verbatim}
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+\end{verbatim}
+
+Durante este paso, la clave ya existía en la máquina y se sobrescribió para dejarla consistente con el repositorio oficial.
+
+\section*{3. Registrar el repositorio oficial}
+En lugar de depender del paquete \texttt{docker.io} de Ubuntu, se agregó el repositorio oficial de Docker para obtener las versiones actuales de Engine, Compose y Buildx.
+
+{\small
+\begin{verbatim}
+repo="deb [arch=$(dpkg --print-architecture) \\
+signed-by=/etc/apt/keyrings/docker.gpg]"
+repo="$repo https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+echo "$repo" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+\end{verbatim}
+}
+
+En esta máquina la distribución reportó \texttt{focal}, por lo que el repositorio quedó apuntando a Ubuntu 20.04.
+
+\section*{4. Quitar paquetes anteriores de Ubuntu}
+Antes de instalar Docker desde el repositorio oficial, se eliminaron los paquetes que venían del repositorio de Ubuntu para evitar conflictos.
+
+\begin{verbatim}
+sudo apt-get remove -y docker.io containerd runc
+\end{verbatim}
+
+Esto liberó la instalación previa y evitó mezclar binarios de distinta procedencia.
+
+\section*{5. Instalar Docker completo}
+Luego se instaló el conjunto oficial de paquetes:
+
+\begin{itemize}[leftmargin=*]
+  \item \texttt{docker-ce}: motor de Docker.
+  \item \texttt{docker-ce-cli}: cliente de línea de comando.
+  \item \texttt{containerd.io}: runtime de contenedores.
+  \item \texttt{docker-buildx-plugin}: soporte para Buildx.
+  \item \texttt{docker-compose-plugin}: soporte para \texttt{docker compose}.
+  \item \texttt{docker-ce-rootless-extras}: utilidades para modo rootless.
+\end{itemize}
+
+\begin{verbatim}
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io \
+  docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+\end{verbatim}
+
+En esta m\'aquina, \texttt{apt} instal\'o adem\'as \texttt{slirp4netns}, que es una dependencia usada por el modo rootless.
+
+\section*{6. Habilitar el servicio}
+Se activ\'o Docker para que arranque autom\'aticamente con el sistema.
+
+\begin{verbatim}
+sudo systemctl enable --now docker
+\end{verbatim}
+
+Con esto, el servicio qued\'o activo y habilitado al inicio.
+
+\section*{7. Verificar la instalaci\'on}
+Finalmente se comprob\'o que las herramientas respondieran correctamente y se ejecut\'o un contenedor de prueba.
+
+\begin{verbatim}
+docker --version
+docker compose version
+docker buildx version
+systemctl is-active docker
+systemctl is-enabled docker
+docker run --rm hello-world
+\end{verbatim}
+
+La verificaci\'on fue exitosa: Docker report\'o la versi\'on \texttt{28.1.1}, Compose report\'o \texttt{v2.35.1}, Buildx report\'o \texttt{v0.23.0} y el contenedor \texttt{hello-world} confirm\'o que el motor funciona correctamente.
+
+\section*{8. Resultado final}
+La instalaci\'on correcta en esta computadora qued\'o con esta combinaci\'on:
+
+\begin{itemize}[leftmargin=*]
+  \item Ubuntu 20.04.6 LTS.
+  \item Repositorio oficial de Docker para \texttt{focal}.
+  \item Docker Engine 28.1.1.
+  \item Docker Compose Plugin 2.35.1.
+  \item Docker Buildx Plugin 0.23.0.
+  \item Servicio \texttt{docker} activo y habilitado.
+\end{itemize}
+
+
+\end{document}
