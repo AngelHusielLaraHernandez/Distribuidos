@@ -12,23 +12,25 @@
 \contentsline {subsection}{\numberline {4.4}Desarrollo del Cliente}{14}{subsection.4.4}%
 \contentsline {subsection}{\numberline {4.5}Resultados:}{15}{subsection.4.5}%
 \contentsline {subsubsection}{\numberline {4.5.1}Opcion 1 (Registro de alumnos):}{15}{subsubsection.4.5.1}%
-\contentsline {subsubsection}{\numberline {4.5.2}Opcion 2 (Buscar alumno):}{16}{subsubsection.4.5.2}%
-\contentsline {subsubsection}{\numberline {4.5.3}Opcion 3 (Actulizacion de alumno):}{16}{subsubsection.4.5.3}%
-\contentsline {subsection}{\numberline {4.6}Opcion 4 (Eliminar alumno:)}{16}{subsection.4.6}%
-\contentsline {section}{\numberline {5}Actividad 2}{16}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Planteamiento de la Solución}{16}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Diseño y Justificación del Archivo \texttt {.proto}}{17}{subsection.5.2}%
-\contentsline {subsubsection}{\numberline {5.2.1}La Estructura Principal: \texttt {Alumno} (Mensajes)}{19}{subsubsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2}Las Funciones del Servidor (Servicio y Métodos RPC)}{20}{subsubsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.3}Desarrollo del Lado del Servidor}{22}{subsection.5.3}%
-\contentsline {subsubsection}{\numberline {5.3.1}1. Concurrencia y Persistencia Segura (I/O)}{22}{subsubsection.5.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.2}2. Lógica de Negocio (Clase \texttt {AlumnoServidor})}{23}{subsubsection.5.3.2}%
-\contentsline {subsubsection}{\numberline {5.3.3}3. Inicialización Multi-hilo}{24}{subsubsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.4}Desarrollo del Lado del Cliente}{25}{subsection.5.4}%
-\contentsline {subsubsection}{\numberline {5.4.1}1. Conexión Dinámica y Canal gRPC}{25}{subsubsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.2}2. Empaquetado y Robustez (Manejo de Errores)}{26}{subsubsection.5.4.2}%
-\contentsline {subsubsection}{\numberline {5.4.3}3. Consumo de Streaming de Datos}{27}{subsubsection.5.4.3}%
-\contentsline {subsection}{\numberline {5.5}Resultados de la Actividad 2}{28}{subsection.5.5}%
-\contentsline {subsubsection}{\numberline {5.5.1}Local}{28}{subsubsection.5.5.1}%
-\contentsline {subsubsection}{\numberline {5.5.2}Remoto}{33}{subsubsection.5.5.2}%
-\contentsline {section}{Referencias}{37}{section*.29}%
+\contentsline {subsubsection}{\numberline {4.5.2}Opcion 2 (Buscar alumno):}{18}{subsubsection.4.5.2}%
+\contentsline {subsubsection}{\numberline {4.5.3}Opcion 3 (Actulizacion de alumno):}{20}{subsubsection.4.5.3}%
+\contentsline {subsection}{\numberline {4.6}Opcion 4 (Eliminar alumno:)}{23}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Actividad 2}{24}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Planteamiento de la Solución}{24}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Diseño y Justificación del Archivo \texttt {.proto}}{24}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}La Estructura Principal: \texttt {Alumno} (Mensajes)}{27}{subsubsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2}Las Funciones del Servidor (Servicio y Métodos RPC)}{28}{subsubsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.3}Desarrollo del Lado del Servidor}{30}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}1. Concurrencia y Persistencia Segura (I/O)}{30}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}2. Lógica de Negocio (Clase \texttt {AlumnoServidor})}{31}{subsubsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.3}3. Inicialización Multi-hilo}{32}{subsubsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.4}Desarrollo del Lado del Cliente}{33}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}1. Conexión Dinámica y Canal gRPC}{33}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}2. Empaquetado y Robustez (Manejo de Errores)}{34}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.3}3. Consumo de Streaming de Datos}{35}{subsubsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.5}Resultados de la Actividad 2}{36}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Local}{36}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Remoto}{41}{subsubsection.5.5.2}%
+\contentsline {section}{\numberline {6}Tabla de participacion en el proyecto:}{45}{section.6}%
+\contentsline {section}{\numberline {7}Conclusiones:}{45}{section.7}%
+\contentsline {section}{Referencias}{46}{section*.46}%
