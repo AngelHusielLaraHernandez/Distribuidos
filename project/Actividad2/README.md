@@ -1,4 +1,4 @@
-# 🎓 Sistema de Alumnos — Aplicación Distribuida con gRPC (Python)
+# Sistema de Alumnos — Aplicación Distribuida con gRPC (Python)
 
 ## Estructura del proyecto
 
@@ -113,8 +113,8 @@ Selecciona una opcion: 1
   Curso     : Redes
   Direccion : Calle Falsa 123
 
-  ✅ Alumno registrado exitosamente.
-  📌 ID asignado: 3F7A1B2C
+  Alumno registrado exitosamente.
+  ID asignado: 3F7A1B2C
 
 Selecciona una opcion: 5
   Campo de busqueda: curso
