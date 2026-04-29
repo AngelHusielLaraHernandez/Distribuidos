@@ -701,6 +701,49 @@
     Si cacha el marcador \texttt{-1} o de caracteres en los apuntadores serializados de cadena, 
     salta asíncronamente su actualización y pasa por retener en el registro la información que se obtuvo.
 
+    \subsection{Resultados:}
+
+    \subsubsection{Opcion 1 (Registro de alumnos):}
+    Para la primera parte, tenemos al inicio del servidor, donde al momento de inicair el servidor el servidor manda un mensaje en la consola,
+    indicando que ip es la que esta usando y cual fue la asignada por rpcbind, ahora bien, una vez iniciando el servidor, los demas clientes 
+    se pueden conectar, lanzandoles el menu principal, donde el cliente 1, lo primero que hace es registrar un alumno, donde se le pide que se le asigne el ID, 
+    el nombre, donde sera el nombre de el integrante Adolfo de jesus, despues de esto se le pide la edad y el curso, por ultimo el servidor, le responde con un mensaje de cofnirmacion y el servidor en la terminal y en txt, se actuliza
+    correctamente y al mismo tiempo.
+
+    %imagen de fofo y de servidor primera
+
+    Despues de esto, el cliente 2, tambien registrara un alumno, donde este mismo se le pediran los mismos datos y se actulziara de la misma forma, donde en la terminal del servidor, se ve como la ip 
+    cambia entre dispositivos y se ve como se actuliza correctame el txt.
+
+    %imagen de pepe y de servidor
+
+    Ahora bien, en el cliente 1, que tiene la direccion ip \texttt{172.27.61.105} con el puerto \texttt{51880} y el cliente 2, tiene la ip \texttt{ 172.27.61.64} con el puerto \texttt{45828}.
+    Estos dos clientes, seguiran registratnado otros dos alumnos, donde quedara de la siguiente manera y se vera asi tanto en la terminal de los clientes:
+
+    %fotos de todos los registros del cliente
+
+    \subsubsection{Opcion 2 (Buscar alumno):}
+    Los clientes biscaran los alumnos, ya sea por ID, nombre, o algun campo relacionado, donde al cliente se le traera el alumno con sus atributos,
+    pero en el servidor, se vera que usuario hizo la solicitud en la terminal.
+
+    %foto de fofo solicitado la buqueda de los alumnos
+
+
+    \subsubsection{Opcion 3 (Actulizacion de alumno):}
+
+    Para la parte de actulizacion de un alumno, lo que se hace principamente, es listar todos los alumnos registrados en la terminla, una vezz que lo localice, el cliente
+    lo buscara por el ID, donde, se podran actulizar todos los campos, pero en caso de no querer actulizar un campo, se puede dejar vacio dandole un enter y se quedara como esta, despues de esto 
+    en el setvidor se veran dos llamdas o dos solicituds, una que es listar alumnos, y otro que es la funcion de actulizar alumno, esto se ve en la terminal como se hacen las dos solicitudes
+    se ven en la misma ip, ademas de eso, se ve como se actuliza correctaente el txt, a comparacion del anterior:
+
+    \subsection{Opcion 4 (Eliminar alumno:)}
+
+    Para eliminar un alumno, en este caso se le muestra la lista de los alumnos a el cliente y solo se le pide el ID que se desee eliminar y este mismo se eliminara autoamticamente
+    tanto del registro como del txt para tener un correcto control del mismo.
+
+    
+
+    
     \section{Actividad 2}
 
     \subsection{Planteamiento de la Solución}
