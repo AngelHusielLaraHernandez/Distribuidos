@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portada - RPC y gRPC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Importación de fuentes elegantes y modernas */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@400;500;600;700&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0f172a; /* Fondo oscuro de la página */
+        }
+
+        /* Contenedor principal con proporción 16:9 (1280x720) */
+        .video-thumbnail {
+            width: 1280px;
+            height: 720px;
+            /* Fondo de sistemas distribuidos/redes con un gradiente oscuro para legibilidad */
+            background-image: linear-gradient(rgba(2, 6, 23, 0.85), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .font-serif { font-family: 'Cinzel', serif; }
+        .font-sans { font-family: 'Montserrat', sans-serif; }
+        
+        .unam-gold { color: #D4AF37; } /* Color oro UNAM */
+        
+        /* Efecto de cristal para el cuadro de información */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-thumbnail p-12">
+        
+        <!-- HEADER: Logos y Nombre de la Universidad -->
+        <!-- Logo UNAM (Izquierda) -->
+        <img src="der.png" alt="Logo UNAM" class="absolute top-10 left-10 h-36 object-contain drop-shadow-lg z-10">
+             
+        <!-- Logo Facultad (Derecha) -->
+        <img src="izq.png" alt="Logo FI" class="absolute top-10 right-10 h-36 object-contain drop-shadow-lg z-10">
+        
+        <!-- Títulos Centrales -->
+        <div class="text-center w-full pt-4 pb-2 z-10 relative">
+            <h1 class="text-3xl font-serif font-bold tracking-widest unam-gold drop-shadow-md">UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO</h1>
+            <h2 class="text-2xl font-sans mt-3 tracking-[0.2em] uppercase font-semibold text-gray-200">Facultad de Ingeniería</h2>
+        </div>
+
+        <!-- CUERPO CENTRAL: Información de la Práctica -->
+        <div class="flex-grow flex justify-center items-center font-sans mt-4 relative z-10">
+            
+            <div class="glass-panel w-full max-w-5xl rounded-3xl p-10 relative">
+                
+                <!-- Materia y Grupo -->
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold unam-gold uppercase tracking-widest mb-2">Sistemas Distribuidos</h3>
+                    <div class="flex justify-center space-x-12 text-lg text-gray-300 font-medium">
+                        <span class="bg-white/10 px-4 py-1 rounded-full border border-white/5">Grupo: 01</span>
+                        <span class="bg-white/10 px-4 py-1 rounded-full border border-white/5">Semestre: 2026-2</span>
+                    </div>
+                </div>
+
+                <!-- Título Principal de la Práctica -->
+                <div class="text-center mb-10 mt-6">
+                    <p class="text-xl text-gray-400 tracking-wider mb-2 uppercase">Práctica</p>
+                    <h4 class="text-6xl font-bold text-white tracking-tight drop-shadow-lg">RPC y gRPC</h4>
+                </div>
+
+                <!-- Detalles (Integrantes y Profesora) -->
+                <div class="grid grid-cols-12 gap-8 text-left border-t border-white/10 pt-8 mt-4">
+                    
+                    <!-- Columna Integrantes (Ocupa 7/12 del espacio) -->
+                    <div class="col-span-7 pl-4">
+                        <p class="text-lg unam-gold font-bold mb-4 tracking-wider uppercase">Integrantes</p>
+                        <ul class="space-y-3 text-[17px] text-gray-100 font-medium">
+                            <li class="flex justify-between items-center bg-white/5 p-2 rounded-lg px-4">
+                                <span>García Cortés Adolfo de Jesús</span> 
+                                <span class="text-unam-gold font-mono text-sm bg-black/30 px-2 py-1 rounded">320317264</span>
+                            </li>
+                            <li class="flex justify-between items-center bg-white/5 p-2 rounded-lg px-4">
+                                <span>Lara Hernandez Angel Husiel</span> 
+                                <span class="text-unam-gold font-mono text-sm bg-black/30 px-2 py-1 rounded">320060829</span>
+                            </li>
+                            <li class="flex justify-between items-center bg-white/5 p-2 rounded-lg px-4">
+                                <span>Lugo Manzano Rodrigo</span> 
+                                <span class="text-unam-gold font-mono text-sm bg-black/30 px-2 py-1 rounded">320206968</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Columna Profesora y Fecha (Ocupa 5/12 del espacio) -->
+                    <div class="col-span-5 flex flex-col justify-center space-y-6 border-l border-white/10 pl-8">
+                        <div>
+                            <p class="text-sm unam-gold font-bold mb-1 tracking-wider uppercase">Profesora</p>
+                            <p class="text-xl text-gray-100 font-semibold">M.I. Elba Karen Saenz García</p>
+                        </div>
+                        <div>
+                            <p class="text-sm unam-gold font-bold mb-1 tracking-wider uppercase">Fecha de Entrega</p>
+                            <p class="text-xl text-gray-100 font-semibold">4 de Mayo del 2026</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- Elementos decorativos (Líneas tecnológicas) -->
+        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-60"></div>
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-20"></div>
+    </div>
+
+</body>
+</html>
