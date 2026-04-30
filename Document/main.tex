@@ -1130,6 +1130,11 @@ def ejecutar(ip_servidor):
                     mostrar_alumno(alumno)
 \end{lstlisting}
 
+\textbf{Explicación Detallada del Flujo:}
+\begin{itemize}
+    \item \textbf{El Paradigma de Recepción de Streams:} A diferencia de la petición unaria anterior (donde se recibe una sola respuesta estática), la llamada a \texttt{stub.BuscarPorCriterio(request)} devuelve un iterador de Python que está conectado en vivo al flujo del servidor.
+    \item \textbf{Desempaquetado Asíncrono (\texttt{for alumno in ...}):} Este ciclo \texttt{for} no procesa una lista que ya está en la memoria del cliente. Por el contrario, se queda escuchando en el canal de red. Cada vez que el servidor emite un estudiante (usando su instrucción \texttt{yield}), el cliente recibe ese paquete, lo desempaqueta, e imprime el objeto \texttt{alumno} usando la función auxiliar \texttt{mostrar\_alumno}. Esto permite visualizar grandes volúmenes de datos en tiempo real, con una latencia mínima y sin saturar la memoria RAM de la máquina cliente.
+\end{itemize}
 
 \newpage
 
