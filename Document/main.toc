@@ -32,5 +32,5 @@
 \contentsline {subsubsection}{\numberline {5.5.1}Local}{36}{subsubsection.5.5.1}%
 \contentsline {subsubsection}{\numberline {5.5.2}Remoto}{41}{subsubsection.5.5.2}%
 \contentsline {section}{\numberline {6}Tabla de participacion en el proyecto:}{45}{section.6}%
-\contentsline {section}{\numberline {7}Conclusiones:}{45}{section.7}%
-\contentsline {section}{Referencias}{46}{section*.46}%
+\contentsline {section}{\numberline {7}Conclusiones:}{46}{section.7}%
+\contentsline {section}{Referencias}{47}{section*.46}%

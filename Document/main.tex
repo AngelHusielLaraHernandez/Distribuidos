@@ -1407,24 +1407,39 @@
             \hline
             \cellcolor{orange!10}\centering\Large{Lara Hernandez Angel Husiel} & Para esta practica, lo que logre hacer, fue la realizacion de la actidiad 1, donde desde la generacion del .x, tomando como base lo que nos dio la profesora, agrege secciones las cuales era mas facil que el servidor se comunicara, como la creacion de las listas, asi mismo, el sistema de comunicacion del mismo, fue programado siguiendo los conceptos de apuntadores, logrando asi una correcta activida 1, cumpliendo con todo lo solicitado en C.  \\
             \hline
-            \cellcolor{orange!10}\centering\Large{Lugo Manzano Rodrigo} & \\
+            \cellcolor{orange!10}\centering\Large{Lugo Manzano Rodrigo} & Para esta práctica, me encargué de desarrollar toda la sección de la investigación previa, estableciendo las bases teóricas sobre IDL, XDR y Protocol Buffers. También, participé en las pruebas operativas de las actividades 1 y 2, conectándome como cliente para validar que la comunicación en los servidores funcionaran correctamente. Finalmente, le di voz a la narrativa del video explicativo, donde demostramos el flujo y los resultados exitosos de ambas actividades. \\
             \hline
         \end{tabular}
-        \caption{Participacion de integrantes en el proyecto}
+        \caption{Participación de integrantes en el proyecto}
         \label{tab:participacion-integrantes}
     \end{table}
 
     \section{Conclusiones:}
 
     \begin{itemize}
-      \item García Cortés Adolfo de Jesús: Durante esta práctica, entendí mejor cómo funcionan las llamadas a procedimientos remotos al comparar dos tecnologías de diferentes épocas. 
-      En la primera actividad, al usar el compilador rpcgen, pude ver de forma más básica cómo se hacen las peticiones y cómo se envían los datos. Esto me ayudó a entender mejor cómo funciona la comunicación entre cliente y servidor desde un nivel más cercano al sistema operativo, y me dio una buena base sobre el cómputo distribuido.
-      Al estudiar RPC, noté que su principal ventaja es que es muy ligero y ya viene incluido en muchos sistemas Unix, lo que lo hace útil cuando se trabaja directamente con C y la red. Sin embargo, también tiene desventajas: es más difícil de aprender, requiere manejar la memoria manualmente, sus tipos de datos son limitados y no está tan preparado para manejar grandes cantidades de datos de forma eficiente como las tecnologías actuales.
+        \item García Cortés Adolfo de Jesús: Durante esta práctica, entendí mejor cómo funcionan las llamadas a procedimientos remotos al comparar dos tecnologías de diferentes épocas. 
+        En la primera actividad, al usar el compilador rpcgen, pude ver de forma más básica cómo se hacen las peticiones y cómo se envían los datos. Esto me ayudó a entender mejor cómo funciona la comunicación entre cliente y servidor desde un nivel más cercano al sistema operativo, y me dio una buena base sobre el cómputo distribuido.
+        Al estudiar RPC, noté que su principal ventaja es que es muy ligero y ya viene incluido en muchos sistemas Unix, lo que lo hace útil cuando se trabaja directamente con C y la red. Sin embargo, también tiene desventajas: es más difícil de aprender, requiere manejar la memoria manualmente, sus tipos de datos son limitados y no está tan preparado para manejar grandes cantidades de datos de forma eficiente como las tecnologías actuales.
         Por otro lado, en la segunda actividad usé gRPC con Python, y la experiencia fue mucho más sencilla . Definir la interfaz con archivos .proto fue más fácil de entender, y el código se generó automáticamente, lo que simplificó mucho el trabajo. Además, el uso de server streaming fue muy útil para enviar varios datos (como registros de alumnos) poco a poco, sin gastar demasiada memoria.
 
-Esta segunda parte me permitió ver que gRPC tiene muchas ventajas: es más rápido, puede usarse con varios lenguajes y funciona muy bien para sistemas grandes gracias a su escalabilidad. Aunque tiene algunas desventajas, como necesitar instalar dependencias o ser demasiado complejo para proyectos pequeños, en general es una mejor opción que las tecnologías más antiguas.
-      \item Lara Hernandez Angel Husiel: En esta práctica trabajé tanto con Sun‑RPC/XDR (Actividad 1) como con gRPC/Protocol Buffers (Actividad 2). La primera actividad me permitió comprender a fondo el flujo clásico de RPC, el empaquetado fijo de XDR y la simplicidad para implementar servicios en C; es una solución directa y fácil de depurar, pero limitada en extensibilidad y menos eficiente frente a cambios frecuentes en el esquema. En la segunda actividad, gRPC demostró ser mucho más moderno: mensajes compactos, compatibilidad multi‑lenguaje, soporte nativo para streaming y mejores prestaciones en entornos distribuidos; su principal coste es la dependencia de herramientas, mayor complejidad inicial y curva de aprendizaje. En resumen: RPC clásico es práctico para sistemas sencillos y retrocompatibilidad, mientras que gRPC es preferible para arquitecturas modernas y escalables; ambas experiencias me enseñaron a diseñar interfaces, manejar serialización y aplicar buenas prácticas de concurrencia y persistencia.
-      \item Lugo Manzano Rodrigo:
+        Esta segunda parte me permitió ver que gRPC tiene muchas ventajas: es más rápido, puede usarse con varios lenguajes y funciona muy bien para sistemas grandes gracias a su escalabilidad. Aunque tiene algunas desventajas, como necesitar instalar dependencias o ser demasiado complejo para proyectos pequeños, en general es una mejor opción que las tecnologías más antiguas.
+        \item Lara Hernandez Angel Husiel: En esta práctica trabajé tanto con Sun‑RPC/XDR (Actividad 1) como con gRPC/Protocol Buffers (Actividad 2). La primera actividad me permitió comprender a fondo el flujo clásico de RPC, el empaquetado fijo de XDR y la simplicidad para implementar servicios en C; es una solución directa y fácil de depurar, pero limitada en extensibilidad y menos eficiente frente a cambios frecuentes en el esquema. En la segunda actividad, gRPC demostró ser mucho más moderno: mensajes compactos, compatibilidad multi‑lenguaje, soporte nativo para streaming y mejores prestaciones en entornos distribuidos; su principal coste es la dependencia de herramientas, mayor complejidad inicial y curva de aprendizaje. En resumen: RPC clásico es práctico para sistemas sencillos y retrocompatibilidad, mientras que gRPC es preferible para arquitecturas modernas y escalables; ambas experiencias me enseñaron a diseñar interfaces, manejar serialización y aplicar buenas prácticas de concurrencia y persistencia.
+        
+        \item Lugo Manzano Rodrigo: Primero en esta práctica, gracias a la investigación previa logré analizar y 
+        comprender teóricamente los conceptos fundamentales antes de 
+        pasar a la práctica. Al estar la primera actividad, cumplí el objetivo de entender 
+        a profundidad el uso del IDL de Sun-RPC mediante XDR y el funcionamiento del 
+        compilador rpcgen, realizando las pruebas y conectandome como cliente a los 
+        servicios en C, pude observar directamente cómo se gestiona el empaquetado de 
+        datos y la estructura clásica de las llamadas remotas. Posteriormente, pude
+        contrastar esta experiencia al abordar el uso de gRPC con 
+        Python, definir las interfaces de servicios a través de Protocol Buffers (.proto) 
+        me pareció un proceso mucho más dinámico y adaptable. Al ejecutar las pruebas 
+        operativas en ambos sistemas, pude observar claramente la evolución del cómputo 
+        distribuido, pasando de la rigidez de XDR a un entorno moderno con Protobuf que 
+        facilita implementaciones complejas, como el server streaming. Esta 
+        práctica me permitió consolidar una visión completa sobre cómo se diseñan e 
+        interactúan los sistemas distribuidos en diferentes arquitecturas.
     \end{itemize}
 
     % Impresión Referencias
