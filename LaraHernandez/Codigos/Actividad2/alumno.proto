@@ -1,0 +1,82 @@
+//Version 3
+syntax = "proto3";
+
+package alumnos;
+
+//Funciones del servidor
+
+
+service AlumnoService {
+
+  
+  // Operaciones 
+  rpc Registrar (RegistrarRequest) returns (RegistrarResponse);
+  rpc Consultar (ConsultarRequest) returns (Alumno);
+  rpc Actualizar (ActualizarRequest) returns (Respuesta);
+  rpc Eliminar (EliminarRequest) returns (Respuesta);
+  
+  // Operaciones donde hay interacción entre cliente y servidor
+
+  rpc BuscarPorCriterio (BuscarRequest) returns (stream Alumno);
+  rpc ListarTodos (ListarRequest) returns (stream Alumno);
+}
+
+
+//MENSAJES
+
+// Estructura principal de un alumno. 
+// identificadores únicos 
+message Alumno {
+  string id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  int32 edad = 4;        
+  string curso = 5;
+  string direccion = 6;
+}
+
+message RegistrarRequest {
+  string nombre = 1;
+  string apellido = 2;
+  int32 edad = 3;
+  string curso = 4;
+  string direccion = 5;
+}
+
+message RegistrarResponse {
+  bool exito = 1;       
+  string mensaje = 2;    
+  string id = 3;         
+}
+
+message ConsultarRequest {
+  string id = 1;
+}
+
+message ActualizarRequest {
+  string id = 1;
+  string nombre = 2;
+  string apellido = 3;
+  int32 edad = 4;
+  string curso = 5;
+  string direccion = 6;
+}
+
+message EliminarRequest {
+  string id = 1;
+}
+
+//Respuesta prueba si funciono o no
+message Respuesta {
+  bool exito = 1;
+  string mensaje = 2;
+}
+
+message BuscarRequest {
+  string campo = 1;      // Puede ser "nombre", "apellido" o "curso"
+  string criterio = 2;   // Lo que el usuario escribió para buscar
+}
+
+// Mensaje vacío porque para listar todos no necesitamos enviar ningún parámetro
+message ListarRequest {
+}
