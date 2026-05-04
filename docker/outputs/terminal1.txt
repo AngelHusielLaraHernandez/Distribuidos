@@ -1,0 +1,360 @@
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1$ docker container ls -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED         STATUS                       PORTS     NAMES
+9fafd11987ac   larahernandez                                "./holaLaraHernandez…"   6 days ago      Exited (0) 6 days ago                  magical_margulis
+83b62cc5035f   larahernandez                                "./holaLaraHernandez…"   6 days ago      Exited (0) 6 days ago                  condescending_payne
+a39ee86fc077   ubuntu                                       "bash"                   7 days ago      Exited (0) 6 days ago                  gallant_mclaren
+107905c03607   hola-mundo                                   "/hello"                 7 days ago      Exited (0) 7 days ago                  compassionate_boyd
+cfb8c15402d4   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   13 months ago   Exited (137) 13 months ago             mi_nueva_instancia_2
+c9bdbb4f147f   hello-world                                  "/hello"                 13 months ago   Exited (0) 13 months ago               quizzical_lamarr
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1$ docker rm 9fafd11987ac 83b62cc5035f 107905c03607 c9bdbb4f147f
+9fafd11987ac
+83b62cc5035f
+107905c03607
+c9bdbb4f147f
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1$ docker container ls -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED         STATUS                       PORTS     NAMES
+a39ee86fc077   ubuntu                                       "bash"                   7 days ago      Exited (0) 6 days ago                  gallant_mclaren
+cfb8c15402d4   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   13 months ago   Exited (137) 13 months ago             mi_nueva_instancia_2
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1$ cd docker/
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ nano dockerfile
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker build -t debianfiglet.
+ERROR: docker: 'docker buildx build' requires 1 argument
+
+Usage:  docker buildx build [OPTIONS] PATH | URL | -
+
+Run 'docker buildx build --help' for more information
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker build -t debianfiglet .
+[+] Building 177.8s (6/6) FINISHED                                                                                                                              docker:default
+ => [internal] load build definition from Dockerfile                                                                                                                      0.1s
+ => => transferring dockerfile: 155B                                                                                                                                      0.0s
+ => [internal] load metadata for docker.io/library/ubuntu:latest                                                                                                          0.0s
+ => [internal] load .dockerignore                                                                                                                                         0.1s
+ => => transferring context: 2B                                                                                                                                           0.0s
+ => [1/2] FROM docker.io/library/ubuntu:latest                                                                                                                            0.0s
+ => [2/2] RUN apt update && apt install figlet -y                                                                                                                       177.0s
+ => exporting to image                                                                                                                                                    0.4s 
+ => => exporting layers                                                                                                                                                   0.3s 
+ => => writing image sha256:5002c519f5863baf0e7f5a50136296f6ef2d1a8d998be7fae967d633ec1f9204                                                                              0.0s 
+ => => naming to docker.io/library/debianfiglet                                                                                                                           0.0s 
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run debianfiglet
+ _   _       _             _               _                                                                                                                                   
+| | | | ___ | | __ _    __| | ___  ___  __| | ___ 
+| |_| |/ _ \| |/ _` |  / _` |/ _ \/ __|/ _` |/ _ \
+|  _  | (_) | | (_| | | (_| |  __/\__ \ (_| |  __/
+|_| |_|\___/|_|\__,_|  \__,_|\___||___/\__,_|\___|
+                                                  
+ ____             _             _____ _ _            _      
+|  _ \  ___   ___| | _____ _ __|  ___(_) | ___    __| | ___ 
+| | | |/ _ \ / __| |/ / _ \ '__| |_  | | |/ _ \  / _` |/ _ \
+| |_| | (_) | (__|   <  __/ |  |  _| | | |  __/ | (_| |  __/
+|____/ \___/ \___|_|\_\___|_|  |_|   |_|_|\___|  \__,_|\___|
+                                                            
+ _                    _   _                                 _          
+| |    __ _ _ __ __ _| | | | ___ _ __ _ __   __ _ _ __   __| | ___ ____
+| |   / _` | '__/ _` | |_| |/ _ \ '__| '_ \ / _` | '_ \ / _` |/ _ \_  /
+| |__| (_| | | | (_| |  _  |  __/ |  | | | | (_| | | | | (_| |  __// / 
+|_____\__,_|_|  \__,_|_| |_|\___|_|  |_| |_|\__,_|_| |_|\__,_|\___/___|
+                                                                       
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker save -o dockerimage.tar debianfiglet
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ ocker container ls -a
+
+Orden «ocker» no encontrada. Quizá quiso decir:
+
+  la orden «docker» del paquete snap «docker (28.4.0)»
+  la orden «docker» del paquete deb «docker.io (26.1.3-0ubuntu1~20.04.1)»
+
+Consulte «snap info <nombre del snap>» para ver más versiones.
+
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker container ls -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED         STATUS                       PORTS     NAMES
+e40c971c38b5   debianfiglet                                 "/usr/bin/figlet 'Ho…"   3 minutes ago   Exited (0) 3 minutes ago               cool_northcutt
+a39ee86fc077   ubuntu                                       "bash"                   7 days ago      Exited (0) 7 days ago                  gallant_mclaren
+cfb8c15402d4   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   13 months ago   Exited (137) 13 months ago             mi_nueva_instancia_2
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker rm e40c971c38b5
+e40c971c38b5
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker load -i dockerimage.tar
+Loaded image: debianfiglet:latest
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run debianfiglet
+ _   _       _             _               _      
+| | | | ___ | | __ _    __| | ___  ___  __| | ___ 
+| |_| |/ _ \| |/ _` |  / _` |/ _ \/ __|/ _` |/ _ \
+|  _  | (_) | | (_| | | (_| |  __/\__ \ (_| |  __/
+|_| |_|\___/|_|\__,_|  \__,_|\___||___/\__,_|\___|
+                                                  
+ ____             _             _____ _ _            _      
+|  _ \  ___   ___| | _____ _ __|  ___(_) | ___    __| | ___ 
+| | | |/ _ \ / __| |/ / _ \ '__| |_  | | |/ _ \  / _` |/ _ \
+| |_| | (_) | (__|   <  __/ |  |  _| | | |  __/ | (_| |  __/
+|____/ \___/ \___|_|\_\___|_|  |_|   |_|_|\___|  \__,_|\___|
+                                                            
+ _                    _   _                                 _          
+| |    __ _ _ __ __ _| | | | ___ _ __ _ __   __ _ _ __   __| | ___ ____
+| |   / _` | '__/ _` | |_| |/ _ \ '__| '_ \ / _` | '_ \ / _` |/ _ \_  /
+| |__| (_| | | | (_| |  _  |  __/ |  | | | | (_| | | | | (_| |  __// / 
+|_____\__,_|_|  \__,_|_| |_|\___|_|  |_| |_|\__,_|_| |_|\__,_|\___/___|
+                                                                       
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker container ls -a
+CONTAINER ID   IMAGE                                        COMMAND                  CREATED         STATUS                       PORTS     NAMES
+8bd40382589f   debianfiglet                                 "/usr/bin/figlet 'Ho…"   3 minutes ago   Exited (0) 3 minutes ago               sharp_liskov
+a39ee86fc077   ubuntu                                       "bash"                   7 days ago      Exited (0) 7 days ago                  gallant_mclaren
+cfb8c15402d4   mcr.microsoft.com/mssql/server:2022-latest   "/opt/mssql/bin/laun…"   13 months ago   Exited (137) 13 months ago             mi_nueva_instancia_2
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ 
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=rootpass -d mysql:latest
+Unable to find image 'mysql:latest' locally
+latest: Pulling from library/mysql
+bb5107df7baa: Pull complete 
+191b09bcaa2f: Pull complete 
+85d9f281a64d: Pull complete 
+8ae6deebd2fa: Pull complete 
+3b513c0ae344: Pull complete 
+9248317979a4: Pull complete 
+ae7d368319da: Pull complete 
+fa9dca007c40: Pull complete 
+fabf1cab22f6: Pull complete 
+4eb28e454875: Pull complete 
+Digest: sha256:c9e48b0c008f1936d4139d1c0dcd5950a9dbe57d4d40f383013cde432fa6d6aa
+Status: Downloaded newer image for mysql:latest
+693174d184957331097ab595cffb184c21bd64b261faa011f93a47b02a895511
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -it mysql-container -u root -p
+OCI runtime exec failed: exec failed: unable to start container process: exec: "-u": executable file not found in $PATH: unknown
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -it mysql-container mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.7.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE testdb;
+Query OK, 1 row affected (0.022 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| testdb             |
++--------------------+
+5 rows in set (0.007 sec)
+
+mysql> exit
+Bye
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker rm -f mysql-container
+mysql-container
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=rootpass -d mysql:latest
+5d824c48f851d329ab0313fb2a38dc78656f5617ec6d18f132f4ade85dcf3d25
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -it mysql-container mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.7.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.006 sec)
+
+mysql> exit
+Bye
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysqldocker run --name mysql-container \
+>   -e MYSQL_ROOT_PASSWORD=rootpass \
+>   -d \
+>   -v mysql_data:/var/lib/mysql \
+> ^C
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container \
+>   -e MYSQL_ROOT_PASSWORD=rootpass \
+>   -d \
+>   -v /ruta/local/datos:/var/lib/mysql \
+>   mysql:latest^C
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container   -e MYSQL_ROOT_PASSWORD=rootpass   -d   -v /mysql-data:/var/lib/mysql mysql:latest
+docker: Error response from daemon: Conflict. The container name "/mysql-container" is already in use by container "5d824c48f851d329ab0313fb2a38dc78656f5617ec6d18f132f4ade85dcf3d25". You have to remove (or rename) that container to be able to reuse that name.
+
+Run 'docker run --help' for more information
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker rm -f mysql-container
+mysql-container
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container   -e MYSQL_ROOT_PASSWORD=rootpass   -d   -v /mysql-data:/var/lib/mysql mysql:latest
+5e50243b76b6b841d0450f6b87cd341fbaa3c2bae67d68cd15e6537dd91ea9a1
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -it mysql-container mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.7.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE testdb;
+Query OK, 1 row affected (0.023 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| testdb             |
++--------------------+
+5 rows in set (0.006 sec)
+
+mysql> exit
+Bye
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker rm -f mysql-container
+mysql-container
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --name mysql-container   -e MYSQL_ROOT_PASSWORD=rootpass   -d   -v /mysql-data:/var/lib/mysql mysql:latest
+32b00fbedc769eb29e73cec3da47e95b00220616ef7fac901717b1cb80b4801f
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -it mysql-container mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 9.7.0 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOWDATABASES;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SHOWDATABASES' at line 1
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
+| testdb             |
++--------------------+
+5 rows in set (0.007 sec)
+
+mysql> exit
+Bye
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker network create --subnet 10.1.0.0/24 --gateway 10.1.0.1 br02
+4e630b342a3f28be8da0f5b9261cd648cf6299ef18b8d3a5e5224030b02f2dd1
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+4e630b342a3f   br02      bridge    local
+260b62bfd387   bridge    bridge    local
+4f436ef72dd5   host      host      local
+06afeb5d6097   none      null      local
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker container run \--ip 10.1.0.11\--network br02\--name="holared"\-d\-p 8080:8080\kornkitti/express-hello-world:build-28720557^C
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker run --network br02 --ip 10.1.0.11 --name holared -d -p 8080:8080 kornkitti/express-hello-world:build-28720557
+Unable to find image 'kornkitti/express-hello-world:build-28720557' locally
+build-28720557: Pulling from kornkitti/express-hello-world
+693502eb7dfb: Pull complete 
+081cd4bfd521: Pull complete 
+5d2dc01312f3: Pull complete 
+54a5f7da9a4f: Pull complete 
+f6ebc0704397: Pull complete 
+cd487f72ac9f: Pull complete 
+c0484860bdc0: Pull complete 
+28404ada322d: Pull complete 
+60b52d27b0aa: Pull complete 
+2962e9ac94ac: Pull complete 
+128e2fb07a9d: Pull complete 
+e16d970c3c7c: Pull complete 
+Digest: sha256:d1778b5354a91b4276cf3c8f38ccbc36ece7b1d1566f3af32c2dc0779fe0d15b
+Status: Downloaded newer image for kornkitti/express-hello-world:build-28720557
+a850ff803a3f62886a3a30c9b528f53839560c7a94596d71d00a38191d943561
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -i -t CONTAINER /bin/bash
+Error response from daemon: No such container: CONTAINER
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -i -t CONTAINERID /bin/bash
+Error response from daemon: No such container: CONTAINERID
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker container ls -a
+CONTAINER ID   IMAGE                                          COMMAND                  CREATED          STATUS                       PORTS                                         NAMES
+a850ff803a3f   kornkitti/express-hello-world:build-28720557   "npm start"              4 minutes ago    Up 4 minutes                 0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp   holared
+32b00fbedc76   mysql:latest                                   "docker-entrypoint.s…"   17 minutes ago   Up 17 minutes                3306/tcp, 33060/tcp                           mysql-container
+8bd40382589f   debianfiglet                                   "/usr/bin/figlet 'Ho…"   46 minutes ago   Exited (0) 46 minutes ago                                                  sharp_liskov
+a39ee86fc077   ubuntu                                         "bash"                   7 days ago       Exited (0) 7 days ago                                                      gallant_mclaren
+cfb8c15402d4   mcr.microsoft.com/mssql/server:2022-latest     "/opt/mssql/bin/laun…"   13 months ago    Exited (137) 13 months ago                                                 mi_nueva_instancia_2
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -i -t a850ff803a3f /bin/bash
+root@a850ff803a3f:/usr/src/app# ls
+Dockerfile  README.md  node_modules  package.json  rancher-compose-v0.12.3  server.js
+root@a850ff803a3f:/usr/src/app# cat server.js
+const express = require('express')
+const os = require('os');
+
+const PORT = 8080
+const app = express()
+app.get('/', (req, res) => {
+    res.send(`Hello World, I'm run on ${os.hostname()}`)
+})
+app.listen(PORT)
+console.log(`Running on http://localhost:${PORT}`)
+root@a850ff803a3f:/usr/src/app# cat server.js
+var express = require('express');
+var app = express();
+
+var path =require('path');
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+root@a850ff803a3f:/usr/src/app# ls
+Dockerfile  README.md  index.html  node_modules  package.json  rancher-compose-v0.12.3  server.js
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ ls
+Dockerfile  dockerimage.tar  index.html  instalacion_docker.pdf  server.js
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker exec -i -t a850ff803a3f /bin/bash
+root@a850ff803a3f:/usr/src/app# ls
+Dockerfile  README.md  index.html  node_modules  package.json  rancher-compose-v0.12.3  server.js
+root@a850ff803a3f:/usr/src/app# cat index.html
+<!doctype html>
+
+<html>
+
+<head><meta charset="utf-8"><title>Práctica Docker - Lara Hernandez </title></head>
+
+<body>
+
+<h1>{{ Lara Hernandez Angel Husiel }}</h1>
+
+<p>Esta es una app simple para practicar Dockerfile y docker-compose, clase de distribuidos.</p>
+
+</body>
+
+</html>root@a850ff803a3f:/usr/src/app# cat server.js
+var express = require('express');
+var app = express();
+
+var path =require('path');
+app.get('/', function(req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+root@a850ff803a3f:/usr/src/app# exit
+exit

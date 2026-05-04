@@ -35,4 +35,5 @@ Thumbs.db
 *.gls
 /%OUTDIR%
 main.bbl-SAVE-ERROR
-/.vscode
+.vscode/
+docker/dockerimage.tar

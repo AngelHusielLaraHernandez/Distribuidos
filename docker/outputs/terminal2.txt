@@ -1,0 +1,14 @@
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker cp server.js a850ff803a3f:/usr/src/app/server.js
+Successfully copied 2.05kB to a850ff803a3f:/usr/src/app/server.js
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker cp index.html a850ff803a3f:/usr/src/app/index.
+html
+Successfully copied 2.05kB to a850ff803a3f:/usr/src/app/index.html
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker restart a850ff803a3f
+a850ff803a3f
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker cp index.html a850ff803a3f:/usr/src/app/index.html
+Successfully copied 2.05kB to a850ff803a3f:/usr/src/app/index.html
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ docker restart a850ff803a3f
+a850ff803a3f
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker$ 
+
+
