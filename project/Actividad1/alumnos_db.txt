@@ -1,2 +1,4 @@
-1|Tenshi||21|
-1|assad|asdad|21|asdasd
+2|Adolfo de Jesús|García Cortés|21|Sistemas Distribuidos
+4|Percival|Espinoza Matamoros|32|Inteligencia Artificial
+6|Angel Huziel|Hernandez Lara|24|Microcomputadoras
+98|Victor Jaziel|Flores Martinez|21|Electricidad y Magnetismo
