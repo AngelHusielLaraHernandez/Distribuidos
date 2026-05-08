@@ -1,0 +1,70 @@
+services:
+
+  db:
+    build: ./db
+    container_name: mariadb
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: wp123
+
+    volumes:
+      - db_data:/var/lib/mysql
+
+    networks:
+      red_privada:
+        ipv4_address: 172.20.0.2
+
+  wordpress:
+    build: ./wordpress
+    container_name: wordpress
+    restart: always
+
+    depends_on:
+      - db
+
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: wp123
+      WORDPRESS_DB_NAME: wordpress
+
+    volumes:
+      - wordpress_data:/var/www/html
+
+    networks:
+      red_privada:
+        ipv4_address: 172.20.0.3
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+
+    depends_on:
+      - wordpress
+
+    ports:
+      - "8081:80"
+
+    volumes:
+      - wordpress_data:/var/www/html
+
+    networks:
+      red_privada:
+        ipv4_address: 172.20.0.4
+
+networks:
+  red_privada:
+    driver: bridge
+
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  db_data:
+  wordpress_data:
