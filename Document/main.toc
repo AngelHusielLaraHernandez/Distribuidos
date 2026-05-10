@@ -1,12 +1,12 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {section}{\numberline {1}Objetivo:}{1}{section.1}%
-\contentsline {section}{\numberline {2}Introduccion:}{1}{section.2}%
-\contentsline {section}{\numberline {3}Relación con Sistemas Distribuidos:}{2}{section.3}%
-\contentsline {section}{\numberline {4}Funcionamiento general o arquitectura:}{3}{section.4}%
-\contentsline {section}{\numberline {5}Tecnologías relacionadas:}{4}{section.5}%
-\contentsline {section}{\numberline {6}Aplicaciones reales: }{5}{section.6}%
-\contentsline {section}{\numberline {7}Relación con temas vistos en clase:}{6}{section.7}%
-\contentsline {section}{\numberline {8}Ventajas y desafios:}{7}{section.8}%
-\contentsline {section}{\numberline {9}Impacto actual y futuro:}{8}{section.9}%
-\contentsline {section}{\numberline {10}Conclusion:}{9}{section.10}%
-\contentsline {section}{Referencias}{9}{section*.1}%
+\contentsline {section}{\numberline {2}Introducción}{1}{section.2}%
+\contentsline {section}{\numberline {3}Relación con Sistemas Distribuidos}{2}{section.3}%
+\contentsline {section}{\numberline {4}Funcionamiento general o arquitectura}{3}{section.4}%
+\contentsline {section}{\numberline {5}Tecnologías relacionadas}{4}{section.5}%
+\contentsline {section}{\numberline {6}Aplicaciones reales}{5}{section.6}%
+\contentsline {section}{\numberline {7}Relación con temas vistos en clase}{6}{section.7}%
+\contentsline {section}{\numberline {8}Ventajas y desafíos}{7}{section.8}%
+\contentsline {section}{\numberline {9}Impacto actual y futuro}{9}{section.9}%
+\contentsline {section}{\numberline {10}Conclusión}{10}{section.10}%
+\contentsline {section}{Referencias}{10}{section*.1}%
