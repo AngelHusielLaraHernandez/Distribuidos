@@ -39,5 +39,4 @@ Thumbs.db
 main.bbl-SAVE-ERROR
 .vscode/
 docker/dockerimage.tar
-html/
-html/index.html
+
