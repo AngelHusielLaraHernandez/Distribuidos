@@ -33,7 +33,6 @@ Thumbs.db
 *.glg
 *.glo
 *.gls
-*.html
 
 /%OUTDIR%
 main.bbl-SAVE-ERROR
