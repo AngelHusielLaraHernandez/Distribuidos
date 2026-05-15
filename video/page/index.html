@@ -386,11 +386,14 @@
 </head>
 <body>
 
+    <!-- PARTICLE CANVAS -->
     <canvas id="particle-canvas"></canvas>
     <div class="scanlines"></div>
     <div class="vignette"></div>
-    <div id="timer-display">00:00 / 08:45</div>
-    <div id="slide-indicator">01 / 11</div>
+    
+    <!-- FIX: Timer ajustado a 10 minutos (10:00) y el total de slides a 13 -->
+    <div id="timer-display">00:00 / 10:00</div>
+    <div id="slide-indicator">01 / 13</div>
 
     <div id="video-controls">
         <button class="control-btn" onclick="moveSlide(-1)" title="Retroceder Slide"><i class="fas fa-step-backward"></i></button>
@@ -403,10 +406,14 @@
 
     <div id="presentation-container">
 
+        <!-- ==========================================
+             1. PORTADA
+             ========================================== -->
         <section class="slide" data-duration="30000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80');"></div>
             <div class="hex-grid"></div>
 
+            <!-- NUBE 3D CSS -->
             <div class="cloud-3d-container" style="top: 10%; right: 5%;">
                 <div class="cloud-sphere" style="width:160px;height:120px;top:40px;left:80px;"></div>
                 <div class="cloud-sphere" style="width:120px;height:100px;top:20px;left:170px;animation-delay:-1s;"></div>
@@ -420,6 +427,7 @@
                 <div class="cloud-sphere" style="width:90px;height:70px;top:50px;left:180px;animation-delay:-1s;"></div>
             </div>
 
+            <!-- DATA STREAMS decorativos -->
             <div class="data-stream" style="left:10%;height:200px;top:5%;animation-delay:0s;"></div>
             <div class="data-stream" style="left:25%;height:150px;top:15%;animation-delay:1s;"></div>
             <div class="data-stream" style="right:15%;height:180px;top:8%;animation-delay:0.5s;"></div>
@@ -443,7 +451,7 @@
                     <div class="text-left">
                         <p class="text-xs text-cyber-cyan uppercase tracking-widest mb-3 font-bold border-b border-cyber-cyan/30 pb-1 typewriter"><i class="fas fa-users mr-2"></i>Integrantes de Equipo</p>
                         <p class="text-lg text-gray-300 mb-1 anim blur-in typewriter" style="animation-delay: 6s;">García Cortés Adolfo</p>
-                        <p class="text-lg text-gray-300 mb-1 anim blur-in typewriter" style="animation-delay: 7.5s;">Lara Hernandez Angel</p>
+                        <p class="text-lg text-gray-300 mb-1 anim blur-in typewriter" style="animation-delay: 7.5s;">Lara Hernandez Angel Husiel</p>
                         <p class="text-lg text-gray-300 anim blur-in typewriter" style="animation-delay: 9s;">Lugo Manzano Rodrigo</p>
                     </div>
                     <div class="w-px bg-cyber-cyan/30"></div>
@@ -459,10 +467,14 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             2. INTRODUCCION
+             ========================================== -->
         <section class="slide" data-duration="45000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80');"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
 
+            <!-- Orbit rings decorativos -->
             <div class="orbit-ring" style="width:500px;height:500px;top:-100px;right:-150px;border-color:rgba(0,240,255,0.08);"></div>
             <div class="orbit-ring" style="width:350px;height:350px;top:-25px;right:-75px;border-color:rgba(0,240,255,0.12);animation-direction:reverse;animation-duration:18s;"></div>
 
@@ -554,6 +566,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             3. OBJETIVO
+             ========================================== -->
         <section class="slide" data-duration="25000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1920&q=80'); filter: blur(4px) brightness(0.2);"></div>
 
@@ -561,6 +576,7 @@
             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyber-green/40 border-dotted animate-[spin_20s_linear_infinite_reverse] z-0"></div>
             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-cyber-green/10 animate-[spin_15s_linear_infinite] z-0"></div>
 
+            <!-- Decorative crosshair lines -->
             <div class="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyber-green/20 to-transparent z-0"></div>
             <div class="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-cyber-green/20 to-transparent z-0"></div>
 
@@ -589,10 +605,14 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             4. RELACION CON SISTEMAS DISTRIBUIDOS
+             ========================================== -->
         <section class="slide" data-duration="50000">
             <div class="hex-grid" style="opacity: 0.2; filter: hue-rotate(90deg);"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black z-0"></div>
 
+            <!-- Floating network nodes decoration -->
             <svg class="absolute inset-0 w-full h-full z-0 opacity-10" viewBox="0 0 1920 1080">
                 <circle cx="200" cy="150" r="4" fill="#00f0ff"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></circle>
                 <circle cx="500" cy="300" r="3" fill="#ff003c"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
@@ -645,9 +665,13 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             5. ARQUITECTURA
+             ========================================== -->
         <section class="slide" data-duration="55000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1920&q=80'); filter: blur(10px) brightness(0.2);"></div>
 
+            <!-- 3D cloud decorativa -->
             <div class="cloud-3d-container" style="top:5%;left:5%;opacity:0.07;animation-delay:-3s;">
                 <div class="cloud-sphere" style="width:100px;height:80px;top:20px;left:40px;"></div>
                 <div class="cloud-sphere" style="width:80px;height:60px;top:10px;left:110px;animation-delay:-1s;"></div>
@@ -683,6 +707,7 @@
                     </div>
                 </div>
 
+                <!-- Arrows connecting the pillars -->
                 <svg class="w-full max-w-2xl h-8 mt-2 anim blur-in" style="animation-delay:12s;" viewBox="0 0 600 30">
                     <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#00f0ff"/></marker></defs>
                     <line x1="100" y1="15" x2="280" y2="15" stroke="#00f0ff" stroke-width="1" marker-end="url(#arrowhead)" opacity="0.5"/>
@@ -701,6 +726,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             6. TECNOLOGIAS RELACIONADAS
+             ========================================== -->
         <section class="slide" data-duration="55000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.15) hue-rotate(200deg);"></div>
 
@@ -745,6 +773,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             7. APLICACIONES REALES
+             ========================================== -->
         <section class="slide" data-duration="55000">
             <div class="hex-grid" style="opacity: 0.1; filter: hue-rotate(180deg);"></div>
 
@@ -811,6 +842,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             8. RELACION CON CLASE
+             ========================================== -->
         <section class="slide" data-duration="60000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); filter: blur(8px) brightness(0.2) hue-rotate(-30deg);"></div>
 
@@ -859,6 +893,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             9. VENTAJAS Y DESAFIOS
+             ========================================== -->
         <section class="slide p-0" data-duration="50000">
             <div class="absolute inset-0 w-[55%] bg-gradient-to-br from-green-900/80 to-[#050508] clip-diagonal-left z-0"></div>
             <div class="absolute inset-0 w-full bg-gradient-to-bl from-red-900/80 to-[#050508] z-0" style="clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);"></div>
@@ -889,7 +926,7 @@
 
             <div class="w-1/2 h-full flex flex-col justify-center px-16 z-10 pl-24 perspective-container relative">
                 <div class="absolute bottom-24 left-12 anim scale-up" style="animation-delay: 2.5s;">
-                    <img src="https://images.unsplash.com/photo-1510511459019-5efa32524d77?auto=format&fit=crop&w=300&q=80" alt="Security Risk" class="w-40 h-40 rounded-full object-cover hologram-img holo-magenta mix-blend-screen opacity-60" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                    <img src="https://images.unsplash.com/photo-1510511459019-5efa32524d77?auto=format&fit=crop&w=300&q=80" alt="" class="w-40 h-40 rounded-full object-cover hologram-img holo-magenta mix-blend-screen opacity-60" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
                 </div>
 
                 <h2 class="text-6xl font-bebas font-black text-cyber-magenta mb-10 anim slide-from-right glow-icon-magenta text-right typewriter relative z-10 tracking-wider" style="animation-delay: 1.5s;">DESAFIOS</h2>
@@ -910,6 +947,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             10. IMPACTO ACTUAL Y FUTURO
+             ========================================== -->
         <section class="slide" data-duration="55000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.25);"></div>
 
@@ -969,6 +1009,9 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             11. CONCLUSION
+             ========================================== -->
         <section class="slide" data-duration="45000">
             <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80'); filter: blur(3px) brightness(0.3) saturate(1.5);"></div>
             <div class="hex-grid" style="opacity: 0.3;"></div>
@@ -1015,8 +1058,87 @@
             </div>
         </section>
 
+        <!-- ==========================================
+             12. BIBLIOGRAFIA PARTE 1
+             ========================================== -->
+        <section class="slide" data-duration="35000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.15) hue-rotate(200deg);"></div>
+            
+            <div class="w-full max-w-7xl mx-auto px-12 z-10 perspective-container text-center">
+                <h2 class="text-5xl font-bebas font-bold mb-10 text-white tracking-[0.2em] anim slide-in-3d typewriter" style="animation-delay: 0.5s;">BIBLIOGRAFIA <span class="text-cyber-cyan">[1/2]</span></h2>
+
+                <div class="hud-panel p-8 md:p-10 rounded-2xl border-l-4 border-cyber-cyan inline-block text-left shadow-[0_0_40px_rgba(0,240,255,0.1)] w-full">
+                    <ul class="space-y-5 text-gray-300 font-grotesk text-sm md:text-[15px] leading-relaxed">
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 2s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Amazon Web Services. (2024). Netflix Case Study. Consultado el 7 de mayo de 2026, desde <br><a href="https://aws.amazon.com/solutions/case-studies/netflix-case-study/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://aws.amazon.com/solutions/case-studies/netflix-case-study/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 4.5s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Amazon Web Services. (2026). Types of Cloud Computing. Consultado el 7 de mayo de 2026, desde <br><a href="https://aws.amazon.com/types-of-cloud-computing/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://aws.amazon.com/types-of-cloud-computing/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 7s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">ClearFuze. (2025a). Evolution of Cloud Computing: From Mainframes to Modern Multi-Cloud. Consultado el 7 de mayo de 2026, desde <br><a href="https://clearfuze.com/blog/evolution-of-cloud-computing/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://clearfuze.com/blog/evolution-of-cloud-computing/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 9.5s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">ClearFuze. (2025b). What are the Pros and Cons of Cloud Computing: Complete Guide to Advantages and Disadvantages in 2025. Consultado el 7 de mayo de 2026, desde <br><a href="https://clearfuze.com/blog/pros-and-cons-of-cloud-computing/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://clearfuze.com/blog/pros-and-cons-of-cloud-computing/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 12s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Cloudflare. (2025a). Serverless computing vs. containers: How to choose. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.cloudflare.com/learning/serverless/serverless-vs-containers/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.cloudflare.com/learning/serverless/serverless-vs-containers/</a></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             13. BIBLIOGRAFIA PARTE 2
+             ========================================== -->
+        <section class="slide" data-duration="40000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.15) hue-rotate(200deg);"></div>
+            
+            <div class="w-full max-w-7xl mx-auto px-12 z-10 perspective-container text-center">
+                <h2 class="text-5xl font-bebas font-bold mb-10 text-white tracking-[0.2em] anim slide-in-3d typewriter" style="animation-delay: 0.5s;">BIBLIOGRAFIA <span class="text-cyber-cyan">[2/2]</span></h2>
+
+                <div class="hud-panel p-8 md:p-10 rounded-2xl border-l-4 border-cyber-cyan inline-block text-left shadow-[0_0_40px_rgba(0,240,255,0.1)] w-full">
+                    <ul class="space-y-4 text-gray-300 font-grotesk text-sm md:text-[15px] leading-relaxed">
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 2s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Cloudflare. (2025b). Types of Load Balancing Algorithms. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.cloudflare.com/learning/performance/types-of-load-balancing-algorithms/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.cloudflare.com/learning/performance/types-of-load-balancing-algorithms/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 4.5s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Computer History Museum. (2006). 2006: Storage in the Cloud. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.computerhistory.org/storageengine/storage-in-the-cloud/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.computerhistory.org/storageengine/storage-in-the-cloud/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 7s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">CrispIdea. (2026). Cloud Computing in 2026: AI, Edge and Multi-Cloud Trends. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.crispidea.com/cloud-computing-in-2026/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.crispidea.com/cloud-computing-in-2026/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 9.5s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Cyber Defense Magazine. (2025). The Impact of Cloud Computing in 2025. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.cyberdefensemagazine.com/the-impact-of-cloud-computing-in-2025/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.cyberdefensemagazine.com/the-impact-of-cloud-computing-in-2025/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 12s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Digital Alpha. (2025). Microservices, Containers, and Serverless: The Backbone of Cloud-Native Development. Consultado el 7 de mayo de 2026, desde <br><a href="https://www.digital-alpha.com/microservices-containers-and-serverless-the-backbone-of-cloud-native-development/" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://www.digital-alpha.com/microservices-containers-and-serverless-the-backbone-of-cloud-native-development/</a></span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 14.5s;">
+                            <i class="fas fa-book text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="typewriter relative z-50">Express Press Release. (2026, 7 de mayo). Edge Computing Market Trends in 2026 Driven by AI Infrastructure and 5G Deployment Growth. Consultado el 7 de mayo de 2026, desde <br><a href="https://express-press-release.net/news/2026/05/07/1751602" target="_blank" class="text-blue-400 hover:text-cyan-300 underline decoration-blue-500/50 hover:decoration-cyan-300 transition-colors pointer-events-auto inline-block mt-1">https://express-press-release.net/news/2026/05/07/1751602</a></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
     </div>
 
+    <!-- ==========================================
+         SCRIPTS
+         ========================================== -->
     <script>
         // ==========================================
         // PARTICLE SYSTEM (Canvas)
