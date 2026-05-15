@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 50">
-  <path d="M70 5C40 5 16 15 16 27.5S40 50 70 50s54-10 54-22.5S100 5 70 5z" fill="none" stroke="#004879" stroke-width="3"/>
-  <path d="M60 15l15 12.5L60 40" fill="none" stroke="#D03027" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="70" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#004879">CAPITAL ONE</text>
-</svg>
