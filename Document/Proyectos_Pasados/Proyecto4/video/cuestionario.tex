@@ -1,0 +1,96 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{enumitem}
+\usepackage{hyperref}
+
+\pagestyle{empty}
+
+\begin{document}
+
+% ==================== PAGINA 1: PREGUNTAS ====================
+\begin{center}
+    {\Large\bfseries Cuestionario -- Computaci\'on en la Nube}\\[0.3cm]
+    {\normalsize Sistemas Distribuidos -- Grupo 01 -- Semestre 2026-2}\\[0.3cm]
+    {\normalsize Equipo: García Cortés Adolfo de Jesus.}\\[0.3cm]
+    {\normalsize Lara Hernandez Angel Husiel.}\\[0.3cm]
+    {\normalsize Lugo Manzano Rodrigo.}\\[0.3cm]
+    {\normalsize\url{https://drive.google.com/file/d/1fRmsMqElKWidYCqTxGynC-XjsWI1CXae/view?usp=sharing}}
+\end{center}
+
+\vspace{0.5cm}
+
+\noindent\textbf{Instrucciones:} Seleccione la opci\'on correcta para cada pregunta.
+
+\vspace{0.5cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.5em, itemsep=0.8cm]
+
+    \item \textbf{¿Qué algoritmos de consenso distribuido entran en acción para mantener sincronizados los equipos y garantizar la consistencia absoluta de los datos ante cualquier fallo?}
+    \begin{enumerate}[label=\alph*), nosep]
+        \item Algoritmos de enrutamiento como Dijkstra y Bellman-Ford
+        \item Algoritmos de consenso como Paxos y Raft
+        \item Algoritmos de cifrado asimétrico como RSA y ECC
+        \item Algoritmos de procesamiento masivo como MapReduce
+    \end{enumerate}
+
+    \item \textbf{?`Qu\'e tecnolog\'ia, es el est\'andar de factor para la orquestaci\'on de contenedores en la nube?}
+
+    \begin{enumerate}[label=\alph*), nosep]
+        \item Docker
+        \item OpenStack
+        \item Kubernetes
+        \item VMware vSphere
+    \end{enumerate}
+
+    \item \textbf{?`C\'omo se denomina el mecanismo que agrega m\'as nodos al cl\'uster en lugar de aumentar la capacidad de un solo servidor para resolver la escalabilidad?}
+
+    \begin{enumerate}[label=\alph*), nosep]
+        \item Escalamiento vertical
+        \item Escalamiento horizontal
+        \item Balanceo de carga est\'atico
+        \item Migraci\'on en caliente
+    \end{enumerate}
+
+    \item \textbf{?`Qu\'e empresa migr\'o completamente su infraestructura a Amazon Web Services tras una corrupci\'on grave en su base de datos en 2008, siendo el caso m\'as emblem\'atico de migraci\'on a la nube?}
+
+    \begin{enumerate}[label=\alph*), nosep]
+        \item Spotify
+        \item Shopify
+        \item Capital One
+        \item Netflix
+    \end{enumerate}
+
+\end{enumerate}
+
+\newpage
+
+% ==================== PAGINA 2: RESPUESTAS ====================
+\begin{center}
+    {\Large\bfseries Respuestas del Cuestionario}\\[0.3cm]
+    {\normalsize Computaci\'on en la Nube (Cloud Computing)}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{enumerate}[label=\textbf{\arabic*.}, leftmargin=1.5em, itemsep=0.5cm]
+
+    \item \textbf{Respuesta: b) Algoritmos de consenso como Paxos y Raft}
+
+    La nube es un sistema distribuido a gran escala. Para que miles de computadoras independientes funcionen como un sistema único y mantengan los datos sincronizados, se utilizan algoritmos de consenso distribuido (como Paxos y Raft) que garantizan la consistencia aunque ocurran fallos en los nodos.
+    \item \textbf{Respuesta: c) Kubernetes}
+
+    Kubernetes fue desarrollado por Google y es mantenido por la Cloud Native Computing Foundation. Automatiza el despliegue, escalamiento y gesti\'on de contenedores.
+
+    \item \textbf{Respuesta: b) Escalamiento horizontal}
+
+    Consiste en agregar m\'as nodos al cl\'uster en lugar de aumentar la capacidad de un solo servidor. La nube aprovisiona servidores en segundos y los libera cuando la demanda baja.
+
+    \item \textbf{Respuesta: d) Netflix}
+
+    Tras una corrupci\'on en su base de datos en 2008, Netflix migr\'o completamente a AWS. El proceso tom\'o siete a\~nos y concluy\'o en 2016, adoptando microservicios y bases NoSQL.
+
+\end{enumerate}
+
+\end{document}
