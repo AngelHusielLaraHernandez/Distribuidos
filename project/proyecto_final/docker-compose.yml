@@ -1,0 +1,84 @@
+services:
+  p1:
+    build: .
+    container_name: p1
+    environment:
+      PROCESS_ID: P1
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+      LOG_PATH: /app/logs/p1.log
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.2
+
+  p2:
+    build: .
+    container_name: p2
+    environment:
+      PROCESS_ID: P2
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+      LOG_PATH: /app/logs/p2.log
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.3
+
+  p3:
+    build: .
+    container_name: p3
+    environment:
+      PROCESS_ID: P3
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+      LOG_PATH: /app/logs/p3.log
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.4
+
+  p4:
+    build: .
+    container_name: p4
+    environment:
+      PROCESS_ID: P4
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+      LOG_PATH: /app/logs/p4.log
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.5
+
+  p5:
+    build: .
+    container_name: p5
+    environment:
+      PROCESS_ID: P5
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+      LOG_PATH: /app/logs/p5.log
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.6
+
+  cliente:
+    build: .
+    container_name: cliente
+    command: ["sh", "-c", "sleep 5 && python src/driver.py"]
+    environment:
+      PEERS: P1=p1:50051,P2=p2:50051,P3=p3:50051,P4=p4:50051,P5=p5:50051
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      red_privada:
+        ipv4_address: 172.21.0.10
+
+networks:
+  red_privada:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
