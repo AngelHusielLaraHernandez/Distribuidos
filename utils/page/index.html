@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computacion en la Nube - Experiencia Futurista 3D</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Fira+Code:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&family=Bebas+Neue&family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                        grotesk: ['Space Grotesk', 'sans-serif'],
+                        bebas: ['Bebas Neue', 'sans-serif'],
+                        exo: ['Exo 2', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#050508',
+                            cyan: '#00f0ff',
+                            magenta: '#ff003c',
+                            blue: '#020024',
+                            purple: '#7a00ff',
+                            green: '#00ff66',
+                            gold: '#ffd700',
+                            panel: 'rgba(0, 240, 255, 0.05)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff003c;
+            --neon-purple: #7a00ff;
+            --neon-green: #00ff66;
+            --neon-gold: #ffd700;
+        }
+
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0; padding: 0; overflow: hidden; background-color: #050508; color: #e0f2fe;
+            font-family: 'Rajdhani', sans-serif; perspective: 1200px;
+            width: 100vw; height: 100vh;
+        }
+
+        /* ==========================================
+           CANVAS DE PARTICULAS (fondo)
+           ========================================== */
+        #particle-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+        }
+
+        /* ==========================================
+           OVERLAYS
+           ========================================== */
+        .scanlines {
+            position: fixed; inset: 0; width: 100%; height: 100%; z-index: 999;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
+            pointer-events: none; opacity: 0.25;
+        }
+        .vignette {
+            position: fixed; inset: 0; width: 100%; height: 100%; z-index: 998;
+            background: radial-gradient(circle at center, transparent 40%, #050508 100%); pointer-events: none;
+        }
+
+        /* ==========================================
+           SISTEMA DE SLIDES (STACKED para FADE+ZOOM)
+           ========================================== */
+        #presentation-container {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; overflow: hidden; /* Fix: Centrado perfecto */
+        }
+        .slide {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; /* Fix: Cobertura total absoluta */
+            width: 100%; height: 100%; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            transform-style: preserve-3d;
+            opacity: 0; transform: scale(1.08); z-index: 0;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        .slide.active {
+            opacity: 1; transform: scale(1); z-index: 2; pointer-events: auto;
+        }
+        .slide.exiting {
+            opacity: 0; transform: scale(1.15); z-index: 1;
+        }
+
+        /* ==========================================
+           FONDOS E IMAGENES
+           ========================================== */
+        .bg-img {
+            position: absolute; inset: -5%; width: 110%; height: 110%;
+            background-size: cover; background-position: center; filter: blur(5px) brightness(0.3) saturate(1.5) contrast(1.2);
+            z-index: 0; animation: slowPan 30s infinite alternate linear;
+        }
+        @keyframes slowPan { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-2%,-2%) scale(1.05); } }
+
+        .hex-grid {
+            position: absolute; inset: 0; z-index: 1; opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='103.923' viewBox='0 0 60 103.923' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 103.923L0 86.603V51.962L30 34.641l30 17.32v34.642L30 103.923zM30 0L0 17.32v34.642L30 69.282l30-17.32V17.32L30 0z' fill='%2300f0ff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            animation: gridScroll 20s linear infinite;
+        }
+        @keyframes gridScroll { 0% { background-position: 0 0; } 100% { background-position: 60px 103.923px; } }
+
+        /* ==========================================
+           HOLOGRAPHIC IMAGES
+           ========================================== */
+        .hologram-img {
+            filter: drop-shadow(0 0 20px var(--neon-cyan)) contrast(1.2) brightness(1.2);
+            animation: floatImg 6s ease-in-out infinite;
+            transform-style: preserve-3d; will-change: transform, filter;
+        }
+        .holo-magenta { filter: drop-shadow(0 0 20px var(--neon-magenta)) contrast(1.2) brightness(1.2); }
+        .holo-green { filter: drop-shadow(0 0 20px var(--neon-green)) contrast(1.2) brightness(1.2); }
+        .holo-gold { filter: drop-shadow(0 0 20px var(--neon-gold)) contrast(1.2) brightness(1.2); }
+        .holo-purple { filter: drop-shadow(0 0 20px var(--neon-purple)) contrast(1.2) brightness(1.2); }
+
+        .holo-screen {
+            mix-blend-mode: screen; opacity: 0.85; border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
+        }
+
+        @keyframes floatImg {
+            0%, 100% { transform: translateY(0) translateZ(40px) rotateY(0deg); }
+            50% { transform: translateY(-10px) translateZ(80px) rotateY(5deg); }
+        }
+
+        /* ==========================================
+           ANIMACIONES DE ENTRADA
+           ========================================== */
+        .slide .anim { opacity: 0; animation-fill-mode: both; will-change: transform, opacity, filter; }
+        .slide.active .blur-in { animation: blurIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide.active .slide-in-3d { animation: slideIn3D 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide.active .pop-3d { animation: pop3D 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .slide.active .slide-from-left { animation: slideFromLeft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide.active .slide-from-right { animation: slideFromRight 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .slide.active .scale-up { animation: scaleUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        @keyframes blurIn {
+            0% { opacity: 0; filter: blur(20px); transform: translateY(40px) scale(0.9); }
+            100% { opacity: 1; filter: blur(0px); transform: translateY(0) scale(1); }
+        }
+        @keyframes slideIn3D {
+            0% { opacity: 0; transform: translateZ(-500px) rotateX(20deg) translateY(100px); }
+            100% { opacity: 1; transform: translateZ(0) rotateX(0deg) translateY(0); }
+        }
+        @keyframes pop3D {
+            0% { opacity: 0; transform: scale(0.5) translateZ(300px); filter: brightness(2); }
+            100% { opacity: 1; transform: scale(1) translateZ(0); filter: brightness(1); }
+        }
+        @keyframes slideFromLeft {
+            0% { opacity: 0; transform: translateX(-120px) rotateY(15deg); }
+            100% { opacity: 1; transform: translateX(0) rotateY(0); }
+        }
+        @keyframes slideFromRight {
+            0% { opacity: 0; transform: translateX(120px) rotateY(-15deg); }
+            100% { opacity: 1; transform: translateX(0) rotateY(0); }
+        }
+        @keyframes scaleUp {
+            0% { opacity: 0; transform: scale(0.3); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ==========================================
+           EFECTO GLITCH EN TITULOS
+           ========================================== */
+        .glitch {
+            position: relative; display: inline-block;
+        }
+        .glitch::before, .glitch::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+        }
+        .glitch::before {
+            color: var(--neon-cyan); z-index: -1;
+            animation: glitch-clip-top 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            color: var(--neon-magenta); z-index: -2;
+            animation: glitch-clip-bottom 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-clip-top {
+            0% { clip-path: inset(0 0 85% 0); transform: translate(-3px, -2px); }
+            10% { clip-path: inset(15% 0 65% 0); transform: translate(3px, 1px); }
+            20% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, 3px); }
+            30% { clip-path: inset(60% 0 20% 0); transform: translate(2px, -1px); }
+            40% { clip-path: inset(80% 0 5% 0); transform: translate(-1px, 2px); }
+            50% { clip-path: inset(10% 0 70% 0); transform: translate(1px, -2px); }
+            60% { clip-path: inset(30% 0 50% 0); transform: translate(-3px, 1px); }
+            70% { clip-path: inset(55% 0 25% 0); transform: translate(3px, -1px); }
+            80% { clip-path: inset(75% 0 10% 0); transform: translate(-1px, 3px); }
+            90% { clip-path: inset(5% 0 80% 0); transform: translate(2px, -3px); }
+            100% { clip-path: inset(45% 0 35% 0); transform: translate(-2px, 1px); }
+        }
+        @keyframes glitch-clip-bottom {
+            0% { clip-path: inset(65% 0 0 0); transform: translate(3px, 2px); }
+            10% { clip-path: inset(40% 0 20% 0); transform: translate(-2px, -1px); }
+            20% { clip-path: inset(80% 0 5% 0); transform: translate(1px, 3px); }
+            30% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -3px); }
+            40% { clip-path: inset(50% 0 30% 0); transform: translate(3px, 1px); }
+            50% { clip-path: inset(25% 0 55% 0); transform: translate(-3px, 2px); }
+            60% { clip-path: inset(70% 0 10% 0); transform: translate(2px, -2px); }
+            70% { clip-path: inset(5% 0 85% 0); transform: translate(-1px, 1px); }
+            80% { clip-path: inset(35% 0 45% 0); transform: translate(1px, -1px); }
+            90% { clip-path: inset(60% 0 15% 0); transform: translate(-2px, 3px); }
+            100% { clip-path: inset(20% 0 60% 0); transform: translate(2px, -2px); }
+        }
+
+        /* ==========================================
+           NUBE 3D CSS
+           ========================================== */
+        .cloud-3d-container {
+            position: absolute; width: 400px; height: 250px;
+            transform-style: preserve-3d; animation: cloudFloat 8s ease-in-out infinite;
+            z-index: 1; opacity: 0.15; pointer-events: none;
+        }
+        .cloud-sphere {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(0,240,255,0.3), rgba(0,240,255,0.05));
+            box-shadow: 0 0 40px rgba(0,240,255,0.2), inset 0 0 30px rgba(0,240,255,0.1);
+            animation: cloudPulse 4s ease-in-out infinite alternate;
+        }
+        @keyframes cloudFloat {
+            0%, 100% { transform: rotateY(0deg) rotateX(5deg) translateY(0); }
+            25% { transform: rotateY(15deg) rotateX(-3deg) translateY(-15px); }
+            50% { transform: rotateY(0deg) rotateX(-5deg) translateY(-5px); }
+            75% { transform: rotateY(-15deg) rotateX(3deg) translateY(-20px); }
+        }
+        @keyframes cloudPulse {
+            0% { opacity: 0.6; box-shadow: 0 0 40px rgba(0,240,255,0.2), inset 0 0 30px rgba(0,240,255,0.1); }
+            100% { opacity: 1; box-shadow: 0 0 60px rgba(0,240,255,0.4), inset 0 0 40px rgba(0,240,255,0.2); }
+        }
+
+        /* ==========================================
+           TYPEWRITER
+           ========================================== */
+        .typing-cursor::after {
+            content: '\2588'; display: inline-block; margin-left: 4px; color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan); animation: cursorBlink 0.8s infinite; vertical-align: text-bottom;
+        }
+        @keyframes cursorBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .tw-char { transition: opacity 0.05s linear, text-shadow 0.1s ease-out; }
+
+        /* ==========================================
+           HUD PANELS
+           ========================================== */
+        .hud-panel {
+            background: rgba(2, 0, 36, 0.6); backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05), 0 10px 30px rgba(0,0,0,0.5);
+            position: relative; overflow: hidden;
+        }
+        .hud-panel::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: scanLine 3s linear infinite;
+        }
+        @keyframes scanLine { 0% { left: -100%; } 100% { left: 200%; } }
+
+        /* ==========================================
+           GRADIENTS & GLOWS
+           ========================================== */
+        .grad-cyan { background: linear-gradient(90deg, #fff, var(--neon-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .grad-magenta { background: linear-gradient(90deg, #fff, var(--neon-magenta)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .grad-gold { background: linear-gradient(90deg, #ffe259, #ffa751); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .grad-green { background: linear-gradient(90deg, #fff, var(--neon-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .grad-purple { background: linear-gradient(90deg, #fff, var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .glow-icon-cyan { filter: drop-shadow(0 0 10px var(--neon-cyan)); color: var(--neon-cyan); }
+        .glow-icon-magenta { filter: drop-shadow(0 0 10px var(--neon-magenta)); color: var(--neon-magenta); }
+        .glow-icon-green { filter: drop-shadow(0 0 10px var(--neon-green)); color: var(--neon-green); }
+
+        /* ==========================================
+           FLOATING DECORATIVE ELEMENTS
+           ========================================== */
+        .float-element {
+            position: absolute; pointer-events: none; z-index: 1;
+        }
+        .orbit-ring {
+            position: absolute; border-radius: 50%; border: 1px solid rgba(0,240,255,0.15);
+            animation: orbitSpin 25s linear infinite;
+        }
+        @keyframes orbitSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .data-stream {
+            position: absolute; width: 2px; background: linear-gradient(180deg, transparent, var(--neon-cyan), transparent);
+            animation: dataFlow 3s linear infinite; opacity: 0.3;
+        }
+        @keyframes dataFlow {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        /* Holographic bracket decorations */
+        .holo-bracket-left::before {
+            content: '['; position: absolute; left: -20px; top: 50%; transform: translateY(-50%);
+            font-family: 'Fira Code', monospace; color: var(--neon-cyan); font-size: 2em; opacity: 0.4;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        .holo-bracket-right::after {
+            content: ']'; position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+            font-family: 'Fira Code', monospace; color: var(--neon-cyan); font-size: 2em; opacity: 0.4;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        /* ==========================================
+           ANIMATED COUNTER
+           ========================================== */
+        .counter-value {
+            display: inline-block;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ==========================================
+           VIDEO CONTROLS
+           ========================================== */
+        #video-controls {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 100;
+            display: flex; align-items: center; gap: 20px; padding: 12px 30px;
+            background: rgba(5, 5, 8, 0.9); border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            border-radius: 5px; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+        }
+        .control-btn { color: var(--neon-cyan); font-size: 20px; cursor: pointer; transition: all 0.2s; background: none; border: none; outline: none; }
+        .control-btn:hover { color: #fff; text-shadow: 0 0 10px var(--neon-cyan); transform: scale(1.1); }
+
+        .timeline-container {
+            width: 350px; height: 8px; background: rgba(0, 240, 255, 0.2);
+            position: relative; cursor: pointer; border-radius: 4px; overflow: hidden;
+            transition: height 0.2s, background 0.2s;
+        }
+        .timeline-container:hover { height: 12px; background: rgba(0, 240, 255, 0.3); }
+        #global-progress-bar {
+            height: 100%; width: 0%; background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan); pointer-events: none;
+        }
+
+        #timer-display {
+            position: fixed; bottom: 40px; right: 40px; font-family: 'Fira Code', monospace;
+            color: var(--neon-cyan); z-index: 100; font-weight: bold; text-shadow: 0 0 5px var(--neon-cyan);
+        }
+
+        .perspective-container { perspective: 1200px; transform-style: preserve-3d; }
+        .tilt-card { transition: transform 0.5s ease-out; transform-style: preserve-3d; }
+        .tilt-card:hover { transform: rotateX(5deg) rotateY(-5deg) scale(1.03); }
+
+        /* ==========================================
+           SLIDE NUMBER INDICATOR
+           ========================================== */
+        #slide-indicator {
+            position: fixed; top: 30px; right: 40px; z-index: 100;
+            font-family: 'Orbitron', sans-serif; color: rgba(0,240,255,0.5);
+            font-size: 14px; letter-spacing: 3px;
+        }
+
+        /* ==========================================
+           ANIMATED BORDER GLOW
+           ========================================== */
+        .border-glow {
+            position: relative;
+        }
+        .border-glow::after {
+            content: ''; position: absolute; inset: -2px; border-radius: inherit;
+            background: conic-gradient(from 0deg, var(--neon-cyan), var(--neon-purple), var(--neon-magenta), var(--neon-cyan));
+            z-index: -1; animation: borderRotate 4s linear infinite; opacity: 0.5;
+        }
+        @keyframes borderRotate { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        /* ==========================================
+           DIAGONAL CLIP for Ventajas slide
+           ========================================== */
+        .clip-diagonal-left { clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%); }
+    </style>
+</head>
+<body>
+
+    <!-- PARTICLE CANVAS -->
+    <canvas id="particle-canvas"></canvas>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+    <div id="timer-display">00:00 / 08:45</div>
+    <div id="slide-indicator">01 / 11</div>
+
+    <div id="video-controls">
+        <button class="control-btn" onclick="moveSlide(-1)" title="Retroceder Slide"><i class="fas fa-step-backward"></i></button>
+        <button class="control-btn" id="play-pause-btn" onclick="toggleVideoMode()" title="Reproducir/Pausar"><i class="fas fa-play" id="play-icon"></i></button>
+        <div class="timeline-container" onclick="seekVideo(event)" title="Haz clic para adelantar o atrasar el tiempo">
+            <div id="global-progress-bar"></div>
+        </div>
+        <button class="control-btn" onclick="moveSlide(1)" title="Adelantar Slide"><i class="fas fa-step-forward"></i></button>
+    </div>
+
+    <div id="presentation-container">
+
+        <!-- ==========================================
+             1. PORTADA
+             ========================================== -->
+        <section class="slide" data-duration="30000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="hex-grid"></div>
+
+            <!-- NUBE 3D CSS -->
+            <div class="cloud-3d-container" style="top: 10%; right: 5%;">
+                <div class="cloud-sphere" style="width:160px;height:120px;top:40px;left:80px;"></div>
+                <div class="cloud-sphere" style="width:120px;height:100px;top:20px;left:170px;animation-delay:-1s;"></div>
+                <div class="cloud-sphere" style="width:100px;height:80px;top:60px;left:220px;animation-delay:-2s;"></div>
+                <div class="cloud-sphere" style="width:80px;height:70px;top:30px;left:50px;animation-delay:-1.5s;"></div>
+                <div class="cloud-sphere" style="width:140px;height:100px;top:50px;left:130px;animation-delay:-0.5s;"></div>
+            </div>
+            <div class="cloud-3d-container" style="bottom: 15%; left: 3%; animation-delay: -4s; opacity: 0.08;">
+                <div class="cloud-sphere" style="width:130px;height:100px;top:30px;left:60px;"></div>
+                <div class="cloud-sphere" style="width:100px;height:80px;top:10px;left:140px;animation-delay:-2s;"></div>
+                <div class="cloud-sphere" style="width:90px;height:70px;top:50px;left:180px;animation-delay:-1s;"></div>
+            </div>
+
+            <!-- DATA STREAMS decorativos -->
+            <div class="data-stream" style="left:10%;height:200px;top:5%;animation-delay:0s;"></div>
+            <div class="data-stream" style="left:25%;height:150px;top:15%;animation-delay:1s;"></div>
+            <div class="data-stream" style="right:15%;height:180px;top:8%;animation-delay:0.5s;"></div>
+            <div class="data-stream" style="right:30%;height:120px;top:20%;animation-delay:1.5s;"></div>
+
+            <div class="z-10 text-center flex flex-col items-center justify-center w-full max-w-5xl perspective-container mx-auto">
+                <!-- LOGOS UNAM -->
+                <div class="anim pop-3d flex items-center justify-center gap-8 mb-6" style="animation-delay: 0.3s;">
+                    <img src="logosUnam/UNAM_LOGO.png" alt="UNAM" class="h-28 hologram-img holo-gold opacity-90">
+                    <img src="logosUnam/Ingenieria_LOGO.png" alt="Ingenieria" class="h-28 hologram-img holo-gold opacity-90">
+                </div>
+
+                <h4 class="font-grotesk tracking-[0.3em] uppercase text-sm mt-4 mb-2 anim blur-in text-cyan-200 typewriter" style="animation-delay: 1.5s;">Universidad Nacional Autonoma de Mexico</h4>
+                <h5 class="font-grotesk tracking-[0.4em] uppercase text-xs mb-8 anim blur-in text-cyber-magenta glow-icon-magenta typewriter" style="animation-delay: 2s;">Facultad de Ingenieria</h5>
+
+                <h1 class="text-7xl md:text-8xl font-display font-black mb-4 anim slide-in-3d grad-cyan typewriter glitch" data-text="COMPUTACION EN LA NUBE" style="animation-delay: 3s;">
+                    COMPUTACION EN LA NUBE
+                </h1>
+                <p class="text-2xl font-mono text-cyan-400/80 mb-12 anim blur-in typewriter" style="animation-delay: 4s;">> [ CLOUD_COMPUTING_2026 ]</p>
+
+                <div class="flex gap-12 anim slide-in-3d hud-panel p-8 rounded-lg tilt-card" style="animation-delay: 5s;">
+                    <div class="text-left">
+                        <p class="text-xs text-cyber-cyan uppercase tracking-widest mb-3 font-bold border-b border-cyber-cyan/30 pb-1 typewriter"><i class="fas fa-users mr-2"></i>Equipo</p>
+                        <p class="text-lg text-gray-300 mb-1 anim blur-in typewriter" style="animation-delay: 6s;">Garcia Cortes Adolfo</p>
+                        <p class="text-lg text-gray-300 mb-1 anim blur-in typewriter" style="animation-delay: 7.5s;">Lara Hernandez Angel</p>
+                        <p class="text-lg text-gray-300 anim blur-in typewriter" style="animation-delay: 9s;">Lugo Manzano Rodrigo</p>
+                    </div>
+                    <div class="w-px bg-cyber-cyan/30"></div>
+                    <div class="text-left flex flex-col justify-between">
+                        <div>
+                            <p class="text-xs text-cyber-magenta uppercase tracking-widest mb-3 font-bold border-b border-cyber-magenta/30 pb-1 typewriter"><i class="fas fa-database mr-2"></i>Materia</p>
+                            <p class="text-lg text-gray-300 mb-1 typewriter">Sis. Distribuidos <span class="text-cyber-cyan font-mono text-sm">[GRP:01]</span></p>
+                            <p class="text-lg text-gray-300 typewriter">Semestre <span class="text-cyber-magenta font-mono text-sm">[2026-2]</span></p>
+                        </div>
+                        <p class="text-sm text-cyan-500/60 mt-4 typewriter"><i class="fas fa-user-shield mr-2"></i>Profesora: M.I. Elba Karen Saenz Garcia</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             2. INTRODUCCION
+             ========================================== -->
+        <section class="slide" data-duration="45000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80');"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+
+            <!-- Orbit rings decorativos -->
+            <div class="orbit-ring" style="width:500px;height:500px;top:-100px;right:-150px;border-color:rgba(0,240,255,0.08);"></div>
+            <div class="orbit-ring" style="width:350px;height:350px;top:-25px;right:-75px;border-color:rgba(0,240,255,0.12);animation-direction:reverse;animation-duration:18s;"></div>
+
+            <div class="w-full max-w-7xl mx-auto px-12 flex items-center justify-between z-20 perspective-container">
+                <div class="w-[55%] pr-10">
+                    <h3 class="text-xl font-bebas font-bold text-cyber-magenta tracking-[0.3em] mb-2 anim slide-from-left typewriter glitch" data-text="INTRODUCCION" style="animation-delay: 0.2s;">INTRODUCCION</h3>
+                    <h2 class="text-5xl font-exo font-bold mb-6 anim slide-in-3d grad-cyan typewriter" style="animation-delay: 0.5s;">Que es la nube?</h2>
+
+                    <div class="relative w-full h-40 mb-6 perspective-container">
+                        <div class="absolute top-0 left-10 w-3/4 h-32 anim slide-in-3d holo-screen border border-cyber-cyan/40 overflow-hidden z-0" style="animation-delay: 1.5s;">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover hologram-img holo-cyan">
+                        </div>
+                        <div class="absolute -bottom-4 left-0 w-40 h-28 anim pop-3d holo-screen border border-cyber-green/40 overflow-hidden z-10 shadow-[0_0_20px_#00ff66]" style="animation-delay: 2.5s;">
+                            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hologram-img holo-green">
+                        </div>
+                        <div class="absolute -bottom-2 right-4 w-44 h-28 anim pop-3d holo-screen border border-cyber-magenta/40 overflow-hidden z-20 shadow-[0_0_20px_#ff003c]" style="animation-delay: 4.5s;">
+                            <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hologram-img holo-magenta">
+                        </div>
+                    </div>
+
+                    <ul class="space-y-5 relative z-30">
+                        <li class="flex items-start gap-4 anim blur-in" style="animation-delay: 2s;">
+                            <i class="fas fa-server text-2xl glow-icon-cyan mt-1"></i>
+                            <p class="text-xl text-gray-300 leading-relaxed typewriter font-grotesk"><strong class="text-white">Acceso bajo demanda</strong> a recursos informaticos compartidos via internet, eliminando fronteras fisicas.</p>
+                        </li>
+                        <li class="flex items-start gap-4 anim blur-in" style="animation-delay: 4s;">
+                            <i class="fas fa-coins text-2xl glow-icon-magenta mt-1"></i>
+                            <p class="text-xl text-gray-300 leading-relaxed typewriter font-grotesk"><strong class="text-white">Pago algoritmico por consumo.</strong> Cero inversion inicial en hardware obsoleto.</p>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8 hud-panel border-l-4 border-l-cyber-magenta p-4 rounded-r-lg anim pop-3d tilt-card" style="animation-delay: 12s;">
+                        <h4 class="text-sm font-display tracking-widest text-cyber-magenta mb-1 typewriter"><i class="fas fa-globe mr-2"></i>VALORACION DE MERCADO</h4>
+                        <div class="text-5xl font-black text-white font-display">+<span class="counter-value" data-target="800">0</span> <span class="text-xl text-gray-400 font-sans">BILLONES USD</span></div>
+                    </div>
+                </div>
+
+                <div class="w-[45%] relative h-[550px] flex items-center">
+                    <div class="absolute left-6 top-4 bottom-4 w-1 bg-gradient-to-b from-transparent via-cyber-cyan to-transparent opacity-50"></div>
+                    <div class="space-y-6 pl-12 w-full">
+                        <div class="relative anim slide-from-right flex items-center justify-between group" style="animation-delay: 6s;">
+                            <div class="absolute -left-[54px] top-4 w-4 h-4 rounded-full bg-cyber-cyan shadow-[0_0_15px_#00f0ff]"></div>
+                            <div class="w-3/5">
+                                <h4 class="text-3xl font-bebas font-bold text-gray-400 typewriter">1950s</h4>
+                                <p class="text-md text-gray-500 font-mono mt-1 typewriter">> Mainframes.</p>
+                            </div>
+                            <div class="w-2/5 h-16 holo-screen overflow-hidden border border-cyber-cyan/30 anim pop-3d" style="animation-delay: 6.5s;">
+                                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hologram-img holo-cyan">
+                            </div>
+                        </div>
+
+                        <div class="relative anim slide-from-right flex items-center justify-between group" style="animation-delay: 7.5s;">
+                            <div class="absolute -left-[54px] top-4 w-4 h-4 rounded-full bg-cyber-cyan shadow-[0_0_15px_#00f0ff]"></div>
+                            <div class="w-3/5 relative">
+                                <img src="image/salesforce.png" class="absolute left-24 top-0 w-8 h-8 object-contain hologram-img holo-cyan anim pop-3d" style="animation-delay: 8s;">
+                                <h4 class="text-3xl font-bebas font-bold text-gray-300 typewriter">1999</h4>
+                                <p class="text-md text-gray-400 font-mono mt-1 typewriter">> Salesforce.</p>
+                            </div>
+                            <div class="w-2/5 h-16 holo-screen overflow-hidden border border-cyber-cyan/30 anim pop-3d" style="animation-delay: 8s;">
+                                <img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hologram-img holo-cyan">
+                            </div>
+                        </div>
+
+                        <div class="relative anim slide-from-right tilt-card hud-panel p-3 -ml-4 flex items-center justify-between" style="animation-delay: 9s;">
+                            <div class="absolute -left-[40px] top-6 w-6 h-6 rounded-full bg-cyber-magenta shadow-[0_0_20px_#ff003c] z-10 border-2 border-black"></div>
+                            <div class="w-3/5">
+                                <h4 class="text-4xl font-display font-black text-white glow-icon-magenta">2006</h4>
+                                <p class="text-lg text-cyber-cyan font-mono mt-1 typewriter">> Boom: EC2 y S3.</p>
+                            </div>
+                            <div class="w-2/5 h-20 holo-screen overflow-hidden border border-cyber-magenta/50 relative anim pop-3d" style="animation-delay: 9.5s;">
+                                <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover hologram-img holo-magenta mix-blend-screen opacity-80">
+                                <img src="image/aws.svg" class="absolute inset-0 m-auto w-12 h-12 object-contain bg-white/10 p-1 rounded hologram-img holo-gold">
+                            </div>
+                        </div>
+
+                        <div class="relative anim slide-from-right flex items-center justify-between" style="animation-delay: 10.5s;">
+                            <div class="absolute -left-[54px] top-4 w-4 h-4 rounded-full bg-cyber-cyan shadow-[0_0_15px_#00f0ff]"></div>
+                            <div class="w-3/5">
+                                <h4 class="text-3xl font-bebas font-bold text-white typewriter">2008</h4>
+                                <p class="text-md text-gray-300 font-mono mt-1 typewriter">> Azure & GCP globales.</p>
+                            </div>
+                            <div class="w-2/5 flex gap-2 justify-end anim pop-3d" style="animation-delay: 11s;">
+                                <img src="image/azure.png" class="h-10 hologram-img holo-cyan">
+                                <img src="image/gcp.png" class="h-10 hologram-img holo-green">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             3. OBJETIVO
+             ========================================== -->
+        <section class="slide" data-duration="25000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1920&q=80'); filter: blur(4px) brightness(0.2);"></div>
+
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-cyber-green/20 border-dashed animate-[spin_40s_linear_infinite] z-0"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-cyber-green/40 border-dotted animate-[spin_20s_linear_infinite_reverse] z-0"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-cyber-green/10 animate-[spin_15s_linear_infinite] z-0"></div>
+
+            <!-- Decorative crosshair lines -->
+            <div class="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyber-green/20 to-transparent z-0"></div>
+            <div class="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-cyber-green/20 to-transparent z-0"></div>
+
+            <div class="z-10 hud-panel p-12 rounded-2xl border-t-4 border-cyber-green w-full max-w-4xl text-center shadow-[0_0_50px_rgba(0,255,102,0.1)] anim pop-3d" style="animation-delay: 0.5s;">
+                <i class="fas fa-crosshairs text-7xl glow-icon-green mb-6 animate-pulse"></i>
+                <h2 class="text-5xl font-bebas font-bold mb-10 text-white tracking-[0.3em] typewriter glitch" data-text="OBJETIVO" style="animation-delay:0.5s;">OBJETIVO</h2>
+
+                <div class="grid grid-cols-2 gap-8 text-left">
+                    <div class="flex items-start gap-4 anim slide-from-left bg-black/40 p-4 rounded border border-cyber-green/20" style="animation-delay: 2s;">
+                        <i class="fas fa-angle-double-right text-cyber-green mt-1 text-xl"></i>
+                        <p class="text-gray-300 text-lg typewriter font-grotesk">Investigar <strong class="text-white glow-icon-green">tecnologias actuales</strong> conectadas a sistemas distribuidos.</p>
+                    </div>
+                    <div class="flex items-start gap-4 anim slide-from-right bg-black/40 p-4 rounded border border-cyber-green/20" style="animation-delay: 4s;">
+                        <i class="fas fa-angle-double-right text-cyber-green mt-1 text-xl"></i>
+                        <p class="text-gray-300 text-lg typewriter font-grotesk">Identificar la <strong class="text-white glow-icon-green">aplicacion practica</strong> de los conceptos teoricos.</p>
+                    </div>
+                    <div class="flex items-start gap-4 anim slide-from-left bg-black/40 p-4 rounded border border-cyber-green/20" style="animation-delay: 6s;">
+                        <i class="fas fa-angle-double-right text-cyber-green mt-1 text-xl"></i>
+                        <p class="text-gray-300 text-lg typewriter font-grotesk">Analizar <strong class="text-white glow-icon-green">soluciones reales</strong> operativas en la industria 4.0.</p>
+                    </div>
+                    <div class="flex items-start gap-4 anim slide-from-right bg-black/40 p-4 rounded border border-cyber-green/20" style="animation-delay: 8s;">
+                        <i class="fas fa-angle-double-right text-cyber-green mt-1 text-xl"></i>
+                        <p class="text-gray-300 text-lg typewriter font-grotesk">Vincular el <strong class="text-white glow-icon-green">curriculo academico</strong> con el ecosistema vigente.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             4. RELACION CON SISTEMAS DISTRIBUIDOS
+             ========================================== -->
+        <section class="slide" data-duration="50000">
+            <div class="hex-grid" style="opacity: 0.2; filter: hue-rotate(90deg);"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black z-0"></div>
+
+            <!-- Floating network nodes decoration -->
+            <svg class="absolute inset-0 w-full h-full z-0 opacity-10" viewBox="0 0 1920 1080">
+                <circle cx="200" cy="150" r="4" fill="#00f0ff"><animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/></circle>
+                <circle cx="500" cy="300" r="3" fill="#ff003c"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle>
+                <circle cx="1400" cy="200" r="5" fill="#00f0ff"><animate attributeName="opacity" values="0.4;1;0.4" dur="4s" repeatCount="indefinite"/></circle>
+                <circle cx="1700" cy="800" r="3" fill="#7a00ff"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="3.5s" repeatCount="indefinite"/></circle>
+                <line x1="200" y1="150" x2="500" y2="300" stroke="#00f0ff" stroke-width="0.5" opacity="0.2"/>
+                <line x1="500" y1="300" x2="1400" y2="200" stroke="#00f0ff" stroke-width="0.5" opacity="0.1"/>
+                <line x1="1400" y1="200" x2="1700" y2="800" stroke="#7a00ff" stroke-width="0.5" opacity="0.15"/>
+            </svg>
+
+            <div class="w-full max-w-7xl text-center z-10 perspective-container mx-auto">
+                <h2 class="text-5xl font-exo font-bold mb-4 text-white anim slide-in-3d typewriter" style="animation-delay: 0.5s;">
+                    RELACION CON <span class="grad-magenta glitch" data-text="SISTEMAS DISTRIBUIDOS">SISTEMAS DISTRIBUIDOS</span>
+                </h2>
+                <p class="font-mono text-cyber-cyan tracking-widest mb-12 anim blur-in typewriter" style="animation-delay: 1.5s;">[ ESCALA INDUSTRIAL ACTIVADA ]</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+                    <div class="hud-panel p-8 rounded-xl border-t-2 border-cyber-cyan anim slide-from-left tilt-card relative overflow-hidden" style="animation-delay: 4s;">
+                        <img src="image/network.svg" class="absolute top-4 right-4 w-12 h-12 object-contain opacity-40 hologram-img holo-cyan">
+                        <i class="fas fa-network-wired text-4xl glow-icon-cyan mb-4 relative z-10"></i>
+                        <h4 class="text-white font-display font-bold mb-2 tracking-wide typewriter relative z-10">DEFINICION</h4>
+                        <p class="text-gray-400 text-lg leading-snug typewriter relative z-10 font-grotesk">Multiples computadoras que el usuario percibe como un ente unificado (Tanenbaum).</p>
+                    </div>
+
+                    <div class="hud-panel p-8 rounded-xl border-t-2 border-cyber-purple anim scale-up tilt-card" style="animation-delay: 7s;">
+                        <i class="fas fa-user-secret text-4xl text-purple-400 filter drop-shadow-[0_0_10px_#7a00ff] mb-4"></i>
+                        <h4 class="text-white font-display font-bold mb-2 tracking-wide typewriter">TRANSPARENCIA</h4>
+                        <p class="text-gray-400 text-lg leading-snug typewriter font-grotesk">De ubicacion, replicacion y migracion. Complejidad oculta al cliente final.</p>
+                    </div>
+
+                    <div class="hud-panel p-8 rounded-xl border-t-2 border-cyber-magenta anim scale-up tilt-card" style="animation-delay: 10s;">
+                        <i class="fas fa-expand-arrows-alt text-4xl glow-icon-magenta mb-4"></i>
+                        <h4 class="text-white font-display font-bold mb-2 tracking-wide typewriter">ESCALABILIDAD</h4>
+                        <p class="text-gray-400 text-lg leading-snug typewriter font-grotesk">Crecimiento horizontal dinamico. Instancias clonadas bajo demanda en milisegundos.</p>
+                    </div>
+
+                    <div class="hud-panel p-8 rounded-xl border-t-2 border-cyber-green anim slide-from-right tilt-card" style="animation-delay: 13s;">
+                        <i class="fas fa-shield-virus text-4xl glow-icon-green mb-4"></i>
+                        <h4 class="text-white font-display font-bold mb-2 tracking-wide typewriter">TOLERANCIA A FALLOS</h4>
+                        <p class="text-gray-400 text-lg leading-snug typewriter font-grotesk">Replicacion multi-zona. Auto-curacion de redescubrimiento de nodos vivos.</p>
+                    </div>
+                </div>
+
+                <div class="mt-8 hud-panel p-6 border-x-4 border-cyber-gold rounded w-full max-w-3xl mx-auto anim pop-3d text-center relative overflow-hidden" style="animation-delay: 16s;">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-screen">
+                    <i class="fas fa-balance-scale text-3xl text-yellow-400 mb-3 relative z-10"></i>
+                    <h4 class="text-white font-display font-bold text-2xl tracking-widest mb-2 relative z-10 typewriter">CONSENSO DISTRIBUIDO</h4>
+                    <p class="text-gray-300 text-xl font-mono relative z-10 typewriter">> Algoritmos <span class="text-cyber-gold font-bold">Paxos</span> y <span class="text-cyber-gold font-bold">Raft</span> en produccion asegurando la verdad del estado.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             5. ARQUITECTURA
+             ========================================== -->
+        <section class="slide" data-duration="55000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1920&q=80'); filter: blur(10px) brightness(0.2);"></div>
+
+            <!-- 3D cloud decorativa -->
+            <div class="cloud-3d-container" style="top:5%;left:5%;opacity:0.07;animation-delay:-3s;">
+                <div class="cloud-sphere" style="width:100px;height:80px;top:20px;left:40px;"></div>
+                <div class="cloud-sphere" style="width:80px;height:60px;top:10px;left:110px;animation-delay:-1s;"></div>
+            </div>
+
+            <div class="w-full max-w-7xl flex flex-col items-center z-10 perspective-container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bebas font-bold mb-2 text-white tracking-[0.2em] anim slide-in-3d typewriter glitch" data-text="FUNCIONAMIENTO GENERAL O ARQUITECTURA" style="animation-delay: 0.5s;">FUNCIONAMIENTO GENERAL O ARQUITECTURA</h2>
+                <p class="text-cyber-cyan font-mono text-lg mb-12 anim blur-in typewriter" style="animation-delay: 1.5s;">[ FLUJO: USER -> LOAD BALANCER -> CLUSTER -> API -> DB ]</p>
+
+                <div class="flex gap-8 w-full h-96 items-end justify-center perspective-container">
+                    <div class="hud-panel w-1/3 h-3/5 p-6 flex flex-col justify-between border-b-4 border-orange-500 anim pop-3d tilt-card relative" style="animation-delay: 4s; transform-origin: bottom;">
+                        <div class="text-center">
+                            <img src="image/aws.svg" class="w-16 h-12 object-contain bg-white/10 p-2 rounded hologram-img holo-gold mx-auto mb-4">
+                            <h3 class="text-4xl font-bebas font-black text-orange-400 mb-2">IaaS</h3>
+                            <p class="text-gray-300 text-sm typewriter font-grotesk">Infraestructura Cruda (Hardware Virtual).</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel w-1/3 h-4/5 p-6 flex flex-col justify-between border-b-4 border-blue-500 anim pop-3d tilt-card relative" style="animation-delay: 7s; transform-origin: bottom;">
+                        <div class="text-center">
+                            <img src="image/heroku.png" class="w-12 h-12 object-contain hologram-img holo-cyan mx-auto mb-4">
+                            <h3 class="text-4xl font-bebas font-black text-blue-400 mb-2">PaaS</h3>
+                            <p class="text-gray-300 text-sm typewriter font-grotesk">Entorno Gestionado. Aportas el codigo.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel w-1/3 h-full p-6 flex flex-col justify-between border-b-4 border-cyber-green anim pop-3d tilt-card relative" style="animation-delay: 10s; transform-origin: bottom;">
+                        <div class="text-center">
+                            <img src="image/salesforce.png" class="w-16 h-12 object-contain hologram-img holo-green mx-auto mb-4">
+                            <h3 class="text-4xl font-bebas font-black text-green-400 mb-2">SaaS</h3>
+                            <p class="text-gray-300 text-sm typewriter font-grotesk">Software Completo. Listo para el consumo.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrows connecting the pillars -->
+                <svg class="w-full max-w-2xl h-8 mt-2 anim blur-in" style="animation-delay:12s;" viewBox="0 0 600 30">
+                    <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#00f0ff"/></marker></defs>
+                    <line x1="100" y1="15" x2="280" y2="15" stroke="#00f0ff" stroke-width="1" marker-end="url(#arrowhead)" opacity="0.5"/>
+                    <line x1="320" y1="15" x2="500" y2="15" stroke="#00f0ff" stroke-width="1" marker-end="url(#arrowhead)" opacity="0.5"/>
+                    <text x="190" y="10" fill="#00f0ff" font-size="9" font-family="monospace" opacity="0.6">+ abstraccion</text>
+                    <text x="390" y="10" fill="#00f0ff" font-size="9" font-family="monospace" opacity="0.6">+ abstraccion</text>
+                </svg>
+
+                <div class="mt-8 hud-panel px-8 py-4 rounded-full flex gap-8 font-display text-sm tracking-widest text-gray-400 anim blur-in typewriter" style="animation-delay: 15s;">
+                    <span class="text-cyber-cyan"><i class="fas fa-satellite mr-2"></i>DESPLIEGUES:</span>
+                    <span class="text-white">PUBLICA</span> |
+                    <span class="text-white">PRIVADA</span> |
+                    <span class="text-white">HIBRIDA</span> |
+                    <span class="text-white">COMUNITARIA</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             6. TECNOLOGIAS RELACIONADAS
+             ========================================== -->
+        <section class="slide" data-duration="55000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.15) hue-rotate(200deg);"></div>
+
+            <div class="w-full max-w-6xl mx-auto z-10 perspective-container">
+                <h2 class="text-5xl font-exo font-bold mb-16 text-center text-white tracking-widest anim slide-in-3d typewriter" style="animation-delay: 0.5s;">TECNOLOGIAS <span class="grad-cyan glitch" data-text="RELACIONADAS">RELACIONADAS</span></h2>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-gray-400 anim slide-from-left tilt-card relative" style="animation-delay: 3s;">
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">VIRTUALIZACION</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">KVM, Xen. Hipervisores que consolidan servidores fisicos en multiples VMs aisladas.</p>
+                    </div>
+
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-blue-400 anim pop-3d tilt-card relative" style="animation-delay: 6s;">
+                        <img src="image/docker.png" class="absolute top-4 right-4 w-10 h-10 object-contain opacity-30 hologram-img holo-cyan">
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">CONTENEDORES</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">Docker. Unidades portatiles que comparten kernel. Arranque en microsegundos.</p>
+                    </div>
+
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-blue-600 anim slide-from-right tilt-card relative" style="animation-delay: 9s;">
+                        <img src="image/kubernetes.svg" class="absolute top-4 right-4 w-10 h-10 object-contain opacity-30 hologram-img holo-cyan">
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">KUBERNETES</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">El cerebro operativo. Orquesta clusteres masivos de contenedores autonomamente.</p>
+                    </div>
+
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-cyber-purple anim slide-from-left tilt-card relative" style="animation-delay: 12s;">
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">MICROSERVICIOS</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">Arquitectura desacoplada. Modulos peque&ntilde;os comunicados via APIs ligeras.</p>
+                    </div>
+
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-cyber-gold anim pop-3d tilt-card relative" style="animation-delay: 15s;">
+                        <i class="fas fa-bolt text-3xl text-yellow-400 absolute top-4 right-4 opacity-30 hologram-img holo-gold"></i>
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">SERVERLESS</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">AWS Lambda. Ejecucion de funciones reactivas sin administrar infraestructura base.</p>
+                    </div>
+
+                    <div class="hud-panel p-6 rounded-xl border-l-4 border-orange-500 anim slide-from-right tilt-card relative" style="animation-delay: 18s;">
+                        <img src="image/cloudflare.svg" class="absolute top-4 right-4 w-10 h-10 object-contain opacity-30 hologram-img holo-gold">
+                        <h4 class="text-2xl font-bebas font-bold mb-2 text-white pr-10 typewriter tracking-wider">REFRACCION CDN</h4>
+                        <p class="text-lg text-gray-400 leading-snug typewriter font-grotesk">Cloudflare, Akamai. Replicacion estatica global aniquilando la latencia geografica.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             7. APLICACIONES REALES
+             ========================================== -->
+        <section class="slide" data-duration="55000">
+            <div class="hex-grid" style="opacity: 0.1; filter: hue-rotate(180deg);"></div>
+
+            <div class="w-full max-w-7xl mx-auto px-8 z-10 perspective-container">
+                <h2 class="text-5xl font-bebas font-bold mb-12 text-center text-white tracking-[0.2em] anim slide-in-3d typewriter" style="animation-delay: 0.5s;">APLICACIONES <span class="text-cyber-magenta glitch" data-text="REALES">REALES</span></h2>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim pop-3d tilt-card border-t-2 border-red-600" style="animation-delay: 3s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <img src="image/netflix.png" alt="Netflix" class="h-8 w-auto object-contain mb-2 filter drop-shadow-[0_0_15px_red] hologram-img self-start">
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">200M+ usuarios operados en microservicios AWS.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim scale-up tilt-card border-t-2 border-green-500" style="animation-delay: 6s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <img src="image/spotify.png" alt="Spotify" class="h-8 w-auto object-contain mb-2 filter drop-shadow-[0_0_15px_#4ade80] hologram-img self-start">
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">Algoritmos GCP procesando Big Data de 500M+ perfiles.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim pop-3d tilt-card border-t-2 border-blue-500" style="animation-delay: 9s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1501167786227-4cba60f6d58f?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <img src="image/capitalone.png" alt="Capital One" class="h-8 w-auto object-contain mb-2 filter drop-shadow-[0_0_15px_#60a5fa] hologram-img self-start bg-white/20 p-1 rounded">
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">Capital One 100% cloud. Datacenters fisicos eliminados.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim slide-from-left tilt-card border-t-2 border-teal-500" style="animation-delay: 12s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <i class="fas fa-heartbeat text-3xl text-teal-400 mb-2 filter drop-shadow-[0_0_15px_#2dd4bf] hologram-img holo-cyan"></i>
+                            <h3 class="text-2xl font-bebas font-bold text-white mb-1 tracking-wider">HealthTech</h3>
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">Historiales medicos unificados y telemedicina escalable.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim scale-up tilt-card border-t-2 border-yellow-500" style="animation-delay: 15s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <i class="fas fa-shopping-cart text-3xl text-yellow-400 mb-2 filter drop-shadow-[0_0_15px_#facc15] hologram-img holo-gold"></i>
+                            <h3 class="text-2xl font-bebas font-bold text-white mb-1 tracking-wider">E-Commerce</h3>
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">Elasticidad brutal tolerando picos de Black Friday.</p>
+                        </div>
+                    </div>
+
+                    <div class="hud-panel h-56 rounded-xl relative overflow-hidden group anim slide-from-right tilt-card border-t-2 border-purple-500" style="animation-delay: 18s;">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800')] bg-cover opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+                        <div class="relative z-10 p-6 h-full flex flex-col justify-end">
+                            <img src="image/zoom.svg" alt="Zoom" class="h-6 w-auto object-contain mb-2 filter drop-shadow-[0_0_15px_#c084fc] hologram-img self-start bg-white/20 p-1 rounded">
+                            <p class="text-lg text-gray-300 typewriter font-grotesk">Aulas virtuales sosteniendo el aprendizaje global 24/7.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             8. RELACION CON CLASE
+             ========================================== -->
+        <section class="slide" data-duration="60000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80'); filter: blur(8px) brightness(0.2) hue-rotate(-30deg);"></div>
+
+            <div class="w-full max-w-6xl mx-auto z-10 perspective-container">
+                <h2 class="text-4xl md:text-5xl font-exo font-bold mb-10 text-center text-white tracking-widest anim slide-in-3d typewriter" style="animation-delay: 0.5s;">RELACION CON <span class="grad-green glitch" data-text="TEMAS VISTOS EN CLASE">TEMAS VISTOS EN CLASE</span></h2>
+
+                <div class="hud-panel rounded-2xl border border-cyber-green/50 shadow-[0_0_30px_rgba(0,255,102,0.1)] relative overflow-hidden">
+                    <img src="image/docker.png" class="absolute -right-10 -bottom-10 w-64 opacity-10 hologram-img holo-green">
+
+                    <div class="flex items-center justify-between border-b border-cyber-green/20 py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-left" style="animation-delay: 3s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fas fa-cubes text-cyber-green mr-3"></i>Conceptos Core</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">Transparencia y Escalabilidad materializadas.</div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-cyber-green/20 py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-right" style="animation-delay: 7s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fas fa-project-diagram text-cyber-green mr-3"></i>Capa de Red OSI</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">TCP/IP estricto, Enrutamiento CIDR, TLS/HTTPS.</div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-cyber-green/20 py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-left" style="animation-delay: 11s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fas fa-exchange-alt text-cyber-green mr-3"></i>Protocolos IPC</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">Llamadas gRPC (RPC moderno) y Colas Kafka/SQS.</div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-cyber-green/20 py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-right" style="animation-delay: 15s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fas fa-clock text-cyber-green mr-3"></i>Sincronizacion NTP</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">Algoritmos Cristian/Berkeley ejecutados a escala AWS.</div>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-cyber-green/20 py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-left" style="animation-delay: 19s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fas fa-balance-scale text-cyber-green mr-3"></i>Consenso Distribuido</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">Protocolos Paxos y Raft gobernando bases etcd.</div>
+                    </div>
+
+                    <div class="flex items-center justify-between py-5 px-8 hover:bg-cyber-green/10 transition-colors anim slide-from-right" style="animation-delay: 23s;">
+                        <div class="w-5/12 font-bold text-xl text-white font-mono typewriter"><i class="fab fa-docker text-cyber-green mr-3"></i>Aislamiento Kernel</div>
+                        <div class="w-2/12 text-center text-cyber-green/50 animate-pulse"><i class="fas fa-random"></i></div>
+                        <div class="w-5/12 text-right text-gray-300 text-lg typewriter font-grotesk">El Docker de laboratorio opera identico en produccion.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             9. VENTAJAS Y DESAFIOS
+             ========================================== -->
+        <section class="slide p-0" data-duration="50000">
+            <div class="absolute inset-0 w-[55%] bg-gradient-to-br from-green-900/80 to-[#050508] clip-diagonal-left z-0"></div>
+            <div class="absolute inset-0 w-full bg-gradient-to-bl from-red-900/80 to-[#050508] z-0" style="clip-path: polygon(55% 0, 100% 0, 100% 100%, 45% 100%);"></div>
+
+            <!-- Central divider glow -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-full bg-gradient-to-b from-transparent via-white/20 to-transparent z-[5]"></div>
+
+            <div class="w-1/2 h-full flex flex-col justify-center px-16 z-10 perspective-container relative">
+                <div class="absolute top-24 right-12 anim scale-up" style="animation-delay: 2s;">
+                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=300&q=80" alt="Growth" class="w-40 h-40 rounded-full object-cover hologram-img holo-green mix-blend-screen opacity-60" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                </div>
+
+                <h2 class="text-6xl font-bebas font-black text-cyber-green mb-10 anim slide-from-left glow-icon-green typewriter relative z-10 tracking-wider" style="animation-delay: 0.5s;">VENTAJAS</h2>
+                <ul class="space-y-10 relative z-10">
+                    <li class="flex items-start gap-5 anim slide-from-left" style="animation-delay: 3s;">
+                        <i class="fas fa-check-circle text-3xl text-cyber-green mt-1 drop-shadow-[0_0_10px_#00ff66]"></i>
+                        <p class="text-2xl text-gray-300 leading-tight typewriter font-grotesk"><strong class="text-white">Reduccion Financiera:</strong> 30-50% en hardware. Modelo Pay-As-You-Go.</p>
+                    </li>
+                    <li class="flex items-start gap-5 anim slide-from-left" style="animation-delay: 6s;">
+                        <i class="fas fa-check-circle text-3xl text-cyber-green mt-1 drop-shadow-[0_0_10px_#00ff66]"></i>
+                        <p class="text-2xl text-gray-300 leading-tight typewriter font-grotesk"><strong class="text-white">Elasticidad Instintiva:</strong> Escalamiento hiper-rapido automatizado.</p>
+                    </li>
+                    <li class="flex items-start gap-5 anim slide-from-left" style="animation-delay: 9s;">
+                        <i class="fas fa-check-circle text-3xl text-cyber-green mt-1 drop-shadow-[0_0_10px_#00ff66]"></i>
+                        <p class="text-2xl text-gray-300 leading-tight typewriter font-grotesk"><strong class="text-white">Inmunidad:</strong> Alta disponibilidad (SLA >99.9%) multi-region.</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="w-1/2 h-full flex flex-col justify-center px-16 z-10 pl-24 perspective-container relative">
+                <div class="absolute bottom-24 left-12 anim scale-up" style="animation-delay: 2.5s;">
+                    <img src="https://images.unsplash.com/photo-1510511459019-5efa32524d77?auto=format&fit=crop&w=300&q=80" alt="Security Risk" class="w-40 h-40 rounded-full object-cover hologram-img holo-magenta mix-blend-screen opacity-60" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                </div>
+
+                <h2 class="text-6xl font-bebas font-black text-cyber-magenta mb-10 anim slide-from-right glow-icon-magenta text-right typewriter relative z-10 tracking-wider" style="animation-delay: 1.5s;">DESAFIOS</h2>
+                <ul class="space-y-10 text-right relative z-10">
+                    <li class="flex items-start justify-end gap-5 anim slide-from-right" style="animation-delay: 15s;">
+                        <p class="text-2xl text-gray-300 leading-tight text-right typewriter font-grotesk"><strong class="text-white">Brechas Criticas:</strong> 45% de hackeos por configuracion humana erronea.</p>
+                        <i class="fas fa-exclamation-triangle text-3xl text-cyber-magenta mt-1 drop-shadow-[0_0_10px_#ff003c]"></i>
+                    </li>
+                    <li class="flex items-start justify-end gap-5 anim slide-from-right" style="animation-delay: 18s;">
+                        <p class="text-2xl text-gray-300 leading-tight text-right typewriter font-grotesk"><strong class="text-white">Vendor Lock-in:</strong> Esclavitud tecnica a APIs propietarias.</p>
+                        <i class="fas fa-lock text-3xl text-cyber-magenta mt-1 drop-shadow-[0_0_10px_#ff003c]"></i>
+                    </li>
+                    <li class="flex items-start justify-end gap-5 anim slide-from-right" style="animation-delay: 21s;">
+                        <p class="text-2xl text-gray-300 leading-tight text-right typewriter font-grotesk"><strong class="text-white">Hemorragia de Costos:</strong> Problema #1 para el <span class="counter-value" data-target="84">0</span>% de las corporaciones.</p>
+                        <i class="fas fa-chart-line text-3xl text-cyber-magenta mt-1 drop-shadow-[0_0_10px_#ff003c]"></i>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             10. IMPACTO ACTUAL Y FUTURO
+             ========================================== -->
+        <section class="slide" data-duration="55000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=1920&q=80'); filter: blur(5px) brightness(0.25);"></div>
+
+            <div class="w-full max-w-7xl mx-auto px-8 flex flex-col items-center z-10 perspective-container">
+                <h2 class="text-5xl md:text-6xl font-bebas font-bold mb-12 text-white anim slide-in-3d tracking-[0.2em] typewriter glitch" data-text="IMPACTO ACTUAL Y FUTURO" style="animation-delay: 0.5s;">IMPACTO ACTUAL <span class="grad-gold">Y FUTURO</span></h2>
+
+                <div class="w-full grid grid-cols-2 gap-12">
+                    <div class="hud-panel border-t-4 border-cyber-gold rounded-3xl p-8 anim pop-3d tilt-card" style="animation-delay: 3s;">
+                        <h3 class="text-2xl font-display font-bold text-white mb-8 border-b border-white/10 pb-4 typewriter"><i class="fas fa-chart-pie text-cyber-gold mr-3"></i>ESTADO DEL MERCADO</h3>
+
+                        <div class="space-y-6 font-mono text-lg">
+                            <div>
+                                <div class="flex justify-between mb-2"><span class="text-gray-300 font-grotesk">AWS (Amazon)</span><span class="font-bold text-cyber-gold text-xl"><span class="counter-value" data-target="32">0</span>%</span></div>
+                                <div class="w-full bg-black/50 h-3 rounded overflow-hidden border border-white/10"><div class="bg-cyber-gold h-full animated-bar" style="width: 0%; --target-width: 32%; box-shadow: 0 0 10px #ffd700;"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2"><span class="text-gray-300 font-grotesk">Azure (Microsoft)</span><span class="font-bold text-blue-400 text-xl"><span class="counter-value" data-target="23">0</span>%</span></div>
+                                <div class="w-full bg-black/50 h-3 rounded overflow-hidden border border-white/10"><div class="bg-blue-500 h-full animated-bar" style="width: 0%; --target-width: 23%; box-shadow: 0 0 10px #3b82f6;"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-2"><span class="text-gray-300 font-grotesk">GCP (Google)</span><span class="font-bold text-green-400 text-xl"><span class="counter-value" data-target="11">0</span>%</span></div>
+                                <div class="w-full bg-black/50 h-3 rounded overflow-hidden border border-white/10"><div class="bg-green-500 h-full animated-bar" style="width: 0%; --target-width: 11%; box-shadow: 0 0 10px #22c55e;"></div></div>
+                            </div>
+                        </div>
+                        <div class="mt-8 bg-cyber-gold/10 border border-cyber-gold/30 p-4 rounded text-cyber-gold flex items-center justify-center gap-3">
+                            <i class="fas fa-code-branch text-2xl"></i>
+                            <p class="text-xl font-bold tracking-wider typewriter"><span class="counter-value" data-target="89">0</span>% MULTI-CLOUD</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="hud-panel border-l-4 border-cyber-purple p-6 rounded-xl flex items-center gap-6 anim slide-from-right tilt-card relative overflow-hidden" style="animation-delay: 8s;">
+                            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=150&q=80" class="w-20 h-20 rounded-full object-cover hologram-img mix-blend-screen hidden lg:block">
+                            <div class="flex-1">
+                                <h4 class="text-2xl font-bebas font-bold text-white mb-1 typewriter tracking-wider">INTELIGENCIA ARTIFICIAL</h4>
+                                <p class="text-lg text-gray-400 leading-tight typewriter font-grotesk">Clusteres GPU alquilados. Inversion de $520B para LLMs como Bedrock/Vertex.</p>
+                            </div>
+                        </div>
+
+                        <div class="hud-panel border-l-4 border-cyber-cyan p-6 rounded-xl flex items-center gap-6 anim slide-from-right tilt-card relative overflow-hidden" style="animation-delay: 13s;">
+                            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=150&q=80" class="w-20 h-20 rounded-full object-cover hologram-img holo-cyan mix-blend-screen hidden lg:block">
+                            <div class="flex-1">
+                                <h4 class="text-2xl font-bebas font-bold text-white mb-1 typewriter tracking-wider">EDGE COMPUTING</h4>
+                                <p class="text-lg text-gray-400 leading-tight typewriter font-grotesk">Procesamiento distribuido en antenas 5G. Latencia reducida a milisegundos criticos.</p>
+                            </div>
+                        </div>
+
+                        <div class="hud-panel border-l-4 border-cyber-magenta p-6 rounded-xl flex items-center gap-6 anim slide-from-right tilt-card relative overflow-hidden" style="animation-delay: 18s;">
+                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=150&q=80" class="w-20 h-20 rounded-full object-cover hologram-img holo-magenta mix-blend-screen hidden lg:block">
+                            <div class="flex-1">
+                                <h4 class="text-2xl font-bebas font-bold text-white mb-1 typewriter tracking-wider">COMPUTO CUANTICO</h4>
+                                <p class="text-lg text-gray-400 leading-tight typewriter font-grotesk">Amazon Braket / Azure Quantum. Superposicion de qubits accesible por API.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             11. CONCLUSION
+             ========================================== -->
+        <section class="slide" data-duration="45000">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80'); filter: blur(3px) brightness(0.3) saturate(1.5);"></div>
+            <div class="hex-grid" style="opacity: 0.3;"></div>
+
+            <!-- 3D Cloud final -->
+            <div class="cloud-3d-container" style="top:8%;right:8%;opacity:0.12;animation-delay:-2s;">
+                <div class="cloud-sphere" style="width:180px;height:130px;top:30px;left:60px;"></div>
+                <div class="cloud-sphere" style="width:130px;height:100px;top:10px;left:170px;animation-delay:-1s;"></div>
+                <div class="cloud-sphere" style="width:100px;height:80px;top:60px;left:230px;animation-delay:-2s;"></div>
+            </div>
+
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 anim pop-3d z-0" style="animation-delay: 1s;">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" class="w-[800px] h-[800px] rounded-full object-cover opacity-20 hologram-img holo-cyan mix-blend-screen" style="clip-path: circle(50%);">
+            </div>
+
+            <div class="z-10 w-full max-w-6xl mx-auto text-center perspective-container">
+                <h2 class="text-6xl font-display font-bold mb-12 text-white anim slide-in-3d typewriter glitch" data-text="CONCLUSION" style="animation-delay: 0.5s;">CONCLUSION</h2>
+
+                <div class="hud-panel p-12 rounded-3xl border-t-2 border-cyber-cyan inline-block text-left shadow-[0_0_50px_rgba(0,240,255,0.2)] bg-black/60 relative z-10">
+                    <ul class="space-y-6 mb-12">
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 3s;">
+                            <i class="fas fa-power-off text-2xl text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="text-2xl text-gray-300 typewriter font-grotesk"><strong class="text-white">Escala Industrial:</strong> La nube es la aplicacion final de la teoria distribuida.</span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 6s;">
+                            <i class="fas fa-power-off text-2xl text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="text-2xl text-gray-300 typewriter font-grotesk"><strong class="text-white">Reflejo Practico:</strong> Laboratorios convertidos en despliegues globales.</span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-left" style="animation-delay: 9s;">
+                            <i class="fas fa-power-off text-2xl text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="text-2xl text-gray-300 typewriter font-grotesk"><strong class="text-white">Trinidad Central:</strong> Transparencia, Escalabilidad y Tolerancia a fallos absoluta.</span>
+                        </li>
+                        <li class="flex items-start gap-4 anim slide-from-right" style="animation-delay: 12s;">
+                            <i class="fas fa-power-off text-2xl text-cyber-cyan mt-1 glow-icon-cyan"></i>
+                            <span class="text-2xl text-gray-300 typewriter font-grotesk"><strong class="text-white">Evolucion Sostenida:</strong> IA y Cuantica creceran, los fundamentos matematicos persistiran.</span>
+                        </li>
+                    </ul>
+
+                    <div class="anim pop-3d text-center border-t border-cyber-cyan/30 pt-10" style="animation-delay: 18s;">
+                        <h3 class="text-4xl md:text-5xl font-display font-black grad-cyan tracking-wide filter drop-shadow-[0_0_15px_#00f0ff] typewriter">
+                            "LA TEORIA DE HOY ES LA INFRAESTRUCTURA DEL MANANA."
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ==========================================
+         SCRIPTS
+         ========================================== -->
+    <script>
+        // ==========================================
+        // PARTICLE SYSTEM (Canvas)
+        // ==========================================
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 80;
+        const CONNECTION_DISTANCE = 150;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 2 + 0.5;
+                this.color = ['#00f0ff', '#7a00ff', '#ff003c', '#00ff66'][Math.floor(Math.random() * 4)];
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECTION_DISTANCE) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = particles[i].color;
+                        ctx.globalAlpha = (1 - dist / CONNECTION_DISTANCE) * 0.15;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            drawConnections();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==========================================
+        // TYPEWRITER SYSTEM
+        // ==========================================
+        let typeTimeouts = [];
+        let typeIntervals = [];
+
+        function prepareTypewriters() {
+            document.querySelectorAll('.typewriter').forEach(element => {
+                if (element.dataset.ready) return;
+                const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+                const textNodes = [];
+                while (walker.nextNode()) textNodes.push(walker.currentNode);
+                textNodes.forEach(node => {
+                    const text = node.nodeValue;
+                    if (text.trim() === '') return;
+                    const fragment = document.createDocumentFragment();
+                    for (let i = 0; i < text.length; i++) {
+                        const char = text[i];
+                        if (char === ' ' || char === '\n' || char === '\t') {
+                            fragment.appendChild(document.createTextNode(char));
+                        } else {
+                            const span = document.createElement('span');
+                            span.textContent = char;
+                            span.style.opacity = '0';
+                            span.classList.add('tw-char');
+                            fragment.appendChild(span);
+                        }
+                    }
+                    node.parentNode.replaceChild(fragment, node);
+                });
+                element.dataset.ready = 'true';
+            });
+        }
+
+        function clearTypewriters() {
+            typeTimeouts.forEach(clearTimeout);
+            typeIntervals.forEach(clearInterval);
+            typeTimeouts = [];
+            typeIntervals = [];
+            document.querySelectorAll('.tw-char').forEach(c => c.style.opacity = '0');
+            document.querySelectorAll('.typewriter').forEach(el => el.classList.remove('typing-cursor'));
+        }
+
+        // ==========================================
+        // ANIMATED COUNTERS
+        // ==========================================
+        function animateCounters(slide) {
+            slide.querySelectorAll('.counter-value').forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                if (isNaN(target)) return;
+                let current = 0;
+                const increment = target / 60;
+                const interval = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(interval);
+                    }
+                    counter.textContent = Math.floor(current);
+                }, 30);
+                typeIntervals.push(interval);
+            });
+        }
+
+        // ==========================================
+        // ANIMATED BARS
+        // ==========================================
+        function animateBars(slide) {
+            slide.querySelectorAll('.animated-bar').forEach(bar => {
+                const targetWidth = bar.style.getPropertyValue('--target-width');
+                if (targetWidth) {
+                    setTimeout(() => {
+                        bar.style.transition = 'width 2s cubic-bezier(0.4, 0, 0.2, 1)';
+                        bar.style.width = targetWidth;
+                    }, 500);
+                }
+            });
+        }
+
+        // ==========================================
+        // PLAYER LOGIC (FADE + ZOOM TRANSITIONS)
+        // ==========================================
+        const container = document.getElementById('presentation-container');
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const slideProgress = document.getElementById('global-progress-bar');
+        const playIcon = document.getElementById('play-icon');
+        const timerDisplay = document.getElementById('timer-display');
+        const slideIndicator = document.getElementById('slide-indicator');
+
+        let currentSlide = 0;
+        let previousSlide = -1;
+        let isVideoMode = false;
+        let playInterval;
+        let playheadTime = 0;
+        let totalDuration = 0;
+        let slideStartTimes = [];
+
+        function formatTime(ms) {
+            let totalSeconds = Math.floor(ms / 1000);
+            let minutes = Math.floor(totalSeconds / 60);
+            let seconds = totalSeconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function initTimings() {
+            slides.forEach(slide => {
+                slideStartTimes.push(totalDuration);
+                totalDuration += parseInt(slide.getAttribute('data-duration')) || 5000;
+            });
+            document.querySelectorAll('.anim, .typewriter').forEach(el => {
+                let delayStr = el.style.animationDelay;
+                if(delayStr) {
+                    el.setAttribute('data-orig-delay', parseFloat(delayStr) * 1000);
+                } else {
+                    let animParent = el.closest('.anim');
+                    if(animParent && animParent.style.animationDelay) {
+                        el.setAttribute('data-orig-delay', parseFloat(animParent.style.animationDelay) * 1000);
+                    } else {
+                        el.setAttribute('data-orig-delay', 0);
+                    }
+                }
+            });
+            timerDisplay.textContent = `00:00 / ${formatTime(totalDuration)}`;
+        }
+
+        function updatePlayhead() {
+            let percent = (playheadTime / totalDuration) * 100;
+            slideProgress.style.width = `${percent}%`;
+            timerDisplay.textContent = `${formatTime(playheadTime)} / ${formatTime(totalDuration)}`;
+
+            let expectedSlide = 0;
+            for(let i = 0; i < totalSlides; i++) {
+                let dur = parseInt(slides[i].getAttribute('data-duration'));
+                if(playheadTime >= slideStartTimes[i] && playheadTime < slideStartTimes[i] + dur) {
+                    expectedSlide = i;
+                    break;
+                }
+            }
+            if(playheadTime >= totalDuration) {
+                expectedSlide = totalSlides - 1;
+                toggleVideoMode(false);
+                playheadTime = totalDuration;
+            }
+            if(expectedSlide !== currentSlide) {
+                currentSlide = expectedSlide;
+                updateUI();
+            }
+        }
+
+        function resetBars(slide) {
+            slide.querySelectorAll('.animated-bar').forEach(bar => {
+                bar.style.transition = 'none';
+                bar.style.width = '0%';
+            });
+        }
+
+        function updateUI() {
+            clearTypewriters();
+            let timePassedInSlide = playheadTime - slideStartTimes[currentSlide];
+
+            // Update slide indicator
+            slideIndicator.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+
+            slides.forEach((slide, index) => {
+                if(index === currentSlide) {
+                    slide.classList.remove('exiting');
+                    slide.classList.remove('active');
+                    void slide.offsetWidth;
+                    slide.classList.add('active');
+
+                    // Animate bars and counters
+                    resetBars(slide);
+                    animateBars(slide);
+                    animateCounters(slide);
+
+                    slide.querySelectorAll('.anim').forEach(el => {
+                        let origDelay = parseFloat(el.getAttribute('data-orig-delay')) || 0;
+                        let newDelay = origDelay - timePassedInSlide;
+                        el.style.animationDelay = `${newDelay / 1000}s`;
+                    });
+
+                    slide.querySelectorAll('.typewriter').forEach(el => {
+                        let origDelay = parseFloat(el.getAttribute('data-orig-delay')) || 0;
+                        let delayMs = origDelay - timePassedInSlide;
+                        let chars = el.querySelectorAll('.tw-char');
+                        if (delayMs <= 0) {
+                            let typingTimePassed = Math.abs(delayMs);
+                            let charsToReveal = Math.floor(typingTimePassed / 15);
+                            for(let i=0; i<chars.length; i++){
+                                chars[i].style.opacity = (i < charsToReveal) ? '1' : '0';
+                            }
+                            if (charsToReveal < chars.length) {
+                                el.classList.add('typing-cursor');
+                                let i = charsToReveal;
+                                let iId = setInterval(() => {
+                                    if (i < chars.length) {
+                                        chars[i].style.opacity = '1';
+                                        chars[i].style.textShadow = '0 0 10px var(--neon-cyan)';
+                                        let currentSpan = chars[i];
+                                        setTimeout(() => { if(currentSpan) currentSpan.style.textShadow = ''; }, 100);
+                                        i++;
+                                    } else { clearInterval(iId); el.classList.remove('typing-cursor'); }
+                                }, 15);
+                                typeIntervals.push(iId);
+                            }
+                        } else {
+                            for(let i=0; i<chars.length; i++) chars[i].style.opacity = '0';
+                            let tId = setTimeout(() => {
+                                el.classList.add('typing-cursor');
+                                let i = 0;
+                                let iId = setInterval(() => {
+                                    if (i < chars.length) {
+                                        chars[i].style.opacity = '1';
+                                        chars[i].style.textShadow = '0 0 10px var(--neon-cyan)';
+                                        let currentSpan = chars[i];
+                                        setTimeout(() => { if(currentSpan) currentSpan.style.textShadow = ''; }, 100);
+                                        i++;
+                                    } else { clearInterval(iId); el.classList.remove('typing-cursor'); }
+                                }, 15);
+                                typeIntervals.push(iId);
+                            }, delayMs);
+                            typeTimeouts.push(tId);
+                        }
+                    });
+                } else if (index === previousSlide) {
+                    slide.classList.remove('active');
+                    slide.classList.add('exiting');
+                    setTimeout(() => slide.classList.remove('exiting'), 1200);
+                } else {
+                    slide.classList.remove('active');
+                    slide.classList.remove('exiting');
+                }
+            });
+            previousSlide = currentSlide;
+        }
+
+        function playLoop() {
+            playheadTime += 50;
+            if(playheadTime > totalDuration) playheadTime = totalDuration;
+
+            let percent = (playheadTime / totalDuration) * 100;
+            slideProgress.style.width = `${percent}%`;
+            timerDisplay.textContent = `${formatTime(playheadTime)} / ${formatTime(totalDuration)}`;
+
+            let expectedSlide = currentSlide;
+            let dur = parseInt(slides[currentSlide].getAttribute('data-duration'));
+            if(playheadTime >= slideStartTimes[currentSlide] + dur) {
+                expectedSlide++;
+            }
+
+            if(expectedSlide !== currentSlide && expectedSlide < totalSlides) {
+                currentSlide = expectedSlide;
+                updateUI();
+            } else if (playheadTime >= totalDuration) {
+                toggleVideoMode(false);
+            }
+        }
+
+        function toggleVideoMode(forcePause = null) {
+            if(forcePause === false || isVideoMode) {
+                isVideoMode = false;
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play');
+                clearInterval(playInterval);
+            } else {
+                if(playheadTime >= totalDuration) {
+                    playheadTime = 0;
+                    currentSlide = 0;
+                    updateUI();
+                }
+                isVideoMode = true;
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                playInterval = setInterval(playLoop, 50);
+            }
+        }
+
+        function seekVideo(e) {
+            const cont = e.currentTarget;
+            const rect = cont.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = Math.max(0, Math.min(1, clickX / rect.width));
+            playheadTime = totalDuration * percent;
+            updatePlayhead();
+            updateUI();
+        }
+
+        function moveSlide(direction) {
+            let newSlide = currentSlide + direction;
+            if (newSlide >= 0 && newSlide < totalSlides) {
+                currentSlide = newSlide;
+                playheadTime = slideStartTimes[currentSlide];
+                updatePlayhead();
+                updateUI();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') moveSlide(1);
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+            if (e.key === ' ') { e.preventDefault(); toggleVideoMode(); }
+        });
+
+        // INIT
+        prepareTypewriters();
+        initTimings();
+        updateUI();
+    </script>
+</body>
+</html>
