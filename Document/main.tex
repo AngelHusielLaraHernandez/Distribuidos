@@ -201,65 +201,7 @@
     \setcounter{page}{1}
 
     \section{Objetivo:}
-    Que el alumno investigue tecnologías y aplicaciones actuales relacionadas con los sistemas distribuidos,
-    identificando cómo los conceptos vistos en clase se aplican en soluciones reales actualizadas actualmente en la industria.
 
-    \section{Introducción}
-
-    La computación en la nube, o \textit{cloud computing}, es un modelo tecnológico que permite el acceso bajo demanda a un conjunto compartido de recursos informáticos configurables, como redes, servidores, almacenamiento, aplicaciones y servicios, los cuales pueden ser aprovisionados y liberados de forma rápida con un mínimo esfuerzo de gestión por parte del usuario \parencite{nist-sp800-145}. En términos sencillos, se trata de utilizar la infraestructura de terceros a través de internet en lugar de mantener equipos propios, pagando únicamente por lo que se consume.
-
-    El origen de esta idea se remonta a los años cincuenta, cuando las computadoras \textit{mainframe} eran compartidas por múltiples usuarios mediante terminales remotas, un esquema conocido como \textit{time-sharing}. Sin embargo, el concepto moderno de nube comenzó a tomar forma mucho después. En 1999, Salesforce demostró que una aplicación empresarial compleja podía ofrecerse íntegramente a través de un navegador web bajo un modelo de pago por uso, sentando las bases del Software como Servicio \parencite{clearfuze-history}. El punto de inflexión llegó en 2006, cuando Amazon lanzó Elastic Compute Cloud (EC2) y Simple Storage Service (S3), permitiendo a cualquier empresa alquilar servidores virtuales y almacenamiento de forma elástica, sin necesidad de adquirir hardware propio \parencite{computerhistory-cloud2006}. Poco después, en 2008, Microsoft presentó Azure y Google lanzó App Engine, consolidando un mercado que hoy supera los ochocientos mil millones de dólares a nivel mundial \parencite{programminghelper-market2026}.
-
-    El problema central que resuelve la computación en la nube es la rigidez y el alto costo de la infraestructura tradicional. Antes de su aparición, una empresa que anticipara picos de demanda debía comprar servidores suficientes para el peor escenario, lo que implicaba grandes inversiones de capital y largos tiempos de aprovisionamiento. Con la nube, esos mismos recursos se obtienen en minutos y se escalan de manera automática según la carga real, eliminando tanto el sobreaprovisionamiento como el riesgo de quedarse sin capacidad en momentos críticos. Además, la nube traslada al proveedor la responsabilidad de mantener centros de datos, aplicar parches de seguridad y garantizar la disponibilidad del servicio, permitiendo que los equipos de ingeniería se concentren en desarrollar sus productos en lugar de administrar fierros.
-
-    \newpage
-    \section{Relación con Sistemas Distribuidos}
-
-    La computación en la nube es, en esencia, un sistema distribuido a gran escala. Cumple con la definición clásica de Tanenbaum y Van Steen, que describe un sistema distribuido como un conjunto de computadoras independientes que se presentan al usuario como un sistema coherente y unificado. Cuando un usuario sube un archivo a Google Drive o despliega una aplicación en AWS, interactúa con un punto de acceso único, sin percibir que detrás operan miles de servidores repartidos en decenas de centros de datos alrededor del mundo \parencite{splunk-distributed}.
-
-    Los nodos que componen una plataforma de nube interactúan mediante protocolos de red bien definidos. Los servidores de cómputo procesan las solicitudes, los sistemas de almacenamiento replican datos en múltiples ubicaciones geográficas, y los balanceadores de carga distribuyen el tráfico para evitar cuellos de botella. Toda esta coordinación ocurre de forma transparente para el usuario final, lo que constituye uno de los objetivos fundamentales de cualquier sistema distribuido: la transparencia. Ya sea transparencia de ubicación, porque el usuario no sabe en qué centro de datos se ejecuta su código, de replicación, porque los datos se copian automáticamente sin intervención manual, o de migración, porque las máquinas virtuales pueden moverse entre servidores físicos sin interrumpir el servicio \parencite{researchgate-scalability}.
-
-    Al mismo tiempo, la nube enfrenta los retos clásicos de los sistemas distribuidos. La escalabilidad se resuelve mediante el escalamiento horizontal, es decir, agregar más nodos al clúster en lugar de aumentar la capacidad de un solo servidor. La tolerancia a fallos se logra a través de la replicación de datos y la redundancia de componentes: si un servidor o incluso un centro de datos completo deja de funcionar, el sistema redirige las peticiones a réplicas disponibles sin que el usuario perciba la interrupción \parencite{researchgate-faulttolerant}. Y la consistencia de los datos, uno de los problemas más difíciles en sistemas distribuidos, se gestiona mediante algoritmos de consenso como Paxos y Raft, que permiten a los nodos ponerse de acuerdo sobre el estado correcto de la información incluso ante fallos parciales \parencite{wiki-consensus}.
-
-    \newpage
-    \section{Funcionamiento general o arquitectura}
-
-
-    \newpage
-    \section{Tecnologías relacionadas}
-
-    \newpage
-    \section{Aplicaciones reales}
-
-    \newpage
-    \section{Relación con temas vistos en clase}
-
-    \newpage
-    \section{Ventajas y desafíos}
-
-    Como toda tecnología, la computación en la nube presenta un conjunto de beneficios significativos junto con retos que no deben subestimarse.
-
-    Entre las \textbf{ventajas} más destacadas se encuentra la \textit{reducción de costos}. Al eliminar la necesidad de adquirir y mantener hardware propio, las organizaciones pueden reducir sus gastos en infraestructura de TI entre un treinta y un cincuenta por ciento, según estimaciones de la industria. El modelo de pago por uso permite que una startup con recursos limitados acceda a la misma potencia de cómputo que una corporación multinacional, democratizando el acceso a la tecnología \parencite{clearfuze-pros-cons}.
-
-    La \textit{escalabilidad elástica} permite ajustar los recursos de forma automática y casi instantánea. Si una tienda en línea experimenta un pico de tráfico durante una campaña de descuentos, la nube aprovisiona servidores adicionales en segundos y los libera cuando la demanda regresa a la normalidad. Esta capacidad elimina tanto el desperdicio de recursos por sobreaprovisionamiento como el riesgo de caídas por falta de capacidad.
-
-    La \textit{alta disponibilidad} es otra ventaja clave. Los principales proveedores garantizan niveles de disponibilidad superiores al 99.9\%, gracias a la replicación de datos y servicios en múltiples zonas de disponibilidad y regiones geográficas. Esto significa que incluso si un centro de datos completo deja de funcionar, el servicio continúa operando desde otra ubicación sin intervención manual.
-
-    La \textit{agilidad en el desarrollo} se beneficia enormemente, ya que los equipos pueden crear entornos de prueba completos en minutos, experimentar con nuevas tecnologías sin compromisos a largo plazo y desplegar actualizaciones de software de manera continua mediante prácticas de integración y entrega continua (CI/CD).
-
-    Sin embargo, los \textbf{desafíos} son igualmente relevantes. La \textit{seguridad} sigue siendo la preocupación principal para muchas organizaciones. Según diversos reportes, aproximadamente el 45\% de los incidentes de seguridad se originan en entornos de nube, muchas veces debido a errores de configuración humanos, como dejar un bucket de S3 abierto al público o no aplicar políticas de acceso adecuadas \parencite{cyberdefense-cloud2025}.
-
-    La \textit{latencia} puede ser un obstáculo para aplicaciones que requieren respuestas en tiempo real, como plataformas de trading financiero o videojuegos en línea. Aunque las CDN y la computación en el borde mitigan este problema, la distancia física entre el usuario y el centro de datos sigue imponiéndose como una limitación inherente.
-
-    El \textit{vendor lock-in}, o dependencia del proveedor, ocurre cuando una organización construye su infraestructura utilizando servicios propietarios de un proveedor específico, lo que dificulta la migración posterior a otro proveedor o de regreso a una infraestructura propia. Este riesgo ha impulsado la adopción de estrategias multi-nube y el uso de tecnologías de código abierto como Kubernetes y Terraform.
-
-    Finalmente, la \textit{gestión de costos} resulta paradójicamente desafiante. Aunque la nube promete ahorro, la facilidad para crear recursos puede llevar a un gasto descontrolado si no se implementan políticas de gobernanza adecuadas. Según el informe Flexera 2025 State of the Cloud, el 84\% de las organizaciones considera la gestión de costos como su mayor reto en la nube \parencite{finout-cloud-stats2026}.
-
-    \newpage
-    \section{Impacto actual y futuro}
-
-    \newpage
-    \section{Conclusión}
 
     % Impresión Referencias
     \nocite{*}
