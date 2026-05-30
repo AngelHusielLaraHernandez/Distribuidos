@@ -1,6 +1,15 @@
 \babel@toc {spanish}{}\relax 
 \contentsline {section}{\numberline {1}Objetivo}{1}{section.1}%
-\contentsline {section}{\numberline {2}Servicios gRPC}{1}{section.2}%
-\contentsline {section}{\numberline {3}Flujo de trabajo}{1}{section.3}%
-\contentsline {section}{\numberline {4}Requerimientos}{1}{section.4}%
-\contentsline {section}{Referencias}{2}{section*.1}%
+\contentsline {section}{\numberline {2}Planteamiento del escenario:}{1}{section.2}%
+\contentsline {section}{\numberline {3}Diagrama del escenario:}{2}{section.3}%
+\contentsline {section}{\numberline {4}Documentacion de codigo:}{3}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Codigo proto:}{3}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Codigos python:}{3}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Codigos docker:}{3}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Secuencia de comandos para la ejecucion:}{3}{section.5}%
+\contentsline {section}{\numberline {6}Resultados:}{3}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Capturas de los resultados:}{3}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Bitacoras:}{3}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Conclusion:}{3}{section.7}%
+\contentsline {section}{\numberline {8}Link de video:}{3}{section.8}%
+\contentsline {section}{Referencias}{3}{section*.1}%
