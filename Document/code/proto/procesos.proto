@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package procesos;
+
+service ProcesoService {
+  rpc EnviarMensaje(ReqEnvio) returns (Ack);
+  rpc RecibirMensaje(ReqRecepcion) returns (Ack);
+  rpc EventoInterno(ReqInterno) returns (Ack);
+  rpc Broadcast(ReqDifusion) returns (Ack);
+}
+
+message ReqEnvio {
+  string origen = 1;
+  string destino = 2;
+  string msg = 3;
+}
+
+message ReqRecepcion {
+  string origen = 1;
+  string msg = 2;
+  repeated int64 vector = 3;
+}
+
+message ReqInterno {
+  string desc = 1;
+}
+
+message ReqDifusion {
+  string origen = 1;
+  string msg = 2;
+}
+
+message Ack {
+  bool ok = 1;
+  string msg = 2;
+  repeated int64 vector = 3;
+}

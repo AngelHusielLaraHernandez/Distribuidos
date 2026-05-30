@@ -5,11 +5,14 @@
 \contentsline {section}{\numberline {4}Documentacion de codigo:}{3}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Codigo proto:}{3}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Codigos python:}{3}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Codigos docker:}{3}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Secuencia de comandos para la ejecucion:}{3}{section.5}%
-\contentsline {section}{\numberline {6}Resultados:}{3}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Capturas de los resultados:}{3}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Bitacoras:}{3}{subsection.6.2}%
-\contentsline {section}{\numberline {7}Conclusion:}{3}{section.7}%
-\contentsline {section}{\numberline {8}Link de video:}{3}{section.8}%
-\contentsline {section}{Referencias}{3}{section*.1}%
+\contentsline {subsection}{\numberline {4.3}Códigos docker:}{4}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Secuencia de comandos para la ejecución:}{7}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Preparación del entorno}{7}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Secuencia de comandos para el escenario esto, para la terminal 2}{7}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Revision de logs:}{10}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Resultados:}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Capturas de los resultados:}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Bitacoras:}{10}{subsection.6.2}%
+\contentsline {section}{\numberline {7}Conclusion:}{10}{section.7}%
+\contentsline {section}{\numberline {8}Link de video:}{10}{section.8}%
+\contentsline {section}{Referencias}{10}{section*.1}%

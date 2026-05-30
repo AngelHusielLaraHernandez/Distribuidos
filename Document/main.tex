@@ -111,7 +111,7 @@
 }
 
 % Definición del lenguaje Docker para listings
-\lstdefinelanguage{Dockerfile}{
+\lstdefinelanguage[LAB]{Dockerfile}{
   sensitive=true,
   morecomment=[l]{\#},
   morestring=[b]",
@@ -288,18 +288,268 @@ haciendo que los cinco relojes vectoriales sean los mismos de manera simultánea
 
 \textbf{Descripcion del reloj vectorial:}
 
+\newpage
 \textbf{Diagrama:}
-
 
 \section{Documentacion de codigo:}
 
 \subsection{Codigo proto:}
 
+
 \subsection{Codigos python:}
 
-\subsection{Codigos docker:}
+\newpage
+\subsection{Códigos docker:}
 
-\section{Secuencia de comandos para la ejecucion:}
+\textbf{Dockerfile:}
+
+El archivo Dockerfile lo que hace es que define las instrucciones de como se ira 
+contruyendo la imagen base de los contenedores. 
+
+Para esto la primer alinea, lo que ahce es que inicia una imagen optimizada de Python python:3.11-slim, depsues de esto, 
+establece /app como el directorio de trabajo principal dentro del entorno virtual. 
+
+Despues de esto, transfiere el archivo de requerimientos e instala las dependencias 
+mediante pip install, utilizando la bandera --no-cache-dir, esto se hace mas que nada 
+para evitar almacenar archivos temporales y reduce el peso del contenedor final, despues de esto, 
+copia los directorios de código que en neustro los tenemos por carpetas separadas, que son
+proto y src, y configura la variable de entorno PYTHONPATH 
+esto se hace para que el intérprete reconozca los módulos importados. 
+
+No obstante en la 13 linea, tenemos lo mas importante, que es directaemtne el lanzamiento de 
+el servidor gRPC, esto por medio de la compilacion inicial del archivo proto, este lo que hara es que
+procesa el archivo procesos.proto para generar las clases cliente y servidor en Python.
+ 
+Finalmente, declaramos el uso del puerto 50051 para permitir la comunicacion de el gRPC y 
+definemos como comando por defecto la ejecución del servidor principal src/process.py.
+
+\lstinputlisting[language={[LAB]Dockerfile}, caption=Código dockerfile, basicstyle=\ttfamily\scriptsize]{code/docker/Dockerfile}
+
+\newpage
+
+\textbf{Docker Compose:}
+
+El archivo docker-compose es el que se encarga de orgnizar directamente
+toda la estrucutra completa del sistema, definiendo desde la red aislada 
+y un total de seis servicios, donde en este caso son cinco procesos de procesamiento 
+p1 a p5 y un proceso o nodo que es el cliente. 
+
+Para cada uno de los procesos servidores, el codigo lo que hace, es que indica que la imagen debe 
+construirse a partir del directorio actual y le asigna un nombre de contenedor, esto por medio del comando 
+environment, despues de esto se colocan ya directamente las variables de entorno 
+para la lógica del código en Python, que en este caso son las de los requesitos del proyecto, tales como
+el identificador único del proceso PROCESS\_ID, el mapa de la red indicando las rutas de todos los nodos
+y la ruta de destino para almacenar directametne las bitacoras. 
+
+Para asegurar que los archivos generados no se pierdan al apagar los contenedores, 
+se utiliza columentes directamente, que lo que hace es que, mapea un directorio local hacia dentro del propio contenedor. 
+
+No osbante, el servicio cliente es casi igual, pero sobrescribe el comando de inicio por defecto con 
+``sleep" e ``infinity", esto es por que lo que queremos es que mantenga en un estado de reposo 
+para poder seguir mentiendo comandos de prueba, que son los \textbf{docker exec}. 
+
+Finalmente, en la parte inferior del archivo, se define la red\_privada bajo un formato de tipo puente
+con una subred que en este caso es parecido al usado directamtne en clase en los ejercicios, siendo para este proyecto 
+el 172.21.0.0/16, lo cual permite usar direcciones estáticas para cada contenedor.
+
+\lstinputlisting[language=DockerCompose, caption=Código docker compose, basicstyle=\ttfamily\scriptsize]{code/docker/docker-compose.yml}
+
+\section{Secuencia de comandos para la ejecución:}
+
+\subsection{Preparación del entorno}
+
+\textbf{Levantar los contenedores:}
+Se levanta todo el sistema la mediante, el siguiente comando, donde la bandera -d libera la terminal.
+
+\begin{quote}
+\texttt{\textcolor{blue}{docker} compose up -d --build}
+\end{quote}
+
+\textbf{Ver los logs en vivo (Terminal 1):}
+
+En dado caso, de que si quiera ver los logs, en vivo se hara uso de dos terminal, no obstante
+como bien sabemos los logs se guardan en una carpeta llamada logs, y se puede ver con el uso del comando cat, 
+regresando a la terminal 1, se dejara con este comando activo. 
+Esto permite observar cómo los contenedores reaccionan en tiempo real.
+
+\begin{quote}
+\texttt{\textcolor{blue}{docker} compose logs -f}
+\end{quote}
+
+\subsection{Secuencia de comandos para el escenario esto, para la terminal 2}
+
+\begingroup
+\shorthandoff{"}
+
+\textbf{1. P1 (App Cliente) -- Evento interno: crear el carrito}
+
+Inicia el evento interno en P1 simulando que la app del cliente crea la orden. 
+
+P1 incrementa su propia posición en el reloj vectorial, pasando de \texttt{[0,0,0,0,0]} a \texttt{[1,0,0,0,0]}. 
+
+en este punto no hay comunicación con otros procesos.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P1 interno --desc "armar carrito pedido"
+\end{quote}
+
+\newpage
+
+\textbf{2. P1 $\rightarrow$ P2 - solicitud de cobro}
+
+P1 envía un mensaje gRPC punto a punto a P2 con los datos de la orden. 
+
+Al enviarlo, P1 incrementa su reloj nuevamente y envia su vector al mensaje. 
+
+Al recibirlo, P2 compara los vectores numero a nuemero del arreglo, 
+toma los máximos e incrementa su propia posición.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P1 enviar --receptor P2 --msg '{"id":"ORD-77X", "total":250, "req":"cobro"}'
+\end{quote}
+
+\textbf{3. P2 (Verficiacion de Pago)}
+
+P2 ejecuta un evento interno simulando que se verifica si tarjeta de crédito tiene fondos y es real. 
+
+Solo incrementa su posición en el reloj vectorial.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P2 interno --desc "validar cobro tarjeta"
+\end{quote}
+
+\textbf{4. P2 $\rightarrow$ P3 - Confirmacion al restaurante}
+
+Con el pago aprobado, P2 le envía los detalles de la orden a P3 vía gRPC. 
+
+P3 recibe el vector de P2, aplica lo mismo de revisar los máximos e incrementa su propia posición. 
+
+Su reloj ahora esta sincornizuado con los eventos previos de P1 y P2.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P2 enviar --receptor P3 --msg '\{"id":"ORD-77X", "pago":"ok", "item":"Super Star"\}'
+\end{quote}
+
+\textbf{5. P3 (Restaurante)}
+
+P3 ejecuta un evento interno que lo que hace es que simula la preparación y que se empaqueta la hamburguesa. 
+Su reloj vectorial avanza en su propia posición.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P3 interno --desc "preparar comida"
+\end{quote}
+
+\newpage
+\textbf{6. P3 $\rightarrow$ P4 - Aviso al repartidor}
+
+P3 envía un mensaje gRPC a P4 indicando que el paquete está listo para recolección. 
+
+P4 combina directamente el vector recibido con el suyo, sincronizando su reloj con 
+todos los eventos acuymulados.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P3 enviar --receptor P4 --msg '\{"id":"ORD-77X", "paquete":"listo"\}'
+\end{quote}
+
+\textbf{7. P4 (Repartidor) - Evento interno: calcular ruta GPS}
+
+P4 realiza un evento interno que simula el cálculo de la ruta óptima hacia el destino del cliente mediante GPS. 
+
+Solo incrementa su posición en el reloj vectorial.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P4 interno --desc "calcular ruta gps"
+\end{quote}
+
+\textbf{8. P4 $\rightarrow$ P5 -- Notificación de inicio de viaje}
+
+P4 le comunica a P5 que es el sevidor de notificaciones que el repartidor ya está en camino. 
+
+P5 recibe el vector con el historial completo de todos los procesos y lo combinad directamente con el suyo 
+para preparar el broadcast.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P4 enviar --receptor P5 --msg '{"id":"ORD-77X", "repartidor":"va", "eta":"15m"}'
+\end{quote}
+
+\textbf{9. P5 (Servidor de Notificaciones)}
+
+P5 ejecuta un evento interno para calcular y registrar el tiempo estimado de llegada 
+antes de mandar el broadcast. 
+
+Su reloj vectorial avanza en su propia posición.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P5 interno --desc "enviar notificacion"
+\end{quote}
+
+\textbf{10. P5 -- Broadcast final a todos los nodos}
+
+P5 envía a todos al mimso tiempo el estado final de la orden a P1, P2, P3 y P4 mediante una difusión gRPC. 
+
+Cada proceso receptor compara el vector actualizado de P5 con el suyo y termina con los tiempos acutlaizdos de forma correcta todos.
+
+\begin{center}
+  \textbf{Comando:}
+\end{center}
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P5 difusion --msg '\{"id":"ORD-77X", "fin":"entregado", "eta":"15m"\}'
+\end{quote}
+
+\subsection{Revision de logs:}
+
+Para revisar el archivo de bitácora generado por cada nodo al finalizar la secuencia 
+(se muestra el ejemplo para P1, pero aplica para P1 a P5):
+
+\begin{quote}
+\textcolor{blue}{docker} \textcolor{green}{exec} -it p1 cat /app/logs/p1.log
+\end{quote}
+
+Para detener los contenedores, esto solo se hace despues de matar el proceso del comando de logs, esto baja todos los servicios de docker
+creados:
+
+\begin{quote}
+\texttt{\textcolor{blue}{docker} compose down}
+\end{quote}
+
+\endgroup
 
 \section{Resultados:}
 
