@@ -28,8 +28,11 @@
 \usepackage{xcolor}
 \usepackage{makecell}
 \usepackage{array}
+
+\usepackage{multirow}
 \usepackage{tikz}
 \usepackage[table]{xcolor}
+\usepackage{booktabs}
 \usetikzlibrary{shapes.geometric, shapes.multipart, positioning, arrows.meta, calc, shadows, decorations.pathreplacing,babel}
 
 % --- LISTAS ---
@@ -46,6 +49,15 @@
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+\definecolor{azulprimario}{HTML}{1A3A5C}
+\definecolor{azulsecundario}{HTML}{2E86C1}
+\definecolor{verdeclave}{HTML}{1E8449}
+\definecolor{grisclaro}{HTML}{F2F3F4}
+\definecolor{grisfondo}{HTML}{EAECEE}
+\definecolor{rojo}{HTML}{C0392B}
+\definecolor{naranja}{HTML}{E67E22}
+ 
+
 
 \lstset{
   backgroundcolor=\color{backcolour},
@@ -76,6 +88,37 @@
            {¡}{{\textexclamdown}}1
 }
 
+\lstdefinelanguage{protobuf}{
+  keywords    = {syntax, package, service, rpc, returns, message, repeated,
+                 string, bool, int32, int64, float, double, bytes, enum,
+                 oneof, map, reserved, option, import},
+  keywordstyle= \color{protokey}\bfseries,
+  stringstyle = \color{protostring},
+  commentstyle= \color{protocomment}\itshape,
+  morestring  = [b]",
+  morecomment = [l]{//},
+  sensitive   = true,
+}
+ 
+\lstdefinestyle{proto}{
+  language         = protobuf,
+  basicstyle       = \ttfamily\footnotesize,
+  numbers          = left,
+  numberstyle      = \tiny\color{gray},
+  numbersep        = 10pt,
+  stepnumber       = 1,
+  frame            = single,
+  framerule        = 0.5pt,
+  rulecolor        = \color{verdeclave!40},
+  backgroundcolor  = \color{grisclaro},
+  showstringspaces = false,
+  tabsize          = 2,
+  breaklines       = true,
+  captionpos       = b,
+  xleftmargin      = 1.5em,
+  framexleftmargin = 1.5em,
+}
+
 % Estilo para código en C
 \lstdefinestyle{cstyle}{
   language=C,
@@ -97,18 +140,43 @@
   showstringspaces=false
 }
 
+\definecolor{protokey}{HTML}{0550AE}
+\definecolor{protostring}{HTML}{0A3069}
+\definecolor{protocomment}{HTML}{6E7781}
+\definecolor{pycomentario}{HTML}{6A737D}
+\definecolor{pystring}{HTML}{032F62}
+\definecolor{pykeyword}{HTML}{D73A49}
+\definecolor{pybuiltin}{HTML}{005CC5}
+\definecolor{pydecorador}{HTML}{6F42C1}
+
 % Definición del lenguaje Python para listings
-\lstdefinelanguage[LAB]{Python}{
-    morekeywords={False, None, True, and, as, assert, async, await, break,
-                                class, continue, def, del, elif, else, except, finally,
-                                for, from, global, if, import, in, is, lambda, nonlocal,
-                                not, or, pass, raise, return, try, while, with, yield,
-                                machine, Pin, PWM, ADC, Timer, sleep_ms, sleep_us},
-    morecomment=[l]{\#},
-    morestring=[b]",
-    morestring=[b]',
-    sensitive=true
+\lstdefinestyle{python}{
+  language         = Python,
+  basicstyle       = \ttfamily\footnotesize,
+  keywordstyle     = \color{pykeyword}\bfseries,
+  stringstyle      = \color{pystring},
+  commentstyle     = \color{pycomentario}\itshape,
+  numberstyle      = \tiny\color{gray},
+  numbers          = left,
+  numbersep        = 10pt,
+  stepnumber       = 1,
+  frame            = single,
+  framerule        = 0.5pt,
+  rulecolor        = \color{azulsecundario!40},
+  backgroundcolor  = \color{grisclaro},
+  showstringspaces = false,
+  tabsize          = 4,
+  breaklines       = true,
+  breakatwhitespace= true,
+  captionpos       = b,
+  xleftmargin      = 1.5em,
+  framexleftmargin = 1.5em,
+  morekeywords     = {self, True, False, None, with, as, yield, lambda, import, from},
+  literate         = {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+                     {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1
+                     {Ú}{{\'U}}1 {Ñ}{{\~N}}1
 }
+
 
 % Definición del lenguaje Docker para listings
 \lstdefinelanguage[LAB]{Dockerfile}{
@@ -120,6 +188,8 @@
           EXPOSE, VOLUME, USER, GROUP, SHELL, LABEL, STOPSIGNAL,
           HEALTHCHECK, ONBUILD, MAINTAINER, COMMENT}
 }
+
+
 
 % Definición del lenguaje Docker Compose para listings
 \lstdefinelanguage{DockerCompose}{
