@@ -56,16 +56,16 @@ class ProcesoService(procesos_pb2_grpc.ProcesoServiceServicer):
     def _real_internal_work(self, descripcion):
         texto = descripcion.lower()
         if "carrito" in texto or "armar" in texto:
-            return "orden=Super_Star_Con_Queso_Carls_Jr total=$250"
-        if "pago" in texto or "cobro" in texto or "tarjeta" in texto or "paypal" in texto:
-            return "transaccion=aprobada metodo=PayPal"
+            return '{"accion":"crear_carrito", "item":"Super Star Con Queso", "precio":250.00}'
+        if "pago" in texto or "cobro" in texto or "tarjeta" in texto:
+            return '{"accion":"validar_tarjeta", "status":"fondos_aprobados", "auth":"TXN-9981"}'
         if "cocina" in texto or "preparar" in texto:
-            return "estado=empaquetado tiempo_prep=12min"
+            return '{"accion":"cocina", "status":"empaquetado", "temp":"caliente"}'
         if "ruta" in texto or "gps" in texto:
-            return "destino=Tlalnepantla_de_Baz dist=4.2km"
-        if "tiempo" in texto or "llegada" in texto:
-            return "eta=15_minutos"
-        return f"longitud_desc={len(descripcion)}"
+            return '{"accion":"gps_routing", "destino":"Tlalnepantla de Baz", "distancia":"4.2km"}'
+        if "tiempo" in texto or "llegada" in texto or "notificacion" in texto:
+            return '{"accion":"push_notification", "dispositivo":"iPad Air", "status":"enviado"}'
+        return f'{{"longitud_desc":{len(descripcion)}}}'
 
     def _send_to(self, receiver_id, mensaje):
         if receiver_id not in self.peers:

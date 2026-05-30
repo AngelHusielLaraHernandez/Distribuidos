@@ -49,31 +49,31 @@ def run_scenario(peers):
     # Eventos de P1 (App Cliente)
     call_internal(peers, "P1", "armar carrito con el pedido")
     time.sleep(1)
-    call_send(peers, "P1", "P2", "solicitud de cobro")
+    call_send(peers, "P1", "P2", '{"orden_id":"ORD-77X", "total":250.00, "req":"cobro"}')
     time.sleep(1)
 
     # Eventos de P2 (Pasarela de Pago)
-    call_internal(peers, "P2", "validar cobro por paypal")
+    call_internal(peers, "P2", "validar cobro por tarjeta")
     time.sleep(1)
-    call_send(peers, "P2", "P3", "pago aprobado, preparar orden")
+    call_send(peers, "P2", "P3", '{"orden_id":"ORD-77X", "pago":"aprobado", "items":["Super Star Con Queso"]}')
     time.sleep(1)
 
     # Eventos de P3 (Restaurante)
     call_internal(peers, "P3", "preparar y empaquetar comida")
     time.sleep(1)
-    call_send(peers, "P3", "P4", "paquete listo para recoleccion")
+    call_send(peers, "P3", "P4", '{"orden_id":"ORD-77X", "paquete":"listo", "peso":"0.8kg"}')
     time.sleep(1)
 
     # Eventos de P4 (App Repartidor)
     call_internal(peers, "P4", "calcular ruta gps")
     time.sleep(1)
-    call_send(peers, "P4", "P5", "iniciando viaje de entrega")
+    call_send(peers, "P4", "P5", '{"orden_id":"ORD-77X", "repartidor":"asignado", "eta":"15_min"}')
     time.sleep(1)
 
     # Eventos de P5 (Servidor Notificaciones)
-    call_internal(peers, "P5", "registrar tiempo estimado de llegada")
+    call_internal(peers, "P5", "enviar notificacion push")
     time.sleep(1)
-    call_broadcast(peers, "P5", "Orden completada y en camino")
+    call_broadcast(peers, "P5", '{"orden_id":"ORD-77X", "estado_final":"en_camino", "eta":"15_min"}')
     time.sleep(1)
 
 def run():

@@ -87,7 +87,10 @@ def run():
             response = stub.Broadcast(request)
 
     status = "OK" if response.ok else "ERR"
-    print(f"{status}: {response.mensaje} (lamport={response.lamport_time})")
+    
+    # --- CORRECCIÓN: Extraemos el reloj_vectorial y lo formateamos ---
+    vector_str = str(list(response.reloj_vectorial)).replace(" ", "")
+    print(f"{status}: {response.mensaje} (vector={vector_str})")
 
 
 if __name__ == "__main__":
