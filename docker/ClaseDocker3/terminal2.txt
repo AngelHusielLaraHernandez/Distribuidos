@@ -1,0 +1,140 @@
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exe -it mariadb_tx bash
+unknown shorthand flag: 'i' in -it
+
+Usage:  docker [OPTIONS] COMMAND [ARG...]
+
+Run 'docker --help' for more information
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exec -it mariadb bash
+root@816837758ca2:/# mariadb -u root -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 6
+Server version: 11.8.6-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> USE banco;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [banco]> SET autocommit = 0;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITED;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'UNCOMMITED' at line 1
+MariaDB [banco]> SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT @@tx_isolation;
++------------------+
+| @@tx_isolation   |
++------------------+
+| READ-UNCOMMITTED |
++------------------+
+1 row in set (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT * from cuentas;
++----+--------+-------+
+| id | nombre | saldo |
++----+--------+-------+
+|  1 | Ana    |   500 |
+|  2 | Luis   |  1000 |
+|  3 | Carlos |  1000 |
++----+--------+-------+
+3 rows in set (0.000 sec)
+
+MariaDB [banco]> SELECT * from cuentas;
++----+--------+-------+
+| id | nombre | saldo |
++----+--------+-------+
+|  1 | Ana    |  1000 |
+|  2 | Luis   |  1000 |
+|  3 | Carlos |  1000 |
++----+--------+-------+
+3 rows in set (0.000 sec)
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> UPDATE cuenas SET saldo=1200 WHERE nombre= 'Luis';
+ERROR 1146 (42S02): Table 'banco.cuenas' doesn't exist
+MariaDB [banco]> UPDATE cuentas SET saldo=1200 WHERE nombre= 'Luis';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> INSERT INTO cuentas (nombre,saldo) VALUES ('Sam', 1500);
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [banco]>  SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| READ-COMMITTED |
++----------------+
+1 row in set (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Carlos';
++-------+
+| saldo |
++-------+
+|  1000 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Carlos';
++-------+
+| saldo |
++-------+
+|   900 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> UPDATE cuentas SET saldo = 950 WHERE nombre = 'Carlos';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.007 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Carlos';
++-------+
+| saldo |
++-------+
+|   950 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> UPDATE cuentas SET saldo = 800 WHERE nombre = 'Carlos';
+ERROR 1205 (HY000): Lock wait timeout exceeded; try restarting transaction
+MariaDB [banco]> UPDATE cuentas SET saldo = 800 WHERE nombre = 'Carlos';
+Query OK, 1 row affected (6.526 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> 

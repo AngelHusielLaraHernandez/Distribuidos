@@ -1,92 +1,80 @@
 import argparse
 import os
 import time
-
 import grpc
+
 import procesos_pb2
 import procesos_pb2_grpc
 
-def parse_peers(raw_peers):
-    peers = {}
-    if not raw_peers:
-        return peers
-    items = [item.strip() for item in raw_peers.split(",") if item.strip()]
-    for item in items:
-        if "=" not in item:
-            continue
-        peer_id, address = item.split("=", 1)
-        peers[peer_id.strip()] = address.strip()
-    return peers
+def leer_nodos(crudos):
+    nodos = {}
+    if not crudos: return nodos
+    items = [i.strip() for i in crudos.split(",") if i.strip()]
+    for i in items:
+        if "=" not in i: continue
+        id_nodo, dir_nodo = i.split("=", 1)
+        nodos[id_nodo.strip()] = dir_nodo.strip()
+    return nodos
 
-def call_internal(peers, target_id, desc):
-    address = peers[target_id]
-    with grpc.insecure_channel(address) as channel:
-        stub = procesos_pb2_grpc.ProcesoServiceStub(channel)
-        request = procesos_pb2.EventoInternoRequest(descripcion=desc)
-        stub.EventoInterno(request)
+def evt_interno(nodos, dest, desc):
+    dir_nodo = nodos[dest]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        req = procesos_pb2.ReqInterno(desc=desc)
+        stub.EventoInterno(req)
 
-def call_send(peers, sender_id, receiver_id, mensaje):
-    address = peers[sender_id]
-    with grpc.insecure_channel(address) as channel:
-        stub = procesos_pb2_grpc.ProcesoServiceStub(channel)
-        request = procesos_pb2.EnviarMensajeRequest(
-            sender_id=sender_id,
-            receiver_id=receiver_id,
-            mensaje=mensaje,
-        )
-        stub.EnviarMensaje(request)
+def evt_enviar(nodos, origen, dest, msg):
+    dir_nodo = nodos[origen]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        req = procesos_pb2.ReqEnvio(origen=origen, destino=dest, msg=msg)
+        stub.EnviarMensaje(req)
 
-def call_broadcast(peers, sender_id, mensaje):
-    address = peers[sender_id]
-    with grpc.insecure_channel(address) as channel:
-        stub = procesos_pb2_grpc.ProcesoServiceStub(channel)
-        request = procesos_pb2.BroadcastRequest(sender_id=sender_id, mensaje=mensaje)
-        stub.Broadcast(request)
+def evt_difusion(nodos, origen, msg):
+    dir_nodo = nodos[origen]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        req = procesos_pb2.ReqDifusion(origen=origen, msg=msg)
+        stub.Broadcast(req)
 
-def run_scenario(peers):
-    print("Iniciando escenario de Pedidos de Comida a Domicilio...", flush=True)
+def escenario(nodos):
+    print("Iniciando Escenario de Entrega...", flush=True)
     
-    # Eventos de P1 (App Cliente)
-    call_internal(peers, "P1", "armar carrito con el pedido")
+    evt_interno(nodos, "P1", "armar carrito pedido")
     time.sleep(1)
-    call_send(peers, "P1", "P2", '{"orden_id":"ORD-77X", "total":250.00, "req":"cobro"}')
-    time.sleep(1)
-
-    # Eventos de P2 (Pasarela de Pago)
-    call_internal(peers, "P2", "validar cobro por tarjeta")
-    time.sleep(1)
-    call_send(peers, "P2", "P3", '{"orden_id":"ORD-77X", "pago":"aprobado", "items":["Super Star Con Queso"]}')
+    evt_enviar(nodos, "P1", "P2", '{"id":"ORD-77X", "total":250, "req":"cobro"}')
     time.sleep(1)
 
-    # Eventos de P3 (Restaurante)
-    call_internal(peers, "P3", "preparar y empaquetar comida")
+    evt_interno(nodos, "P2", "validar cobro tarjeta")
     time.sleep(1)
-    call_send(peers, "P3", "P4", '{"orden_id":"ORD-77X", "paquete":"listo", "peso":"0.8kg"}')
-    time.sleep(1)
-
-    # Eventos de P4 (App Repartidor)
-    call_internal(peers, "P4", "calcular ruta gps")
-    time.sleep(1)
-    call_send(peers, "P4", "P5", '{"orden_id":"ORD-77X", "repartidor":"asignado", "eta":"15_min"}')
+    evt_enviar(nodos, "P2", "P3", '{"id":"ORD-77X", "pago":"ok", "item":"Super Star"}')
     time.sleep(1)
 
-    # Eventos de P5 (Servidor Notificaciones)
-    call_internal(peers, "P5", "enviar notificacion push")
+    evt_interno(nodos, "P3", "preparar comida")
     time.sleep(1)
-    call_broadcast(peers, "P5", '{"orden_id":"ORD-77X", "estado_final":"en_camino", "eta":"15_min"}')
+    evt_enviar(nodos, "P3", "P4", '{"id":"ORD-77X", "paquete":"listo"}')
     time.sleep(1)
 
-def run():
-    parser = argparse.ArgumentParser(description="Orquestador de escenario")
-    parser.add_argument("--peers", default=os.getenv("PEERS", ""), help="Mapa de peers")
-    args = parser.parse_args()
+    evt_interno(nodos, "P4", "calcular ruta gps")
+    time.sleep(1)
+    evt_enviar(nodos, "P4", "P5", '{"id":"ORD-77X", "repartidor":"va", "eta":"15m"}')
+    time.sleep(1)
 
-    peers = parse_peers(args.peers)
-    if not peers:
-        raise SystemExit("Falta PEERS")
+    evt_interno(nodos, "P5", "enviar notificacion")
+    time.sleep(1)
+    evt_difusion(nodos, "P5", '{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}')
+    time.sleep(1)
 
-    run_scenario(peers)
+def ejecutar():
+    p = argparse.ArgumentParser()
+    p.add_argument("--nodos", default=os.getenv("PEERS", ""))
+    args = p.parse_args()
+
+    nodos = leer_nodos(args.nodos)
+    if not nodos: raise SystemExit("Falta PEERS")
+
+    escenario(nodos)
     print("Escenario ejecutado exitosamente", flush=True)
 
 if __name__ == "__main__":
-    run()
+    ejecutar()

@@ -8,191 +8,163 @@ import grpc
 import procesos_pb2
 import procesos_pb2_grpc
 from bitacora import Bitacora
-from lamport import VectorClock
+from vectorial import RelojVectorial
 
-DEFAULT_PORT = 50051
+puerto = 50051
 
-COLORS = {
-    "P1": "\033[94m",  # Azul
-    "P2": "\033[92m",  # Verde
-    "P3": "\033[93m",  # Amarillo
-    "P4": "\033[95m",  # Magenta
-    "P5": "\033[96m",  # Cian
+COLORES = {
+    "P1": "\033[94m",
+    "P2": "\033[92m",
+    "P3": "\033[93m",
+    "P4": "\033[95m",
+    "P5": "\033[96m",
 }
-RESET_COLOR = "\033[0m"
+FIN_COL = "\033[0m"
 
-def parse_peers(raw_peers):
-    peers = {}
-    if not raw_peers:
-        return peers
-    items = [item.strip() for item in raw_peers.split(",") if item.strip()]
-    for item in items:
-        if "=" not in item:
-            continue
-        peer_id, address = item.split("=", 1)
-        peers[peer_id.strip()] = address.strip()
-    return peers
+def leer_nodos(crudos):
+    nodos = {}
+    if not crudos: return nodos
+    items = [i.strip() for i in crudos.split(",") if i.strip()]
+    for i in items:
+        if "=" not in i: continue
+        id_nodo, dir_nodo = i.split("=", 1)
+        nodos[id_nodo.strip()] = dir_nodo.strip()
+    return nodos
 
-def get_env_or_default(key, default=None):
-    value = os.getenv(key)
-    return value if value not in (None, "") else default
+def obt_env(clave, defecto=None):
+    val = os.getenv(clave)
+    return val if val not in (None, "") else defecto
 
-def build_log_path(process_id):
-    log_path = get_env_or_default("LOG_PATH", f"/app/logs/{process_id}.log")
-    return log_path
+def ruta_log(id_proc):
+    return obt_env("LOG_PATH", f"/app/logs/{id_proc}.log")
 
-class ProcesoService(procesos_pb2_grpc.ProcesoServiceServicer):
-    def __init__(self, process_id, peers, bitacora):
-        self.process_id = process_id
-        self.peers = peers
-        self.bitacora = bitacora
-        self.clock = VectorClock(process_id, len(peers))
-        self.color = COLORS.get(process_id, "")
+class ServicioProceso(procesos_pb2_grpc.ProcesoServiceServicer):
+    def __init__(self, id_proc, nodos, bita):
+        self.id_proc = id_proc
+        self.nodos = nodos
+        self.bita = bita
+        self.reloj = RelojVectorial(id_proc, len(nodos))
+        self.color = COLORES.get(id_proc, "")
 
-    def _log(self, line):
-        self.bitacora.append(line)
-        print(f"{self.color}{line}{RESET_COLOR}", flush=True)
+    def _log(self, linea):
+        self.bita.agregar(linea)
+        print(f"{self.color}{linea}{FIN_COL}", flush=True)
 
-    def _real_internal_work(self, descripcion):
-        texto = descripcion.lower()
-        if "carrito" in texto or "armar" in texto:
-            return '{"accion":"crear_carrito", "item":"Super Star Con Queso", "precio":250.00}'
-        if "pago" in texto or "cobro" in texto or "tarjeta" in texto:
-            return '{"accion":"validar_tarjeta", "status":"fondos_aprobados", "auth":"TXN-9981"}'
-        if "cocina" in texto or "preparar" in texto:
+    def _tarea(self, desc):
+        txt = desc.lower()
+        if "carrito" in txt or "armar" in txt:
+            return '{"accion":"crear_carrito", "item":"Super Star", "precio":250}'
+        if "pago" in txt or "cobro" in txt or "tarjeta" in txt:
+            return '{"accion":"validar_tarjeta", "status":"ok", "auth":"TXN-9981"}'
+        if "cocina" in txt or "preparar" in txt:
             return '{"accion":"cocina", "status":"empaquetado", "temp":"caliente"}'
-        if "ruta" in texto or "gps" in texto:
-            return '{"accion":"gps_routing", "destino":"Tlalnepantla de Baz", "distancia":"4.2km"}'
-        if "tiempo" in texto or "llegada" in texto or "notificacion" in texto:
-            return '{"accion":"push_notification", "dispositivo":"iPad Air", "status":"enviado"}'
-        return f'{{"longitud_desc":{len(descripcion)}}}'
+        if "ruta" in txt or "gps" in txt:
+            return '{"accion":"gps", "destino":"Tlalnepantla", "dist":"4.2km"}'
+        if "tiempo" in txt or "notificacion" in txt:
+            return '{"accion":"push", "disp":"Celular", "status":"enviado"}'
+        return f'{{"len_desc":{len(desc)}}}'
 
-    def _send_to(self, receiver_id, mensaje):
-        if receiver_id not in self.peers:
-            return False, f"Destino desconocido: {receiver_id}", self.clock.value()
+    def _enviar(self, destino, msg):
+        if destino not in self.nodos:
+            return False, f"Desconocido: {destino}", self.reloj.valor()
+        if destino == self.id_proc:
+            return False, "Auto-envio", self.reloj.valor()
 
-        if receiver_id == self.process_id:
-            return False, "No se permite enviar a si mismo", self.clock.value()
-
-        vector = self.clock.tick()
-        vector_str = str(vector).replace(" ", "")
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
         
-        self._log(
-            f"[SEND] {self.process_id} -> {receiver_id} msg=\"{mensaje}\" vector r={vector_str}"
-        )
+        self._log(f'[SEND] {self.id_proc} -> {destino} msg="{msg}" vector r={str_v}')
 
-        address = self.peers[receiver_id]
-        request = procesos_pb2.RecibirMensajeRequest(
-            sender_id=self.process_id,
-            mensaje=mensaje,
-            reloj_vectorial=vector,
-        )
+        dir_nodo = self.nodos[destino]
+        req = procesos_pb2.ReqRecepcion(origen=self.id_proc, msg=msg, vector=vec)
 
         try:
-            with grpc.insecure_channel(address) as channel:
-                stub = procesos_pb2_grpc.ProcesoServiceStub(channel)
-                response = stub.RecibirMensaje(request)
-                vector_ack=str(list(response.reloj_vectorial)).replace(" ", "")
-                self._log(f"[ACK] {self.process_id} <- {receiver_id} confirmacion=\"{response.mensaje}\" vector_ack={vector_ack}")
-            return True, response.mensaje, list(response.reloj_vectorial)
+            with grpc.insecure_channel(dir_nodo) as canal:
+                stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+                res = stub.RecibirMensaje(req)
+                str_ack = str(list(res.vector)).replace(" ", "")
+                self._log(f'[ACK] {self.id_proc} <- {destino} confirmacion="{res.msg}" vector_ack={str_ack}')
+            return True, res.msg, list(res.vector)
         except grpc.RpcError as err:
-            return False, err.details() or "Error gRPC", self.clock.value()
+            return False, err.details() or "Error gRPC", self.reloj.valor()
 
-    def EnviarMensaje(self, request, context):
-        if request.sender_id and request.sender_id != self.process_id:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            context.set_details("sender_id no coincide con el proceso")
-            return procesos_pb2.Ack(ok=False, mensaje="sender_id invalido", reloj_vectorial=self.clock.value())
+    def EnviarMensaje(self, req, ctx):
+        if req.origen and req.origen != self.id_proc:
+            ctx.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return procesos_pb2.Ack(ok=False, msg="origen invalido", vector=self.reloj.valor())
 
-        ok, mensaje, _ = self._send_to(request.receiver_id, request.mensaje)
-        if not ok:
-            context.set_code(grpc.StatusCode.FAILED_PRECONDITION)
-        return procesos_pb2.Ack(ok=ok, mensaje=mensaje, reloj_vectorial=self.clock.value())
+        ok, msg, _ = self._enviar(req.destino, req.msg)
+        if not ok: ctx.set_code(grpc.StatusCode.FAILED_PRECONDITION)
+        return procesos_pb2.Ack(ok=ok, msg=msg, vector=self.reloj.valor())
 
-    def RecibirMensaje(self, request, context):
-        vector_recibido = list(request.reloj_vectorial)
-        vector_recibido_str = str(vector_recibido).replace(" ", "")
+    def RecibirMensaje(self, req, ctx):
+        vec_rec = list(req.vector)
+        str_rec = str(vec_rec).replace(" ", "")
         
-        updated = self.clock.update(vector_recibido)
-        vector_actualizado_str = str(updated).replace(" ", "")
+        vec_act = self.reloj.actualizar(vec_rec)
+        str_act = str(vec_act).replace(" ", "")
 
-        self._log(
-            f"[RECEIVE] {self.process_id} <- {request.sender_id} msg=\"{request.mensaje}\" "
-            f"vector_recibido={vector_recibido_str} vector_actualizado={vector_actualizado_str}"
-        )
-        return procesos_pb2.Ack(ok=True, mensaje="ACK", reloj_vectorial=updated)
+        self._log(f'[RECEIVE] {self.id_proc} <- {req.origen} msg="{req.msg}" vector_recibido={str_rec} vector_actualizado={str_act}')
+        return procesos_pb2.Ack(ok=True, msg="ACK", vector=vec_act)
 
-    def EventoInterno(self, request, context):
-        descripcion = request.descripcion or "evento interno"
-        resultado = self._real_internal_work(descripcion)
+    def EventoInterno(self, req, ctx):
+        desc = req.desc or "evento"
+        res = self._tarea(desc)
         
-        vector = self.clock.tick()
-        vector_str = str(vector).replace(" ", "")
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
         
-        self._log(f"[INTERNAL] {self.process_id} vector={vector_str}")
-        return procesos_pb2.Ack(ok=True, mensaje=f"Evento registrado: {resultado}", reloj_vectorial=vector)
+        self._log(f'[INTERNAL] {self.id_proc} vector={str_v}')
+        return procesos_pb2.Ack(ok=True, msg=f"Registro: {res}", vector=vec)
 
-    def Broadcast(self, request, context):
-        if request.sender_id and request.sender_id != self.process_id:
-            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
-            context.set_details("sender_id no coincide con el proceso")
-            return procesos_pb2.Ack(ok=False, mensaje="sender_id invalido", reloj_vectorial=self.clock.value())
+    def Broadcast(self, req, ctx):
+        if req.origen and req.origen != self.id_proc:
+            ctx.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return procesos_pb2.Ack(ok=False, msg="origen invalido", vector=self.reloj.valor())
 
-        mensajes = []
-        vector_broadcast = self.clock.tick()
-        vector_str = str(vector_broadcast).replace(" ", "")
+        msgs = []
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
 
-        for receiver_id in sorted(self.peers.keys()):
-            if receiver_id == self.process_id:
-                continue
+        for dest in sorted(self.nodos.keys()):
+            if dest == self.id_proc: continue
             
-            self._log(f"[SEND] {self.process_id} -> {receiver_id} msg=\"{request.mensaje}\" vector r={vector_str}")
-            address = self.peers[receiver_id]
-            req = procesos_pb2.RecibirMensajeRequest(
-                sender_id=self.process_id,
-                mensaje=request.mensaje,
-                reloj_vectorial=vector_broadcast,
-            )
+            self._log(f'[SEND] {self.id_proc} -> {dest} msg="{req.msg}" vector r={str_v}')
+            dir_nodo = self.nodos[dest]
+            peticion = procesos_pb2.ReqRecepcion(origen=self.id_proc, msg=req.msg, vector=vec)
             try:
-                with grpc.insecure_channel(address) as channel:
-                    stub = procesos_pb2_grpc.ProcesoServiceStub(channel)
-                    stub.RecibirMensaje(req)
-                mensajes.append(f"{receiver_id}:OK")
+                with grpc.insecure_channel(dir_nodo) as canal:
+                    stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+                    stub.RecibirMensaje(peticion)
+                msgs.append(f"{dest}:OK")
             except Exception:
-                mensajes.append(f"{receiver_id}:ERR")
+                msgs.append(f"{dest}:ERR")
 
-        resumen = ", ".join(mensajes) if mensajes else "Sin destinos"
-        return procesos_pb2.Ack(ok=True, mensaje=resumen, reloj_vectorial=self.clock.value())
+        resumen = ", ".join(msgs) if msgs else "Sin destinos"
+        return procesos_pb2.Ack(ok=True, msg=resumen, vector=self.reloj.valor())
 
-def iniciar_servidor():
-    process_id = get_env_or_default("PROCESS_ID")
-    if not process_id:
-        raise SystemExit("Falta PROCESS_ID")
+def iniciar():
+    id_proc = obt_env("PROCESS_ID")
+    if not id_proc: raise SystemExit("Falta PROCESS_ID")
 
-    peers = parse_peers(get_env_or_default("PEERS", ""))
-    if not peers:
-        raise SystemExit("Falta PEERS")
+    nodos = leer_nodos(obt_env("PEERS", ""))
+    if not nodos: raise SystemExit("Falta PEERS")
 
-    port = int(get_env_or_default("PORT", DEFAULT_PORT))
-    log_path = build_log_path(process_id)
-    bitacora = Bitacora(log_path)
+    pto = int(obt_env("PORT", puerto))
+    bita = Bitacora(ruta_log(id_proc))
 
     servidor = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    procesos_pb2_grpc.add_ProcesoServiceServicer_to_server(
-        ProcesoService(process_id, peers, bitacora), servidor
-    )
-
-    servidor.add_insecure_port(f"0.0.0.0:{port}")
+    procesos_pb2_grpc.add_ProcesoServiceServicer_to_server(ServicioProceso(id_proc, nodos, bita), servidor)
+    servidor.add_insecure_port(f"0.0.0.0:{pto}")
     servidor.start()
     
-    color = COLORS.get(process_id, "")
-    print(f"{color}Proceso {process_id} escuchando en {port}...{RESET_COLOR}", flush=True)
+    col = COLORES.get(id_proc, "")
+    print(f"{col}Nodo {id_proc} activo en el puerto {pto}...{FIN_COL}", flush=True)
 
     try:
-        while True:
-            time.sleep(3600)
+        while True: time.sleep(3600)
     except KeyboardInterrupt:
         servidor.stop(0)
 
 if __name__ == "__main__":
-    iniciar_servidor()
+    iniciar()

@@ -1,0 +1,220 @@
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker pull mariadb:11
+11: Pulling from library/mariadb
+b40150c1c271: Already exists 
+734a30f8b69c: Pull complete 
+6199691a65f0: Pull complete 
+9231a5d302ad: Pull complete 
+2b1c9d2d4f5b: Pull complete 
+ac86d2b31a8a: Pull complete 
+f8c1013d260b: Pull complete 
+019d8b2da7a8: Pull complete 
+Digest: sha256:78185355dd49b54dd6909072531ce8d7e06aa0eccd7aa5b23c93ebb7e34c5aaa
+Status: Downloaded newer image for mariadb:11
+docker.io/library/mariadb:11
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ ls
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exec -it mariadb_tx bash
+Error response from daemon: No such container: mariadb_tx
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exec -it mariadb_tx bash
+Error response from daemon: No such container: mariadb_tx
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker start mariadb
+mariadb
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exec -it mariadb bash
+root@816837758ca2:/# mariadb -u root -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+root@816837758ca2:/# mariadb -u root -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 4
+Server version: 11.8.6-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> exit
+Bye
+root@816837758ca2:/# exit
+exit
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker run -d
+docker: 'docker run' requires at least 1 argument
+
+Usage:  docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+See 'docker run --help' for more information
+angel@angel-ROG-Strix-G713IE-G713IE:~/Documentos/distribuidos/ejemplos1/docker/ClaseDocker3$ docker exec -it mariadb bash
+root@816837758ca2:/# mariadb -u root -p
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 5
+Server version: 11.8.6-MariaDB-ubu2404 mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> CREATE DATABASE banco CHARACTER SET utf8mb4;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> USE banco;
+Database changed
+MariaDB [banco]> CREATE TABLE cuentas(
+    -> id INT PRIMARY KEY AUTO_INCREMENT,
+    -> nombre VARCHAR(50),
+    -> saldo INT 
+    -> );
+Query OK, 0 rows affected (0.039 sec)
+
+MariaDB [banco]> INSERT INTO cuentas(nombre,saldo) VALUES ('Ana',1000), ('Luis', 1000), ('Carlos', 1000);
+Query OK, 3 rows affected (0.008 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [banco]> SET autommit = 0;
+ERROR 1193 (HY000): Unknown system variable 'autommit'
+MariaDB [banco]> SET autocommit = 0;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT @@tx_isolation;
++------------------+
+| @@tx_isolation   |
++------------------+
+| READ-UNCOMMITTED |
++------------------+
+1 row in set (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> UPDATE cuentas SET saldo = 500 WHERE nombre = 'Ana';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> ROLLBACK;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Luis';
++-------+
+| saldo |
++-------+
+|  1000 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Luis';
++-------+
+| saldo |
++-------+
+|  1200 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT * FROM cuentas WHERE saldo > 1000;
++----+--------+-------+
+| id | nombre | saldo |
++----+--------+-------+
+|  2 | Luis   |  1200 |
++----+--------+-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> SELECT * FROM cuentas WHERE saldo > 1000;
++----+--------+-------+
+| id | nombre | saldo |
++----+--------+-------+
+|  2 | Luis   |  1200 |
+|  4 | Sam    |  1500 |
++----+--------+-------+
+2 rows in set (0.001 sec)
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SET TRANSACTION LEVEL READ COMMITED;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'LEVEL READ COMMITED' at line 1
+MariaDB [banco]> SET TRANSACTION ISOLATION LEVEL READ COMMITED;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'COMMITED' at line 1
+MariaDB [banco]> SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Calos';
+Empty set (0.001 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'CaRlos';
++-------+
+| saldo |
++-------+
+|  1000 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> ROLLBACK;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT @@tx_isolation;
++----------------+
+| @@tx_isolation |
++----------------+
+| READ-COMMITTED |
++----------------+
+1 row in set (0.000 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'CaRlos';
++-------+
+| saldo |
++-------+
+|  1000 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> UPDATE cuentas SET saldo = 900 WHERE nombre = 'Carlos';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.005 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'Carlos';
++-------+
+| saldo |
++-------+
+|   900 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> START TRANSACTION;
+Query OK, 0 rows affected (0.000 sec)
+
+MariaDB [banco]> SELECT saldo FROM cuentas WHERE nombre= 'CaRlos';
++-------+
+| saldo |
++-------+
+|   950 |
++-------+
+1 row in set (0.001 sec)
+
+MariaDB [banco]> UPDATE cuentas SET saldo = 900 WHERE nombre = 'Carlos';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [banco]> COMMIT;
+Query OK, 0 rows affected (0.008 sec)

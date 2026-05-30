@@ -200,7 +200,36 @@
 
     \setcounter{page}{1}
 
-    \section{Objetivo:}
+    \section{Objetivo}
+    Desarrollar una simulacion de un sistema distribuido con 5 procesos, donde cada proceso corre en un contenedor Docker y expone un servidor gRPC. Cada proceso mantiene un reloj de Lamport para ordenar eventos internos, envios y recepciones, y registra todo en una bitacora.
+
+    \section{Servicios gRPC}
+    Se definieron los siguientes servicios:
+    \begin{enumerate}
+      \item \textbf{EnviarMensaje}: recibe id del emisor, id del receptor y mensaje. Incrementa el reloj de Lamport del emisor y envia el mensaje al receptor.
+      \item \textbf{RecibirMensaje}: recibe id del emisor, mensaje y tiempo Lamport recibido. Actualiza el reloj local con $\max(L, T) + 1$ y registra la recepcion.
+      \item \textbf{EventoInterno}: simula un evento interno, incrementa el reloj local y registra la bitacora.
+      \item \textbf{Broadcast}: envia un mensaje a todos los procesos del sistema y registra cada envio.
+    \end{enumerate}
+
+
+    \section{Flujo de trabajo}
+    \begin{enumerate}
+      \item Entrar a la carpeta del proyecto: \texttt{cd\ project/proyecto\_final}.
+      \item Construir imagenes: \texttt{docker compose build}.
+      \item Levantar contenedores: \texttt{docker compose up -d}.
+      \item Ejecutar escenario completo: \texttt{docker exec -it cliente python src/driver.py}.
+      \item Pruebas manuales con \texttt{docker exec} usando \texttt{src/cli.py}.
+      \item Revisar bitacoras en \texttt{project/proyecto\_final/logs/}.
+    \end{enumerate}
+
+    \section{Requerimientos}
+    \begin{itemize}
+      \item Todo el sistema corre dentro de contenedores Docker.
+      \item La comunicacion se realiza unicamente entre contenedores.
+      \item Cada proceso mantiene su reloj de Lamport y registra cada evento.
+      \item Las pruebas se ejecutan con \texttt{docker exec}.
+    \end{itemize}
 
 
     % Impresión Referencias
