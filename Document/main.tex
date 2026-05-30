@@ -364,10 +364,743 @@ haciendo que los cinco relojes vectoriales sean los mismos de manera simultánea
 \section{Documentacion de codigo:}
 
 \subsection{Codigo proto:}
+Define cómo se comunican las diferentes partes del sistema utilizando 
+\textbf{Protocol Buffers v3}. Para ello, se especifica el servicio 
+\texttt{ProcesoService}, que incluye cuatro operaciones remotas (RPC) y 
+los mensajes de entrada y salida que utiliza cada una.
+
+\begin{lstlisting}[style=proto, caption={procesos.proto - Definición IDL del servicio gRPC}]
+syntax = "proto3";
+ 
+package procesos;
+ 
+service ProcesoService {
+  rpc EnviarMensaje  (ReqEnvio)    returns (Ack);
+  rpc RecibirMensaje (ReqRecepcion) returns (Ack);
+  rpc EventoInterno  (ReqInterno)  returns (Ack);
+  rpc Broadcast      (ReqDifusion) returns (Ack);
+}
+ 
+message ReqEnvio {
+  string origen  = 1;
+  string destino = 2;
+  string msg     = 3;
+}
+ 
+message ReqRecepcion {
+  string          origen = 1;
+  string          msg    = 2;
+  repeated int64  vector = 3;
+}
+ 
+message ReqInterno {
+  string desc = 1;
+}
+ 
+message ReqDifusion {
+  string origen = 1;
+  string msg    = 2;
+}
+ 
+message Ack {
+  bool           ok     = 1;
+  string         msg    = 2;
+  repeated int64 vector = 3;
+}
+\end{lstlisting}
+ 
+\subsubsection{Descripción del Servicio}
+ 
+\begin{center}
+\begin{tabular}{>{\ttfamily}l l l p{5cm}}
+\toprule
+\textbf{RPC} & \textbf{Entrada} & \textbf{Salida} & \textbf{Descripción} \\
+\midrule
+\texttt{EnviarMensaje}  & \texttt{ReqEnvio}     & \texttt{Ack} & Solicita al nodo que envíe un mensaje a otro. \\[4pt]
+\texttt{RecibirMensaje} & \texttt{ReqRecepcion} & \texttt{Ack} & Notifica al nodo la llegada de un mensaje. \\[4pt]
+\texttt{EventoInterno}  & \texttt{ReqInterno}   & \texttt{Ack} & Dispara un evento local de negocio. \\[4pt]
+\texttt{Broadcast}      & \texttt{ReqDifusion}  & \texttt{Ack} & Difunde un mensaje a todos los nodos. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+
+\subsubsection{Descripción de Mensajes}
+ 
+\begin{center}
+\begin{tabular}{>{\ttfamily}l >{\ttfamily}l r p{5.5cm}}
+\toprule
+\textbf{Mensaje} & \textbf{Campo} & \textbf{Tag} & \textbf{Descripción} \\
+\midrule
+\multirow{3}{*}{\texttt{ReqEnvio}}
+  & origen  & 1 & ID del proceso emisor. \\
+  & destino & 2 & ID del proceso receptor. \\
+  & msg     & 3 & Contenido del mensaje (JSON). \\
+\midrule
+\multirow{3}{*}{\texttt{ReqRecepcion}}
+  & origen & 1 & ID del proceso que origina el mensaje. \\
+  & msg    & 2 & Contenido del mensaje. \\
+  & vector & 3 & Reloj vectorial del emisor (\texttt{repeated int64}). \\
+\midrule
+\texttt{ReqInterno}
+  & desc & 1 & Descripción del evento interno. \\
+\midrule
+\multirow{2}{*}{\texttt{ReqDifusion}}
+  & origen & 1 & ID del proceso que inicia la difusión. \\
+  & msg    & 2 & Contenido a difundir. \\
+\midrule
+\multirow{3}{*}{\texttt{Ack}}
+  & ok     & 1 & \texttt{true} si la operación tuvo éxito. \\
+  & msg    & 2 & Mensaje descriptivo del resultado. \\
+  & vector & 3 & Estado actual del reloj vectorial del nodo (\texttt{repeated int64}). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+ El campo \texttt{vector} en \texttt{ReqRecepcion} y \texttt{Ack} utiliza 
+\texttt{repeated int64} para enviar los valores del reloj vectorial como un 
+arreglo. En Python, este campo se representa automáticamente como una lista 
+de números enteros (\texttt{list[int]}).
+
 
 
 \subsection{Codigos python:}
+\subsubsection{Código 1 : \texttt{vectorial.py} — Reloj Vectorial}
 
+Implementa la clase \texttt{RelojVectorial}, que se encarga de administrar 
+el reloj vectorial de un nodo dentro de un sistema distribuido. Este reloj 
+consiste en un arreglo de enteros, donde cada posición almacena el contador 
+lógico correspondiente a uno de los procesos del sistema.
+
+Dado un sistema con $n$ procesos, el reloj vectorial de un proceso 
+$P_i$ se representa mediante un vector $V$ de $n$ enteros, donde cada 
+posición almacena el contador lógico de un proceso. Su funcionamiento se 
+basa en tres reglas principales:
+
+\begin{itemize}
+    \item \textbf{Evento local:} el proceso incrementa su propio contador.
+    \item \textbf{Envío de mensaje:} antes de enviar un mensaje, el proceso 
+    incrementa su contador y adjunta el reloj vectorial actual al mensaje.
+    \item \textbf{Recepción de mensaje:} al recibir un mensaje, el proceso 
+    incrementa su contador y actualiza su reloj comparando cada posición con 
+    la recibida, conservando siempre el valor más grande.
+\end{itemize}
+
+
+
+\begin{lstlisting}[style=python, caption={vectorial.py — Implementación del Reloj Vectorial}]
+import threading
+ 
+class RelojVectorial:
+    def __init__(self, id_proc, num_proc=5):
+        self.num_proc = num_proc
+        self.idx = int(id_proc.replace("P", "")) - 1
+        self.vec = [0] * num_proc
+        self._bloqueo = threading.Lock()
+ 
+    def evento(self):
+        with self._bloqueo:
+            self.vec[self.idx] += 1
+            return list(self.vec)
+ 
+    def actualizar(self, vec_recibido):
+        with self._bloqueo:
+            self.vec[self.idx] += 1
+            for i in range(self.num_proc):
+                self.vec[i] = max(self.vec[i], vec_recibido[i])
+            return list(self.vec)
+ 
+    def valor(self):
+        with self._bloqueo:
+            return list(self.vec)
+\end{lstlisting}
+
+\textbf{\texttt{\_\_init\_\_(self, id\_proc, num\_proc=5)}}
+
+Constructor de la clase. Inicializa el reloj vectorial del proceso, crea
+el vector con todos sus valores en cero y configura los elementos
+necesarios para acceder al reloj de forma segura desde varios hilos.
+
+\textbf{\texttt{evento(self) -> list}}
+
+Registra un evento local en el proceso. Para ello, incrementa el contador
+correspondiente al proceso actual y devuelve una copia del reloj vectorial
+actualizado. La operación está protegida mediante un \texttt{Lock} para
+evitar accesos simultáneos.
+
+\textbf{\texttt{actualizar(self, vec\_recibido) -> list}}
+
+Procesa la recepción de un mensaje proveniente de otro nodo. El método
+incrementa el contador local y actualiza el reloj vectorial comparando
+cada posición con el vector recibido, conservando siempre el valor más
+alto. Finalmente, devuelve una copia del vector actualizado. La operación
+está protegida mediante un \texttt{Lock}.
+
+\textbf{\texttt{valor(self) -> list}}
+
+Devuelve una copia del estado actual del reloj vectorial sin realizar
+ninguna modificación. Este método se utiliza para consultar el reloj de
+forma segura y está protegido mediante un \texttt{Lock}.
+
+\subsubsection{Código 2: \texttt{bitacora.py} — Manejador de Logs}
+
+La clase \texttt{Bitacora} se encarga de almacenar mensajes en un archivo
+de registro (log) de forma segura. Para evitar problemas cuando varios
+hilos intentan escribir al mismo tiempo, utiliza un
+\texttt{threading.Lock}, garantizando que cada mensaje se guarde
+correctamente sin alterar el contenido del archivo.
+
+\begin{lstlisting}[style=python, caption={bitacora.py — Escritura concurrente de logs}]
+import os
+import threading
+ 
+class Bitacora:
+    def __init__(self, ruta):
+        self.ruta = ruta
+        self._bloqueo = threading.Lock()
+        dir_ruta = os.path.dirname(self.ruta)
+        if dir_ruta:
+            os.makedirs(dir_ruta, exist_ok=True)
+ 
+    def agregar(self, linea):
+        linea_segura = linea.rstrip("\n")
+        with self._bloqueo:
+            with open(self.ruta, "a", encoding="utf-8") as arch:
+                arch.write(linea_segura + "\n")
+\end{lstlisting}
+
+\textbf{\texttt{\_\_init\_\_(self, ruta)}}
+
+Constructor de la bitácora. Recibe la ubicación del archivo de registro y,
+si los directorios necesarios no existen, los crea automáticamente para
+garantizar que el archivo pueda almacenarse correctamente.
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l l p{7cm}}
+\toprule
+\textbf{Parámetro} & \textbf{Tipo} & \textbf{Descripción} \\
+\midrule
+ruta & \texttt{str} & Ruta donde se almacenará el archivo de log. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{\texttt{agregar(self, linea)}}
+
+Agrega una nueva línea al archivo de log de forma segura. Antes de
+escribir, elimina los saltos de línea sobrantes para evitar espacios en
+blanco innecesarios. El archivo se abre en modo \textbf{append}
+(\texttt\{``a''\}), de manera que los nuevos registros se añaden al final sin
+modificar el contenido existente.
+
+\subsubsection{Código 3: \texttt{process.py} — Servidor gRPC}
+
+Es el componente principal del sistema. Implementa el servicio gRPC
+\texttt{ServicioProceso} y se encarga de coordinar la comunicación entre
+los nodos. Sus funciones incluyen el envío y recepción de mensajes, la
+ejecución de eventos internos, la difusión de mensajes a todos los nodos
+(\textit{broadcast}) y la actualización del reloj vectorial cada vez que
+ocurre alguna de estas operaciones.
+
+
+\textbf{\texttt{\texttt{Funciones Auxiliares}}}
+
+\begin{lstlisting}[style=python, caption={process.py — Funciones auxiliares }]
+def leer_nodos(crudos):
+    nodos = {}
+    if not crudos: return nodos
+    items = [i.strip() for i in crudos.split(",") if i.strip()]
+    for i in items:
+        if "=" not in i: continue
+        id_nodo, dir_nodo = i.split("=", 1)
+        nodos[id_nodo.strip()] = dir_nodo.strip()
+    return nodos
+ 
+def obt_env(clave, defecto=None):
+    val = os.getenv(clave)
+    return val if val not in (None, "") else defecto
+ 
+def ruta_log(id_proc):
+    return obt_env("LOG_PATH", f"/app/logs/{id_proc}.log")
+\end{lstlisting}
+ 
+\begin{center}
+\begin{tabular}{>{\ttfamily}l p{9cm}}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{leer\_nodos(crudos)} &
+  Convierte una cadena con el formato \texttt{ID=host:puerto} en un
+  diccionario que relaciona cada proceso con el host y puerto que utiliza
+  para comunicarse. \\[4pt]
+\texttt{obt\_env(clave, defecto)} &
+  Obtiene el valor de una variable de entorno. Si la variable no existe o
+  está vacía, devuelve el valor indicado por \texttt{defecto}. \\[4pt]
+
+\texttt{ruta\_log(id\_proc)} &
+  Genera la ruta del archivo de log asociado al proceso. Si la variable de
+  entorno \texttt{LOG\_PATH} está definida, se utiliza como directorio base
+  para almacenar el archivo. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{\texttt{Clase \texttt{ServicioProceso}}}
+
+
+\begin{lstlisting}[style=python, caption={process.py — Constructor y métodos privados}]
+COLORES = {
+    "P1": "\033[94m", "P2": "\033[92m", "P3": "\033[93m",
+    "P4": "\033[95m", "P5": "\033[96m",
+}
+FIN_COL = "\033[0m"
+ 
+class ServicioProceso(procesos_pb2_grpc.ProcesoServiceServicer):
+    def __init__(self, id_proc, nodos, bita):
+        self.id_proc = id_proc
+        self.nodos = nodos
+        self.bita = bita
+        self.reloj = RelojVectorial(id_proc, len(nodos))
+        self.color = COLORES.get(id_proc, "")
+ 
+    def _log(self, linea):
+        self.bita.agregar(linea)
+        print(f"{self.color}{linea}{FIN_COL}", flush=True)
+ 
+    def _tarea(self, desc):
+        txt = desc.lower()
+        if "carrito" in txt or "armar" in txt:
+            return '{"accion":"crear_carrito", "item":"Super Star", "precio":250}'
+        if "pago" in txt or "cobro" in txt or "tarjeta" in txt:
+            return '{"accion":"validar_tarjeta", "status":"ok", "auth":"TXN-9981"}'
+        if "cocina" in txt or "preparar" in txt:
+            return '{"accion":"cocina", "status":"empaquetado", "temp":"caliente"}'
+        if "ruta" in txt or "gps" in txt:
+            return '{"accion":"gps", "destino":"Tlalnepantla", "dist":"4.2km"}'
+        if "tiempo" in txt or "notificacion" in txt:
+            return '{"accion":"push", "disp":"Celular", "status":"enviado"}'
+        return f'{{"len_desc":{len(desc)}}}'
+\end{lstlisting}
+
+\textbf{Constructor \texttt{\_\_init\_\_}}
+
+Inicializa el servicio del proceso, configurando su identificador, la
+información de los demás nodos del sistema, la bitácora y las estructuras
+necesarias para gestionar la comunicación y el reloj vectorial.
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l l p{6.5cm}}
+\toprule
+\textbf{Parámetro} & \textbf{Tipo} & \textbf{Descripción} \\
+\midrule
+id\_proc & \texttt{str}      & Identificador del proceso (por ejemplo, \texttt{"P1"}). \\
+nodos    & \texttt{dict}     & Diccionario con la información de conexión de todos los procesos. \\
+bita     & \texttt{Bitacora} & Instancia utilizada para registrar eventos en el archivo de log. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Método privado \texttt{\_log(linea)}}
+
+Registra una línea de texto tanto en la bitácora como en la consola.
+Además, utiliza colores para diferenciar los mensajes de cada proceso y
+fuerza la impresión inmediata mediante \texttt{flush=True}.
+
+\textbf{Método privado \texttt{\_tarea(desc)}}
+
+Simula el trabajo realizado por el nodo a partir de la descripción de un
+evento. Dependiendo del contenido de la descripción, ejecuta una acción
+específica y devuelve el resultado en formato JSON.
+
+
+\textbf{Métodos gRPC del Servicer}
+
+\begin{lstlisting}[style=python, caption={process.py — Envío y recepción de mensajes}]
+    def _enviar(self, destino, msg):
+        if destino not in self.nodos:
+            return False, f"Desconocido: {destino}", self.reloj.valor()
+        if destino == self.id_proc:
+            return False, "Auto-envio", self.reloj.valor()
+ 
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
+        self._log(f'[SEND] {self.id_proc} -> {destino} msg="{msg}" vector r={str_v}')
+ 
+        dir_nodo = self.nodos[destino]
+        req = procesos_pb2.ReqRecepcion(origen=self.id_proc, msg=msg, vector=vec)
+        try:
+            with grpc.insecure_channel(dir_nodo) as canal:
+                stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+                res = stub.RecibirMensaje(req)
+                str_ack = str(list(res.vector)).replace(" ", "")
+                self._log(f'[ACK] {self.id_proc} <- {destino} '
+                          f'confirmacion="{res.msg}" vector_ack={str_ack}')
+            return True, res.msg, list(res.vector)
+        except grpc.RpcError as err:
+            return False, err.details() or "Error gRPC", self.reloj.valor()
+ 
+    def EnviarMensaje(self, req, ctx):
+        if req.origen and req.origen != self.id_proc:
+            ctx.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return procesos_pb2.Ack(ok=False, msg="origen invalido",
+                                    vector=self.reloj.valor())
+        ok, msg, _ = self._enviar(req.destino, req.msg)
+        if not ok: ctx.set_code(grpc.StatusCode.FAILED_PRECONDITION)
+        return procesos_pb2.Ack(ok=ok, msg=msg, vector=self.reloj.valor())
+ 
+    def RecibirMensaje(self, req, ctx):
+        vec_rec = list(req.vector)
+        str_rec = str(vec_rec).replace(" ", "")
+        vec_act = self.reloj.actualizar(vec_rec)
+        str_act = str(vec_act).replace(" ", "")
+        self._log(f'[RECEIVE] {self.id_proc} <- {req.origen} msg="{req.msg}" '
+                  f'vector_recibido={str_rec} vector_actualizado={str_act}')
+        return procesos_pb2.Ack(ok=True, msg="ACK", vector=vec_act)
+\end{lstlisting}
+
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l p{9cm}}
+\toprule
+\textbf{Método} & \textbf{Descripción} \\
+\midrule
+\texttt{\_enviar(destino, msg)} &
+  Método interno encargado de enviar un mensaje a otro nodo mediante gRPC.
+  Antes del envío actualiza el reloj vectorial, realiza la comunicación y
+  registra la respuesta recibida. También maneja posibles errores durante
+  la comunicación. \\[4pt]
+
+\texttt{EnviarMensaje(req, ctx)} &
+  Método gRPC que recibe una solicitud de envío de mensaje. Verifica la
+  información recibida, utiliza el mecanismo de envío correspondiente y
+  devuelve una confirmación de la operación. \\[4pt]
+
+\texttt{RecibirMensaje(req, ctx)} &
+  Método gRPC ejecutado cuando un nodo recibe un mensaje. Actualiza el
+  reloj vectorial con la información recibida, registra el evento y
+  devuelve una confirmación junto con el estado actualizado del reloj. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Evento interno y Broadcast}
+
+\begin{lstlisting}[style=python, caption={process.py — Evento interno y Broadcast}]
+    def EventoInterno(self, req, ctx):
+        desc = req.desc or "evento"
+        res = self._tarea(desc)
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
+        self._log(f'[INTERNAL] {self.id_proc} vector={str_v}')
+        return procesos_pb2.Ack(ok=True, msg=f"Registro: {res}", vector=vec)
+ 
+    def Broadcast(self, req, ctx):
+        if req.origen and req.origen != self.id_proc:
+            ctx.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            return procesos_pb2.Ack(ok=False, msg="origen invalido",
+                                    vector=self.reloj.valor())
+        msgs = []
+        vec = self.reloj.evento()
+        str_v = str(vec).replace(" ", "")
+ 
+        for dest in sorted(self.nodos.keys()):
+            if dest == self.id_proc: continue
+            self._log(f'[SEND] {self.id_proc} -> {dest} msg="{req.msg}" '
+                      f'vector r={str_v}')
+            dir_nodo = self.nodos[dest]
+            peticion = procesos_pb2.ReqRecepcion(origen=self.id_proc,
+                                                  msg=req.msg, vector=vec)
+            try:
+                with grpc.insecure_channel(dir_nodo) as canal:
+                    stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+                    stub.RecibirMensaje(peticion)
+                msgs.append(f"{dest}:OK")
+            except Exception:
+                msgs.append(f"{dest}:ERR")
+ 
+        resumen = ", ".join(msgs) if msgs else "Sin destinos"
+        return procesos_pb2.Ack(ok=True, msg=resumen, vector=self.reloj.valor())
+\end{lstlisting}
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l p{9cm}}
+\toprule
+\textbf{Método} & \textbf{Descripción} \\
+\midrule
+\texttt{EventoInterno(req, ctx)} &
+  Simula una actividad realizada únicamente por el nodo local. Ejecuta la
+  tarea asociada a la descripción recibida, actualiza el reloj vectorial y
+  registra el evento en la bitácora. Devuelve el resultado de la tarea en
+  la respuesta. \\[4pt]
+
+\texttt{Broadcast(req, ctx)} &
+  Envía el mismo mensaje a todos los demás nodos del sistema. Antes de
+  iniciar los envíos, obtiene un único valor del reloj vectorial para que
+  todos los destinatarios reciban el mensaje con la misma marca de tiempo
+  lógica. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Función de Arranque \texttt{iniciar()}}
+
+
+\begin{lstlisting}[style=python, caption={process.py — Arranque del servidor gRPC}]
+def iniciar():
+    id_proc = obt_env("PROCESS_ID")
+    if not id_proc: raise SystemExit("Falta PROCESS_ID")
+ 
+    nodos = leer_nodos(obt_env("PEERS", ""))
+    if not nodos: raise SystemExit("Falta PEERS")
+ 
+    pto = int(obt_env("PORT", puerto))
+    bita = Bitacora(ruta_log(id_proc))
+ 
+    servidor = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    procesos_pb2_grpc.add_ProcesoServiceServicer_to_server(
+        ServicioProceso(id_proc, nodos, bita), servidor)
+    servidor.add_insecure_port(f"0.0.0.0:{pto}")
+    servidor.start()
+ 
+    col = COLORES.get(id_proc, "")
+    print(f"{col}Nodo {id_proc} activo en el puerto {pto}...{FIN_COL}", flush=True)
+ 
+    try:
+        while True: time.sleep(3600)
+    except KeyboardInterrupt:
+        servidor.stop(0)
+\end{lstlisting}
+ 
+Lee las variables de entorno \texttt{PROCESS\_ID}, \texttt{PEERS} y
+\texttt{PORT} para obtener la configuración del nodo. Después, crea y
+pone en marcha el servidor gRPC utilizando un \texttt{ThreadPoolExecutor}
+con 10 hilos de trabajo. El proceso permanece en ejecución mediante un
+bucle con pausas periódicas (\texttt{sleep}) y, si se recibe una señal de
+interrupción (\texttt{KeyboardInterrupt}), el servidor se detiene de forma
+ordenada antes de finalizar.
+
+\subsubsection{Código 4: \texttt{driver.py} — Orquestador del Escenario}
+
+Script independiente que ejecuta automáticamente la simulación completa
+del proceso de entrega de comida. Para ello, realiza las llamadas a los
+RPCs de los distintos nodos en el orden establecido, incorporando pausas
+de un segundo entre cada evento para reproducir la secuencia de
+interacciones del sistema.
+
+
+\begin{lstlisting}[style=python, caption={driver.py — Orquestador del escenario de entrega}]
+import argparse, os, time, grpc
+import procesos_pb2, procesos_pb2_grpc
+ 
+def leer_nodos(crudos):
+    # (misma logica que en process.py)
+    nodos = {}
+    if not crudos: return nodos
+    items = [i.strip() for i in crudos.split(",") if i.strip()]
+    for i in items:
+        if "=" not in i: continue
+        id_nodo, dir_nodo = i.split("=", 1)
+        nodos[id_nodo.strip()] = dir_nodo.strip()
+    return nodos
+ 
+def evt_interno(nodos, dest, desc):
+    dir_nodo = nodos[dest]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        stub.EventoInterno(procesos_pb2.ReqInterno(desc=desc))
+ 
+def evt_enviar(nodos, origen, dest, msg):
+    dir_nodo = nodos[origen]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        stub.EnviarMensaje(procesos_pb2.ReqEnvio(
+            origen=origen, destino=dest, msg=msg))
+ 
+def evt_difusion(nodos, origen, msg):
+    dir_nodo = nodos[origen]
+    with grpc.insecure_channel(dir_nodo) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        stub.Broadcast(procesos_pb2.ReqDifusion(origen=origen, msg=msg))
+ 
+def escenario(nodos):
+    print("Iniciando Escenario de Entrega...", flush=True)
+    evt_interno(nodos, "P1", "armar carrito pedido");           time.sleep(1)
+    evt_enviar(nodos, "P1", "P2", '{"id":"ORD-77X","total":250,"req":"cobro"}')
+    time.sleep(1)
+    evt_interno(nodos, "P2", "validar cobro tarjeta");          time.sleep(1)
+    evt_enviar(nodos, "P2", "P3", '{"id":"ORD-77X","pago":"ok","item":"Super Star"}')
+    time.sleep(1)
+    evt_interno(nodos, "P3", "preparar comida");                time.sleep(1)
+    evt_enviar(nodos, "P3", "P4", '{"id":"ORD-77X","paquete":"listo"}')
+    time.sleep(1)
+    evt_interno(nodos, "P4", "calcular ruta gps");              time.sleep(1)
+    evt_enviar(nodos, "P4", "P5", '{"id":"ORD-77X","repartidor":"va","eta":"15m"}')
+    time.sleep(1)
+    evt_interno(nodos, "P5", "enviar notificacion");            time.sleep(1)
+    evt_difusion(nodos, "P5", '{"id":"ORD-77X","fin":"entregado","eta":"15m"}')
+    time.sleep(1)
+\end{lstlisting}
+
+
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l p{9cm}}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{evt\_interno(nodos, dest, desc)} &
+  Ejecuta un evento interno en el nodo indicado por \texttt{dest},
+  utilizando la descripción proporcionada. \\[4pt]
+
+\texttt{evt\_enviar(nodos, origen, dest, msg)} &
+  Solicita al nodo \texttt{origen} el envío de un mensaje hacia el nodo
+  \texttt{dest}. \\[4pt]
+
+\texttt{evt\_difusion(nodos, origen, msg)} &
+  Solicita al nodo \texttt{origen} que envíe el mismo mensaje a todos los
+  demás nodos del sistema. \\[4pt]
+
+\texttt{escenario(nodos)} &
+  Ejecuta de forma automática la secuencia completa de eventos del
+  escenario de entrega, siguiendo el orden establecido e incorporando una
+  pausa de un segundo entre acciones para permitir el procesamiento de los
+  nodos. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Código 5: \texttt{cli.py} — Cliente Interactivo}
+Herramienta de línea de comandos que permite interactuar de forma
+manual con cualquier nodo del sistema. Su uso evita la necesidad de
+modificar el código para realizar pruebas o ejecutar operaciones
+específicas, ya que emplea \texttt{argparse} para gestionar distintos
+subcomandos y opciones de ejecución.
+
+\begin{lstlisting}[style=python, caption={cli.py — Cliente de línea de comandos}]
+import argparse, os, grpc
+import procesos_pb2, procesos_pb2_grpc
+ 
+def leer_nodos(crudos):
+    nodos = {}
+    if not crudos: return nodos
+    items = [i.strip() for i in crudos.split(",") if i.strip()]
+    for i in items:
+        if "=" not in i: continue
+        id_nodo, dir_nodo = i.split("=", 1)
+        nodos[id_nodo.strip()] = dir_nodo.strip()
+    return nodos
+ 
+def res_destino(dest, nodos):
+    if not dest: return None
+    if dest in nodos: return nodos[dest]
+    if ":" in dest: return dest
+    return None
+ 
+def obt_origen(args, nodos):
+    if args.origen: return args.origen
+    if args.destino in nodos: return args.destino
+    return os.getenv("PROCESS_ID", "")
+ 
+def ejecutar():
+    p = argparse.ArgumentParser(description="Cliente CLI")
+    p.add_argument("--destino", required=True)
+    p.add_argument("--nodos",   default=os.getenv("PEERS", ""))
+    p.add_argument("--origen",  default="")
+ 
+    subs = p.add_subparsers(dest="cmd", required=True)
+    cmd_int = subs.add_parser("interno")
+    cmd_int.add_argument("--desc", default="evento")
+ 
+    cmd_env = subs.add_parser("enviar")
+    cmd_env.add_argument("--receptor", required=True)
+    cmd_env.add_argument("--msg",      required=True)
+ 
+    cmd_dif = subs.add_parser("difusion")
+    cmd_dif.add_argument("--msg", required=True)
+ 
+    args    = p.parse_args()
+    nodos   = leer_nodos(args.nodos)
+    dir_dest= res_destino(args.destino, nodos)
+    if not dir_dest: raise SystemExit("Destino invalido")
+ 
+    id_ori = obt_origen(args, nodos)
+    if args.cmd in {"enviar", "difusion"} and not id_ori:
+        raise SystemExit("Falta origen")
+ 
+    with grpc.insecure_channel(dir_dest) as canal:
+        stub = procesos_pb2_grpc.ProcesoServiceStub(canal)
+        if args.cmd == "interno":
+            res = stub.EventoInterno(procesos_pb2.ReqInterno(desc=args.desc))
+        elif args.cmd == "enviar":
+            res = stub.EnviarMensaje(procesos_pb2.ReqEnvio(
+                origen=id_ori, destino=args.receptor, msg=args.msg))
+        else:
+            res = stub.Broadcast(procesos_pb2.ReqDifusion(
+                origen=id_ori, msg=args.msg))
+ 
+    st    = "OK" if res.ok else "ERR"
+    str_v = str(list(res.vector)).replace(" ", "")
+    print(f"{st}: {res.msg} (vector={str_v})")
+\end{lstlisting}
+
+
+
+
+
+Para mantener una estructura modular y resolver las conexiones de forma dinámica, 
+el cliente divide su lógica en las siguientes funciones:
+
+\begin{itemize}
+    \item \textbf{\texttt{leer\_nodos}:} Procesa una cadena de texto en crudo 
+    (típicamente obtenida de la variable de entorno \texttt{PEERS}) y 
+    la transforma en un diccionario que asocia el identificador de 
+    cada nodo con su dirección física.
+    \item \textbf{\texttt{res\_destino}:} Resuelve la dirección a 
+    la cual se conectará el cliente. Es flexible, ya que permite 
+    buscar el destino en el diccionario de nodos conocidos o aceptar
+     directamente una dirección en formato \texttt{IP:puerto}.
+    \item \textbf{\texttt{obt\_origen}:} Deduce qué identificador 
+    debe utilizarse como remitente del mensaje. Si no se indica
+     explícitamente en los argumentos, intenta inferirlo basándose 
+     en el destino o, como último recurso, lee la variable de entorno 
+     \texttt{PROCESS\_ID}.
+    \item \textbf{\texttt{ejecutar}:} Orquesta el flujo principal de 
+    la herramienta. Valida que los parámetros obligatorios existan y 
+    establece un canal de comunicación (\texttt{grpc.insecure\_channel}) 
+    con el destino. Una vez que el nodo remoto procesa la solicitud
+     (evento interno, envío o difusión), esta función captura la respuesta y
+      muestra en consola el estado de la operación junto con el estado del 
+      reloj vectorial resultante.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{>{\ttfamily}l l p{7.5cm}}
+\toprule
+\textbf{Subcomando} & \textbf{Flags} & \textbf{Descripción} \\
+\midrule
+\texttt{interno}  & \texttt{--desc} &
+  Ejecuta un evento interno en el nodo seleccionado utilizando la
+  descripción proporcionada. \\[4pt]
+
+\texttt{enviar}   & \texttt{--receptor}, \texttt{--msg} &
+  Solicita al nodo seleccionado que envíe un mensaje al receptor
+  especificado. \\[4pt]
+
+\texttt{difusion} & \texttt{--msg} &
+  Solicita al nodo seleccionado que envíe el mismo mensaje a todos los
+  demás nodos del sistema. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Ejemplo de uso}
+\begin{verbatim}
+python cli.py --destino P1 --nodos "P1=localhost:50051,P2=localhost:50052" \
+    enviar --receptor P2 --msg '{"prueba": true}'
+\end{verbatim}
 \newpage
 \subsection{Códigos docker:}
 
