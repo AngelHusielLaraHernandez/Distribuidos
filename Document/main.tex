@@ -295,75 +295,159 @@
 \section{Objetivo}
 Comprender cómo se mantiene el orden lógico de eventos en sistemas distribuidos mediante el uso de relojes vectoriales.
 
-\section{Planteamiento del escenario:}
-Para el escenario, se tomo base las aplicaciones de reparto de comida
-donde en este punto tomamos como referencia una arquitectura de microservicios,
-esto mas precisamente cuando un cliente hace una orden, en nuestro caso tomamos como referencia
-al restaurante Carls jr, donde tomamos como pedido la hamburgesa Famose star, esto lo tomamos
-desde que el usuario selecciona la hamburguesa hasta que el sistema manda la notificación final de entrega, 
-ahora bien, tomamos a los procesos como las responsabilidades.
+\section{Planteamiento del escenario}
+Para plantear el escenario, nos basamos en el funcionamiento de las aplicaciones de reparto de comida utilizando una arquitectura de microservicios. Más precisamente, simulamos el flujo de una orden en el restaurante Carl's Jr., eligiendo como pedido específico la hamburguesa Famous Star. El escenario abarca desde que el usuario selecciona su comida hasta que el sistema manda la notificación final de entrega, asignando a cada proceso una responsabilidad específica.
 
-Para esto, todo comienza en el Proceso 1 que es como tal la Aplicación Cliente, este proceso
-simula la UI de usuario propiamente, donde como tal el evento interno es agregar la comida al carrito de compras 
-y el monto a pagar, depsues de esto, una vez que la orden está lista, 
-el Proceso 1 envía una solicitud de cobro mediante un mensaje punto a punto al Proceso 2 que este sera nuestro 
-movimiento de Pago (donde se verifica si la tarjeta es verdadaera y tiene fondos), 
-transmitiendo su reloj vectorial inicial para emepzar la sincronización temporal del sistema.
+Todo comienza en el Proceso 1, que representa la Aplicación Cliente y simula la interfaz de usuario. Aquí, el evento interno consiste en agregar la comida al carrito de compras junto con el monto a pagar. Una vez que la orden está armada, el Proceso 1 envía una solicitud de cobro mediante un mensaje punto a punto al Proceso 2, el cual funciona como el movimiento de pago para verificar si la tarjeta es válida y tiene fondos. En este paso se transmite el reloj vectorial inicial para empezar la sincronización temporal del sistema.
 
-Despues de esto, al recibir la solicitud, el Proceso 2 actualiza su reloj local 
-y ejecuta un evento interno que es el de validar los datos de la tarjeta y procesar la propia transeaccion,
-despues tras aprobar el pago, este proceso se comunica con el Proceso 3 que en este punto lo estamos simulando 
-como si fuera la aplicacion que se tiene en la cocina del Restaurante, 
-enviándole la confirmación de fondos aprobados y los detalles de la misma orden, en este caso que tipo de hambrugesa 
-va a desear el cliente, esto lo que hace es que garantiza un orden lógico, donde como tal
-el restaurante no comenzará a cocinar sin que el pago haya sido exitoso.
+Después, al recibir la solicitud, el Proceso 2 actualiza su reloj local y ejecuta el evento interno de validar los datos de la tarjeta y procesar la transacción. Tras aprobar el pago, este proceso se comunica con el Proceso 3, que simula la aplicación en la cocina del restaurante, enviándole la confirmación de los fondos y los detalles de la orden para saber qué tipo de hamburguesa desea el cliente. Esto garantiza un orden lógico, asegurando que el restaurante no comience a cocinar sin que el pago haya sido exitoso.
 
-Posteriormente, el Proceso 3 registra un evento interno simulando la preparación 
-y el empaquetado de la orden, de hecho una vez que el paquete está listo en el mostrador, 
-la cocina enviara una notificación directa al Proceso 4 que es ya directamente la aplicación del Repartidor. 
-Este cuarto proceso recibe la instrucción, sincroniza su vector, y lanza su propio evento interno para 
-calcular la ruta óptima de entrega mediante el GPS hacia el domicilio del cliente. 
-Al iniciar el viaje, el repartidor actualiza el estado de la orden enviando un mensaje al último proceso.
+Luego, el Proceso 3 registra un evento interno simulando la preparación y el empaquetado de la orden. Una vez que el paquete está listo en el mostrador, la cocina envía una notificación directa al Proceso 4, que representa la aplicación del repartidor. Este cuarto proceso recibe la instrucción, sincroniza su vector y lanza su propio evento interno para calcular la ruta óptima de entrega mediante GPS hacia el domicilio del cliente. Al iniciar el viaje, el repartidor actualiza el estado de la orden mandando un mensaje al último proceso.
 
-Ya por ultimo, tenemos al Proceso 5 que es el servidor de notificaciones, donde en este al recibir el mensaje del 
-repartidor, este ejecuta un evento interno para registrar el Tiempo Estimado de Llegada que es el ETA, y para acabar
-el ciclo de la orden, el Proceso 5 emite un Broadcast hacia los cuatro procesos restantes P1, P2, P3 y P4 
-indicando que la orden ha sido completada y entregada de forma exitosa. 
+Ya por último, tenemos al Proceso 5, que es el servidor de notificaciones. Al recibir el aviso del repartidor, ejecuta un evento interno para registrar el tiempo estimado de llegada o ETA. Para terminar el ciclo de la orden, el Proceso 5 emite una difusión masiva hacia los cuatro procesos restantes para indicar que la orden ha sido completada y entregada de forma exitosa.
+
+Este ultimo paso es imortante, debido a que es el punto donde el sistema lógra sincronizar completamente todos los estados haciendo que los cinco relojes vectoriales sean los mismos de manera simultánea.
+
 
 \newpage
-
-Este ultimo paso es imortante, debido a que es el punto donde el sistema logra sincronizar completamente todos los estados
-haciendo que los cinco relojes vectoriales sean los mismos de manera simultánea.
-
-
 \textbf{Servicios gRPC}
 
 \begin{enumerate}
-  \item \textbf{Enviar Mensaje}: Recibe una estructura ReqEnvio con los identificadores de origen, 
-  destino y de mensaje, esto de forma estructurada como una cadena, despues de esto se incrementa 
-  la posición en el Reloj Vectorial del emisor y coloca la línea de envío en la bitácora.
-  \item \textbf{Recibir Mensaje}: Recibe una estructura ReqRecepcion que contiene el proceso de origen, el mensaje
-  y el arreglo del vector, depsues de esto actualiza el reloj local calculando los valores 
-  máximos, esto por de forma que lo hace componente a componente, e incrementando en 1, por ultimo registra 
-  el evento de recepción y devuelve un mensaje de confirmación con el vector del reloj con el tiempo actual.
-  \item \textbf{Evento Interno}: Recibe una solicitud ReqInterno con la descripción de una tarea (armado de carrito, 
-  validación de pago, preparación en cocina o cálculo de ruta GPS), despues este incrementa la posición 
-  en su reloj lógico vectorial y pone de forma síncrona la entrada en el archivo de registro.
-  \item \textbf{Broadcast}: Recibe una petición de difusión masiva, est emimso incrementa el reloj vectorial 
-  del emisor en 1 y atiende de manera por igual al mismo tiempo el estado actual 
-  junto con el mensaje a todos los demás procesos para sincronizar el estado de la orden.
+    \item \textbf{Enviar Mensaje}: Recibe una estructura ReqEnvio con los identificadores de origen, 
+    destino y de mensaje, esto de forma estructurada como una cadena, despues de esto se incrementa 
+    la posición en el Reloj Vectorial del emisor y coloca la línea de envío en la bitácora.
+    \item \textbf{Recibir Mensaje}: Recibe una estructura ReqRecepcion que contiene el proceso de origen, el mensaje
+    y el arreglo del vector, después de esto actualiza el reloj local calculando los valores 
+    máximos, esto por de forma que lo hace componente a componente, e incrementando en 1, por ultimo registra 
+    el evento de recepción y devuelve un mensaje de confirmación con el vector del reloj con el tiempo actual.
+    \item \textbf{Evento Interno}: Recibe una solicitud ReqInterno con la descripción de una tarea (armado de carrito, 
+    validación de pago, preparación en cocina o cálculo de ruta GPS), despues este incrementa la posición 
+    en su reloj lógico vectorial y pone de forma síncrona la entrada en el archivo de registro.
+    \item \textbf{Broadcast}: Recibe una petición de difusión masiva, este mismo incrementa el reloj vectorial 
+    del emisor en 1 y atiende de manera por igual al mismo tiempo el estado actual 
+                    junto con el mensaje a todos los demás procesos para sincronizar el estado de la orden.
 \end{enumerate}
 
-\section{Diagrama del escenario:}
+\section{Diagrama del escenario}
 
-\textbf{Descripcion del reloj vectorial:}
+\textbf{Descripcion del reloj vectorial}
+
+Para entender cómo cambia el reloj vectorial a lo largo del escenario, es importante seguir el flujo de los mensajes paso a paso. Al principio, los cinco procesos inician con sus relojes completamente en ceros. 
+
+Todo comienza cuando el Proceso 1 realiza la acción de armar el carrito. Al ser un evento interno, solamente suma uno en la primera posición de su arreglo, quedando en [1,0,0,0,0]. Enseguida, el Proceso 1 envía la petición de cobro al Proceso 2. Para mandar el mensaje, el Proceso 1 vuelve a incrementar su contador a [2,0,0,0,0] y adjunta este vector en la transmisión. 
+
+Cuando el Proceso 2 recibe el mensaje, compara el vector que le llegó con el suyo que estaba en ceros. Toma los valores más altos y le suma uno a su propia posición, que es la segunda, por lo que su reloj avanza a [2,1,0,0,0]. Después, el Proceso 2 hace la validación interna de la tarjeta y simplemente suma otro número a su contador local, pasando a [2,2,0,0,0]. Al terminar, manda la confirmación de pago al restaurante en el Proceso 3, lo que hace que el reloj del Proceso 2 suba a [2,3,0,0,0] para el envío.
+
+El Proceso 3 recibe los datos del pago y sincroniza su reloj tomando los valores máximos, sumando uno en la tercera posición para quedar en [2,3,1,0,0]. Luego, el restaurante prepara la comida mediante un evento interno y su reloj avanza a [2,3,2,0,0]. Cuando la comida está lista, el Proceso 3 manda el aviso al repartidor en el Proceso 4, subiendo su propio contador a [2,3,3,0,0] al enviar el paquete de datos.
+
+El repartidor, que es el Proceso 4, recibe la notificación del restaurante, hace la comparación de máximos y aumenta su cuarta posición, actualizando su reloj a [2,3,3,1,0]. A continuación, ejecuta su evento interno para calcular la ruta, lo que sube su contador a [2,3,3,2,0]. Al iniciar el viaje hacia el cliente, le manda el aviso al servidor central en el Proceso 5, por lo que su reloj avanza a [2,3,3,3,0] en el momento del envío.
+
+El servidor recibe el aviso del viaje y actualiza su reloj a [2,3,3,3,1] sumando uno en la quinta posición. Después realiza el evento interno para calcular el tiempo estimado de llegada, avanzando a [2,3,3,3,2]. 
+
+Finalmente, ocurre la difusión masiva. El servidor prepara el mensaje final para todos, subiendo su contador a [2,3,3,3,3] y enviando este vector a los otros cuatro procesos al mismo tiempo. Cuando el Proceso 1 recibe esta difusión, compara el vector nuevo con el último que tenía guardado, toma todos los máximos y le suma uno a su primera posición, terminando en [3,3,3,3,3]. Los demás procesos hacen exactamente lo mismo, sumando uno a su respectiva posición, lo que nos demuestra cómo todos los nodos logran enterarse de la historia completa y mantener el orden causal de nuestro sistema distribuido.
+
+
+\textbf{Diagrama}
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\textwidth}{!}{
+    \begin{tikzpicture}[x=1.3cm, y=-1.5cm, >=stealth, thick]
+        % Líneas de los procesos
+        \foreach \i/\p in {0/P1, 1/P2, 2/P3, 3/P4, 4/P5} {
+            \node[left, font=\bfseries] at (0, \i) {\p};
+            \draw[->, color=gray] (0, \i) -- (16, \i);
+        }
+
+        % --- P1 (App Cliente) ---
+        \filldraw[blue] (1, 0) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[1,0,0,0,0]} 
+            node[below=2pt, font=\scriptsize] {Armar};
+        \filldraw[blue] (2, 0) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,0,0,0,0]} 
+            node[below=2pt, font=\scriptsize] {Envío P2};
+        \filldraw[blue] (15, 0) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[3,3,3,3,3]} 
+            node[below=2pt, font=\scriptsize] {Difusión};
+
+        % --- P2 (Pago) ---
+        \filldraw[green!60!black] (3, 1) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,1,0,0,0]} 
+            node[below=2pt, font=\scriptsize] {Recepción};
+        \filldraw[green!60!black] (4, 1) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,2,0,0,0]} 
+            node[below=2pt, font=\scriptsize] {Validar};
+        \filldraw[green!60!black] (5, 1) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,0,0,0]} 
+            node[below=2pt, font=\scriptsize] {Envío P3};
+        \filldraw[green!60!black] (15, 1) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,4,3,3,3]} 
+            node[below=2pt, font=\scriptsize] {Difusión};
+
+        % --- P3 (Restaurante) ---
+        \filldraw[orange] (6, 2) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,1,0,0]} 
+            node[below=2pt, font=\scriptsize] {Recepción};
+        \filldraw[orange] (7, 2) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,2,0,0]} 
+            node[below=2pt, font=\scriptsize] {Cocinar};
+        \filldraw[orange] (8, 2) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,0,0]} 
+            node[below=2pt, font=\scriptsize] {Envío P4};
+        \filldraw[orange] (15, 2) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,4,3,3]} 
+            node[below=2pt, font=\scriptsize] {Difusión};
+
+        % --- P4 (Repartidor) ---
+        \filldraw[magenta] (9, 3) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,1,0]} 
+            node[below=2pt, font=\scriptsize] {Recepción};
+        \filldraw[magenta] (10, 3) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,2,0]} 
+            node[below=2pt, font=\scriptsize] {Ruta};
+        \filldraw[magenta] (11, 3) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,3,0]} 
+            node[below=2pt, font=\scriptsize] {Envío P5};
+        \filldraw[magenta] (15, 3) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,4,3]} 
+            node[below=2pt, font=\scriptsize] {Difusión};
+
+        % --- P5 (Servidor) ---
+        \filldraw[cyan!80!black] (12, 4) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,3,1]} 
+            node[below=2pt, font=\scriptsize] {Recepción};
+        \filldraw[cyan!80!black] (13, 4) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,3,2]} 
+            node[below=2pt, font=\scriptsize] {ETA};
+        \filldraw[cyan!80!black] (14, 4) circle (2.5pt) 
+            node[above=2pt, font=\scriptsize] {[2,3,3,3,3]} 
+            node[below=2pt, font=\scriptsize] {Broadcast};
+
+        % --- Flechas de mensajes (Punto a Punto) ---
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (2, 0) -- (3, 1) 
+            node[midway, right=2pt, font=\scriptsize] {cobro};
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (5, 1) -- (6, 2) 
+            node[midway, right=2pt, font=\scriptsize] {pago\_ok};
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (8, 2) -- (9, 3) 
+            node[midway, right=2pt, font=\scriptsize] {listo};
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (11, 3) -- (12, 4) 
+            node[midway, right=2pt, font=\scriptsize] {va};
+
+        % --- Flechas del Broadcast Final ---
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (14, 4) -- (15, 0);
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (14, 4) -- (15, 1);
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (14, 4) -- (15, 2);
+        \draw[->, dashed, shorten >=2pt, shorten <=2pt] (14, 4) -- (15, 3);
+
+    \end{tikzpicture}
+    }
+    \caption{Diagrama de secuencias y actualización de relojes vectoriales del escenario propuesto.}
+\end{figure}
 
 \newpage
-\textbf{Diagrama:}
+\section{Documentacion de código}
 
-\section{Documentacion de codigo:}
-
-\subsection{Codigo proto:}
+\subsection{Código proto}
 Define cómo se comunican las diferentes partes del sistema utilizando 
 \textbf{Protocol Buffers v3}. Para ello, se especifica el servicio 
 \texttt{ProcesoService}, que incluye cuatro operaciones remotas (RPC) y 
@@ -371,7 +455,6 @@ los mensajes de entrada y salida que utiliza cada una.
 
 \begin{lstlisting}[style=proto, caption={procesos.proto - Definición IDL del servicio gRPC}]
 syntax = "proto3";
- 
 package procesos;
  
 service ProcesoService {
@@ -465,8 +548,8 @@ arreglo. En Python, este campo se representa automáticamente como una lista
 de números enteros (\texttt{list[int]}).
 
 
-
-\subsection{Codigos python:}
+\newpage
+\subsection{Códigos python}
 \subsubsection{Código 1 : \texttt{vectorial.py} — Reloj Vectorial}
 
 Implementa la clase \texttt{RelojVectorial}, que se encarga de administrar 
@@ -532,8 +615,7 @@ evitar accesos simultáneos.
 
 \textbf{\texttt{actualizar(self, vec\_recibido) -> list}}
 
-Procesa la recepción de un mensaje proveniente de otro nodo. El método
-incrementa el contador local y actualiza el reloj vectorial comparando
+Procesa la recepción de un mensaje que viene de otro nodo. Incrementa el contador local y actualiza el reloj vectorial comparando
 cada posición con el vector recibido, conservando siempre el valor más
 alto. Finalmente, devuelve una copia del vector actualizado. La operación
 está protegida mediante un \texttt{Lock}.
@@ -555,7 +637,6 @@ correctamente sin alterar el contenido del archivo.
 \begin{lstlisting}[style=python, caption={bitacora.py — Escritura concurrente de logs}]
 import os
 import threading
- 
 class Bitacora:
     def __init__(self, ruta):
         self.ruta = ruta
@@ -656,7 +737,6 @@ COLORES = {
     "P4": "\033[95m", "P5": "\033[96m",
 }
 FIN_COL = "\033[0m"
- 
 class ServicioProceso(procesos_pb2_grpc.ProcesoServiceServicer):
     def __init__(self, id_proc, nodos, bita):
         self.id_proc = id_proc
@@ -1096,17 +1176,19 @@ el cliente divide su lógica en las siguientes funciones:
 \end{tabular}
 \end{center}
 
+\newpage
 \textbf{Ejemplo de uso}
 \begin{verbatim}
 python cli.py --destino P1 --nodos "P1=localhost:50051,P2=localhost:50052" \
     enviar --receptor P2 --msg '{"prueba": true}'
 \end{verbatim}
-\newpage
-\subsection{Códigos docker:}
+
+%\newpage
+\subsection{Códigos docker}
 
 \textbf{Dockerfile:}
 
-El archivo Dockerfile lo que hace es que define las instrucciones de como se ira 
+El archivo Dockerfile lo que hace es que define las instrucciones de como se va a ir
 contruyendo la imagen base de los contenedores. 
 
 Para esto la primer alinea, lo que ahce es que inicia una imagen optimizada de Python python:3.11-slim, depsues de esto, 
@@ -1128,7 +1210,7 @@ definemos como comando por defecto la ejecución del servidor principal src/proc
 
 \lstinputlisting[language={[LAB]Dockerfile}, caption=Código dockerfile, basicstyle=\ttfamily\scriptsize]{code/docker/Dockerfile}
 
-\newpage
+%\newpage
 
 \textbf{Docker Compose:}
 
@@ -1157,7 +1239,8 @@ el 172.21.0.0/16, lo cual permite usar direcciones estáticas para cada contened
 
 \lstinputlisting[language=DockerCompose, caption=Código docker compose, basicstyle=\ttfamily\scriptsize]{code/docker/docker-compose.yml}
 
-\section{Secuencia de comandos para la ejecución:}
+\vspace{0.5cm}
+\section{Secuencia de comandos para la ejecución}
 
 \subsection{Preparación del entorno}
 
@@ -1178,6 +1261,7 @@ Esto permite observar cómo los contenedores reaccionan en tiempo real.
 \begin{quote}
 \texttt{\textcolor{blue}{docker} compose logs -f}
 \end{quote}
+
 
 \subsection{Secuencia de comandos para el escenario esto, para la terminal 2}
 
@@ -1200,7 +1284,6 @@ en este punto no hay comunicación con otros procesos.
 \textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P1 interno --desc "armar carrito pedido"
 \end{quote}
 
-\newpage
 
 \textbf{2. P1 $\rightarrow$ P2 - solicitud de cobro}
 
@@ -1254,6 +1337,7 @@ Su reloj ahora esta sincornizuado con los eventos previos de P1 y P2.
 P3 ejecuta un evento interno que lo que hace es que simula la preparación y que se empaqueta la hamburguesa. 
 Su reloj vectorial avanza en su propia posición.
 
+\newpage
 \begin{center}
   \textbf{Comando:}
 \end{center}
@@ -1262,7 +1346,7 @@ Su reloj vectorial avanza en su propia posición.
 \textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P3 interno --desc "preparar comida"
 \end{quote}
 
-\newpage
+
 \textbf{6. P3 $\rightarrow$ P4 - Aviso al repartidor}
 
 P3 envía un mensaje gRPC a P4 indicando que el paquete está listo para recolección. 
@@ -1314,6 +1398,7 @@ antes de mandar el broadcast.
 
 Su reloj vectorial avanza en su propia posición.
 
+\newpage
 \begin{center}
   \textbf{Comando:}
 \end{center}
@@ -1336,7 +1421,7 @@ Cada proceso receptor compara el vector actualizado de P5 con el suyo y termina 
 \textcolor{blue}{docker} \textcolor{green}{exec} -it cliente python src/cli.py --destino P5 difusion --msg '\{"id":"ORD-77X", "fin":"entregado", "eta":"15m"\}'
 \end{quote}
 
-\subsection{Revision de logs:}
+\subsection{Revision de logs}
 
 Para revisar el archivo de bitácora generado por cada nodo al finalizar la secuencia 
 (se muestra el ejemplo para P1, pero aplica para P1 a P5):
@@ -1354,15 +1439,193 @@ creados:
 
 \endgroup
 
-\section{Resultados:}
+\newpage
+\section{Resultados}
 
-\subsection{Capturas de los resultados:}
+\subsection{Capturas de los resultados}
 
-\subsection{Bitacoras:}
+Comenzamos preparando el entorno de trabajo. Ejecutamos el comando para construir las imagenes de los contenedores a partir de los archivos de configuracion. En la terminal se puede ver como inicia este proceso de descarga y preparacion.
 
-\section{Conclusion:}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/1_ComposeUpInicio.png}
+    \caption{Inicio de la construccion de las imagenes de los procesos.}
+\end{figure}
 
-\section{Link de video:}
+Una vez que termina de compilar todo, la consola nos confirma que se creo la red privada y que los seis contenedores ya estan funcionando en segundo plano sin problemas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/2_ComposeUpFinal.png}
+    \caption{Contenedores ejecutandose y creacion de la red privada.}
+\end{figure}
+
+\newpage
+Para ir verificando el desarrollo del proyecto, abrimos una terminal dedicada a mostrar los registros en tiempo real, que sera la terminal superior. Aqui primero comprobamos que los servidores de los procesos ya estan activos y escuchando las peticiones en sus respectivos puertos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/3_ComposeLogs.png}
+    \caption{Terminal de registros mostrando a los procesos activos.}
+\end{figure}
+
+En una segunda terminal inferior comenzamos a enviar los comandos. El primer paso es mandar un evento interno al Proceso 1 para armar el carrito de comida. En la terminal de registros vemos que el Proceso 1 detecta el evento y su reloj vectorial arranca marcando un uno en la primera posición.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/4_ArmarCarrito.png}
+    \caption{Registro del primer evento interno en el reloj vectorial del Proceso 1.}
+\end{figure}
+
+
+Después le pedimos al Proceso 1 que mande la solicitud de cobro al Proceso 2. El Proceso 2 recibe la informacion de la compra junto con el reloj del emisor. Al comparar los valores, toma el maximo y avanza su propio contador, quedando con el vector actualizado correctamente.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/5_SolicitaCobro.png}
+    \caption{Envio de la solicitud de cobro y actualizacion del vector en el Proceso 2.}
+\end{figure}
+
+En el siguiente paso ocurren dos cosas. Primero, el Proceso 2 realiza la validacion de la tarjeta como una tarea interna, sumando uno a su posicion. Inmediatamente despues, manda la confirmacion del pago al restaurante, que es el Proceso 3. Este ultimo recibe los datos y actualiza su reloj, manteniendo asi el orden de todo lo que ha pasado antes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/6_ValidarTarjeta_Y_ConfirmaAlRestaurante.png}
+    \caption{Validacion del pago en el Proceso 2 y confirmacion enviada al Proceso 3.}
+\end{figure}
+
+El restaurante ejecuta de forma local la accion de preparar la comida. Al ser un evento interno, solamente aumenta el contador en la tercera posicion de su reloj vectorial.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.77\textwidth]{img/7_PreparaComida.png}
+    \caption{Evento interno de preparar la comida en el Proceso 3.}
+\end{figure}
+Cuando el paquete esta listo, el restaurante manda el aviso al repartidor, asignado al Proceso 4. El repartidor toma el mensaje, aplica la regla de los maximos al comparar los vectores y ajusta su reloj para estar sincronizado con el resto de la cadena.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.77\textwidth]{img/8_AvisaRepartidor.png}
+    \caption{Aviso al repartidor y sincronizacion de su reloj vectorial.}
+\end{figure}
+
+El repartidor calcula la ruta de entrega mediante un evento interno. La consola nos muestra como su contador sube un numero en la cuarta posicion.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.81\textwidth]{img/9_CalculaRuta.png}
+    \caption{Calculo de la ruta como evento interno en el Proceso 4.}
+\end{figure}
+
+Al iniciar el recorrido, el repartidor le avisa al servidor de notificaciones, que es el Proceso 5. El servidor recibe el vector acumulado y actualiza la quinta posicion de su reloj.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.81\textwidth]{img/10_NotificaInicioDeViaje.png}
+    \caption{Notificacion de viaje al servidor central y actualizacion de su vector.}
+\end{figure}
+
+El servidor realiza un ultimo calculo interno para estimar el tiempo de llegada de la comida, lo que vuelve a incrementar su propio contador en el reloj vectorial.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.78\textwidth]{img/11_ServerRegistraETA.png}
+    \caption{Registro del tiempo de llegada como evento interno en el Proceso 5.}
+\end{figure}
+
+Finalmente llegamos a la difusion. El servidor manda el aviso de entrega a todos los procesos al mismo tiempo. Cada proceso recibe el vector final y, al actualizar sus posiciones, todos los relojes terminan exactamente iguales. Esto demuestra que se logro la sincronizacion de todo el sistema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.78\textwidth]{img/12_BroadcastFinal.png}
+    \caption{Difusion del servidor que logra la sincronizacion de todos los relojes.}
+\end{figure}
+
+Para concluir, ejecutamos el comando para apagar los servicios. Esto detiene los contenedores, los elimina y borra la red privada, dejando el entorno de trabajo completamente limpio.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{img/15_ComposeDown.png}
+    \caption{Limpieza del entorno deteniendo y borrando los contenedores.}
+\end{figure}
+
+
+\subsection{Bitacoras}
+
+Para verificar que la historia de los eventos quedo guardada, consultamos los archivos de texto que cada contenedor genero durante la prueba. En las siguientes capturas se observa la lectura directa de estos archivos desde la línea de comandos, comprobando que la informacion si se queda almacenada incluso despues de que los procesos terminan sus tareas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/13_Cat_P1_P2_P3.png}
+    \caption{Lectura en terminal de las bitacoras de los tres primeros procesos.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/14_Cat_P4_P5.png}
+    \caption{Lectura en terminal de las bitacoras del repartidor y el servidor.}
+\end{figure}
+
+A continuacion detallamos el contenido exacto de cada bitacora extraída de los contenedores. En el archivo del Proceso 1 podemos ver como inicio la orden con el evento interno, el envio de la petición de cobro y como al final recibío la difusión del servidor, actualizando su reloj vectorial para igualar el estado final de toda la red.
+
+\begin{lstlisting}[style=output]
+[INTERNAL] P1 vector=[1,0,0,0,0]
+[SEND] P1 -> P2 msg="{"id":"ORD-77X", "total":250, "req":"cobro"}" vector r=[2,0,0,0,0]
+[ACK] P1 <- P2 confirmacion="ACK" vector_ack=[2,1,0,0,0]
+[RECEIVE] P1 <- P5 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector_recibido=[2,3,3,3,3] vector_actualizado=[3,3,3,3,3]
+\end{lstlisting}
+
+En el registro del Proceso 2 se observa la recepción puntual del cobro, su evento interno de validación bancaria y el envío de la orden hacia la cocina del restaurante. El archivo cierra con el mensaje final del servidor de notificaciones.
+
+\begin{lstlisting}[style=output]
+[RECEIVE] P2 <- P1 msg="{"id":"ORD-77X", "total":250, "req":"cobro"}" vector_recibido=[2,0,0,0,0] vector_actualizado=[2,1,0,0,0]
+[INTERNAL] P2 vector=[2,2,0,0,0]
+[SEND] P2 -> P3 msg="{"id":"ORD-77X", "pago":"ok", "item":"Super Star"}" vector r=[2,3,0,0,0]
+[ACK] P2 <- P3 confirmacion="ACK" vector_ack=[2,3,1,0,0]
+[RECEIVE] P2 <- P5 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector_recibido=[2,3,3,3,3] vector_actualizado=[2,4,3,3,3]
+\end{lstlisting}
+
+La bitacora del Proceso 3 muestra como el restaurante recibe la confirmacion de pago aprobada, ejecuta su evento para preparar la comida y le avisa al repartidor que el paquete esta listo para ser recogido, manteniendo la suma de los vectores en orden.
+
+\begin{lstlisting}[style=output]
+[RECEIVE] P3 <- P2 msg="{"id":"ORD-77X", "pago":"ok", "item":"Super Star"}" vector_recibido=[2,3,0,0,0] vector_actualizado=[2,3,1,0,0]
+[INTERNAL] P3 vector=[2,3,2,0,0]
+[SEND] P3 -> P4 msg="{"id":"ORD-77X", "paquete":"listo"}" vector r=[2,3,3,0,0]
+[ACK] P3 <- P4 confirmacion="ACK" vector_ack=[2,3,3,1,0]
+[RECEIVE] P3 <- P5 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector_recibido=[2,3,3,3,3] vector_actualizado=[2,3,4,3,3]
+\end{lstlisting}
+
+El archivo del Proceso 4 refleja unicamente la interacción del repartidor. Aqui se guarda la recepción del aviso emitido por el restaurante, el evento interno para calcular la ruta geográfica y la notificación que se manda al servidor central para indicar el inicio del viaje.
+
+\begin{lstlisting}[style=output]
+[RECEIVE] P4 <- P3 msg="{"id":"ORD-77X", "paquete":"listo"}" vector_recibido=[2,3,3,0,0] vector_actualizado=[2,3,3,1,0]
+[INTERNAL] P4 vector=[2,3,3,2,0]
+[SEND] P4 -> P5 msg="{"id":"ORD-77X", "repartidor":"va", "eta":"15m"}" vector r=[2,3,3,3,0]
+[ACK] P4 <- P5 confirmacion="ACK" vector_ack=[2,3,3,3,1]
+[RECEIVE] P4 <- P5 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector_recibido=[2,3,3,3,3] vector_actualizado=[2,3,3,4,3]
+\end{lstlisting}
+
+Al último en el registro del Proceso 5 se documenta la llegada del aviso del repartidor y el calculo interno del tiempo estimado de llegada. La bitacora concluye mostrando los cuatro mensajes de difusión que el servidor envio simultaneamente al resto de los procesos para cerrar las operaciones.
+
+\begin{lstlisting}[style=output]
+[RECEIVE] P5 <- P4 msg="{"id":"ORD-77X", "repartidor":"va", "eta":"15m"}" vector_recibido=[2,3,3,3,0] vector_actualizado=[2,3,3,3,1]
+[INTERNAL] P5 vector=[2,3,3,3,2]
+[SEND] P5 -> P1 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector r=[2,3,3,3,3]
+[SEND] P5 -> P2 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector r=[2,3,3,3,3]
+[SEND] P5 -> P3 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector r=[2,3,3,3,3]
+[SEND] P5 -> P4 msg="{"id":"ORD-77X", "fin":"entregado", "eta":"15m"}" vector r=[2,3,3,3,3]
+\end{lstlisting}
+
+\newpage
+\section{Conclusión}
+
+Realizar este proyecto nos permitió agrupar varios de los conceptos teóricos y prácticos que manejamos sobre los sistemas distribuidos y revisamos durante el curso.
+
+El uso de los contenedores de Docker fue muy importante, ya que nos ayudó a separar el entorno de cada proceso, asegurandonos que todos trabajaran de manera independiente dentro de una misma red privada. Por otro lado, trabajar con los archivos proto y la arquitectura de gRPC nos mostro una vez más lo eficiente que puede ser la comunicación entre distintos microservicios, permitiendo enviar y recibir mensajes estructurados de forma muy rápida.
+
+También uno de los mayores aprendizajes del proyecto se dio al momento de programar y observar el comportamiento de los relojes vectoriales. A través de nuestro escenario de pedidos de comida, pudimos comprobar cómo cada proceso actualizaba su propio arreglo numérico al comparar y tomar los valores máximos de los mensajes que recibía. Por otra parte, las bitácoras nos demostraron que, incluso con muchos eventos ocurriendo de manera asíncrona y en distintos lugares, es totalmente posible mantener el orden lógico y la consistencia de toda la transacción. Al final, el sistema funcionó de manera correcta y logramos sincronizar toda la red con éxito.
+
+\section{Link de video}
+
 
 
 % Impresión Referencias
